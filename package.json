@@ -1,7 +1,7 @@
 {
   "name": "mishu-tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automated QA tests for https://mishu.co.il using Playwright.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,21 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.55.0"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "fsevents": "^2.3.2",
+    "playwright": "^1.55.0",
+    "playwright-core": "^1.55.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NahuelJaffe/mishu-tests.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NahuelJaffe/mishu-tests/issues"
+  },
+  "homepage": "https://github.com/NahuelJaffe/mishu-tests#readme"
 }
