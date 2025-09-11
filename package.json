@@ -46,11 +46,6 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {
-    "fsevents": "^2.3.2",
-    "playwright": "^1.55.0",
-    "playwright-core": "^1.55.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NahuelJaffe/mishu-tests.git"

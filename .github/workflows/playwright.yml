@@ -21,7 +21,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
@@ -60,7 +60,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps ${{ matrix.browser }}
@@ -95,7 +95,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
@@ -141,7 +141,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium  # Only install chromium for faster execution
