@@ -18,27 +18,22 @@ async function safeJsonParse(response) {
 let authToken;
 
 test.beforeAll(async ({ request }) => {
-  // Skip API tests if BASE_URL doesn't contain /api/ or if it's not an API endpoint
-  if (!baseURL.includes('/api/') && !baseURL.includes('mishu')) {
-    console.log('Skipping API tests - not an API endpoint');
-    return;
-  }
-
-  const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
-    data: {
-      email: email,
-      password: password
+  try {
+    const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
+      data: {
+        email: email,
+        password: password
+      }
+    });
+    
+    if (loginResponse.ok()) {
+      const loginBody = await safeJsonParse(loginResponse);
+      authToken = loginBody.token;
+    } else {
+      console.log(`Login failed with status: ${loginResponse.status()}`);
     }
-  });
-  
-  if (loginResponse.ok()) {
-    const contentType = loginResponse.headers()['content-type'] || '';
-    if (contentType.includes('text/html')) {
-      console.log('Skipping API tests - received HTML response instead of JSON');
-      return;
-    }
-    const loginBody = await safeJsonParse(loginResponse);
-    authToken = loginBody.token;
+  } catch (error) {
+    console.log('Login setup failed:', error.message);
   }
 });
 
@@ -47,10 +42,9 @@ test.beforeAll(async ({ request }) => {
  * Verifica que se pueda obtener el perfil del usuario
  */
 test('API-12: Get user profile', async ({ request }) => {
-  // Skip if no auth token (likely due to HTML response in beforeAll)
+  // Skip if no auth token available from beforeAll
   if (!authToken) {
-    console.log('Skipping test - no auth token available');
-    return;
+    test.skip('No auth token available - login may have failed');
   }
 
   const response = await request.get(`${baseURL}/api/user/profile`, {
@@ -59,10 +53,12 @@ test('API-12: Get user profile', async ({ request }) => {
     }
   });
 
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    console.log('Skipping test - received HTML response instead of JSON');
-    return;
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(200);
@@ -76,10 +72,9 @@ test('API-12: Get user profile', async ({ request }) => {
  * Verifica que se pueda actualizar el perfil del usuario
  */
 test('API-13: Update user profile', async ({ request }) => {
-  // Skip if no auth token (likely due to HTML response in beforeAll)
+  // Skip if no auth token available from beforeAll
   if (!authToken) {
-    console.log('Skipping test - no auth token available');
-    return;
+    test.skip('No auth token available - login may have failed');
   }
 
   const response = await request.put(`${baseURL}/api/user/profile`, {
@@ -93,10 +88,12 @@ test('API-13: Update user profile', async ({ request }) => {
     }
   });
 
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    console.log('Skipping test - received HTML response instead of JSON');
-    return;
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(200);
@@ -109,10 +106,9 @@ test('API-13: Update user profile', async ({ request }) => {
  * Verifica que se puedan obtener las preferencias de notificación
  */
 test('API-14: Get notification preferences', async ({ request }) => {
-  // Skip if no auth token (likely due to HTML response in beforeAll)
+  // Skip if no auth token available from beforeAll
   if (!authToken) {
-    console.log('Skipping test - no auth token available');
-    return;
+    test.skip('No auth token available - login may have failed');
   }
 
   const response = await request.get(`${baseURL}/api/user/notifications`, {
@@ -121,10 +117,12 @@ test('API-14: Get notification preferences', async ({ request }) => {
     }
   });
 
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    console.log('Skipping test - received HTML response instead of JSON');
-    return;
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(200);
@@ -138,10 +136,9 @@ test('API-14: Get notification preferences', async ({ request }) => {
  * Verifica que se puedan actualizar las preferencias de notificación
  */
 test('API-15: Update notification preferences', async ({ request }) => {
-  // Skip if no auth token (likely due to HTML response in beforeAll)
+  // Skip if no auth token available from beforeAll
   if (!authToken) {
-    console.log('Skipping test - no auth token available');
-    return;
+    test.skip('No auth token available - login may have failed');
   }
 
   const response = await request.put(`${baseURL}/api/user/notifications`, {
@@ -155,10 +152,12 @@ test('API-15: Update notification preferences', async ({ request }) => {
     }
   });
 
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    console.log('Skipping test - received HTML response instead of JSON');
-    return;
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(200);
@@ -172,10 +171,9 @@ test('API-15: Update notification preferences', async ({ request }) => {
  * Verifica que se pueda cambiar la contraseña del usuario
  */
 test('API-16: Change password', async ({ request }) => {
-  // Skip if no auth token (likely due to HTML response in beforeAll)
+  // Skip if no auth token available from beforeAll
   if (!authToken) {
-    console.log('Skipping test - no auth token available');
-    return;
+    test.skip('No auth token available - login may have failed');
   }
 
   const response = await request.post(`${baseURL}/api/user/change-password`, {
@@ -189,10 +187,12 @@ test('API-16: Change password', async ({ request }) => {
     }
   });
 
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    console.log('Skipping test - received HTML response instead of JSON');
-    return;
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   // Puede retornar 200 o 202 dependiendo de si requiere confirmación

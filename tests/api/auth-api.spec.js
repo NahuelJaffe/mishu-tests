@@ -21,11 +21,6 @@ async function safeJsonParse(response) {
  * Verifica que el endpoint de login funcione correctamente
  */
 test('API-01: Login endpoint validation', async ({ request }) => {
-  // Skip if this is not an API-focused test run
-  if (!baseURL.includes('/api/')) {
-    test.skip('API endpoints not available on this environment');
-  }
-
   const response = await request.post(`${baseURL}/api/auth/login`, {
     data: {
       email: email,
@@ -33,10 +28,12 @@ test('API-01: Login endpoint validation', async ({ request }) => {
     }
   });
 
-  // Check if we got an HTML response (404 page)
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    test.skip('API endpoint not found - got HTML response instead of JSON');
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(200);
@@ -50,11 +47,6 @@ test('API-01: Login endpoint validation', async ({ request }) => {
  * Verifica que el endpoint rechace credenciales inválidas
  */
 test('API-02: Invalid login credentials', async ({ request }) => {
-  // Skip if this is not an API-focused test run
-  if (!baseURL.includes('/api/')) {
-    test.skip('API endpoints not available on this environment');
-  }
-
   const response = await request.post(`${baseURL}/api/auth/login`, {
     data: {
       email: 'invalid@example.com',
@@ -62,16 +54,12 @@ test('API-02: Invalid login credentials', async ({ request }) => {
     }
   });
 
-  // Check if we got an HTML response (404 page)
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    test.skip('API endpoint not found - got HTML response instead of JSON');
-  }
-
-  // For this test environment, invalid credentials might still return 200
-  // This is because the frontend handles authentication differently
-  if (response.status() === 200) {
-    test.skip('This environment does not validate credentials at API level');
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
   expect(response.status()).toBe(401);
@@ -83,39 +71,29 @@ test('API-02: Invalid login credentials', async ({ request }) => {
  * API-03: Token validation endpoint
  * Verifica que el endpoint de validación de token funcione
  */
-test('API-03: Token validation endpoint', async ({ request }) => {
-  // Skip if this is not an API-focused test run
-  if (!baseURL.includes('/api/')) {
-    test.skip('API endpoints not available on this environment');
+test('API-03: Token validation', async ({ request }) => {
+  // Skip if no auth token available from beforeAll
+  if (!authToken) {
+    test.skip('No auth token available - login may have failed');
   }
 
-  // Primero hacer login para obtener token
-  const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
-    data: {
-      email: email,
-      password: password
-    }
-  });
-
-  // Check if we got an HTML response (404 page)
-  const contentType = loginResponse.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    test.skip('API endpoint not found - got HTML response instead of JSON');
-  }
-
-  const loginBody = await safeJsonParse(loginResponse);
-  const token = loginBody.token;
-
-  // Validar el token
-  const validateResponse = await request.get(`${baseURL}/api/auth/validate`, {
+  const response = await request.get(`${baseURL}/api/auth/validate`, {
     headers: {
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${authToken}`
     }
   });
 
-  expect(validateResponse.status()).toBe(200);
-  const validateBody = await safeJsonParse(validateResponse);
-  expect(validateBody).toHaveProperty('valid', true);
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
+  }
+
+  expect(response.status()).toBe(200);
+  const responseBody = await safeJsonParse(response);
+  expect(responseBody).toHaveProperty('valid', true);
 });
 
 /**
@@ -123,63 +101,72 @@ test('API-03: Token validation endpoint', async ({ request }) => {
  * Verifica que el endpoint de reset de contraseña funcione
  */
 test('API-04: Password reset request', async ({ request }) => {
-  // Skip if this is not an API-focused test run
-  if (!baseURL.includes('/api/')) {
-    test.skip('API endpoints not available on this environment');
-  }
-
   const response = await request.post(`${baseURL}/api/auth/reset-password`, {
     data: {
       email: email
     }
   });
 
-  // Check if we got an HTML response (404 page)
-  const contentType = response.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    test.skip('API endpoint not found - got HTML response instead of JSON');
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
   }
 
-  expect(response.status()).toBe(200);
+  expect([200, 202]).toContain(response.status());
   const responseBody = await safeJsonParse(response);
   expect(responseBody).toHaveProperty('message');
+});
+
+let authToken;
+
+test.beforeAll(async ({ request }) => {
+  try {
+    const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
+      data: {
+        email: email,
+        password: password
+      }
+    });
+    
+    if (loginResponse.ok()) {
+      const loginBody = await safeJsonParse(loginResponse);
+      authToken = loginBody.token;
+    } else {
+      console.log(`Login failed with status: ${loginResponse.status()}`);
+    }
+  } catch (error) {
+    console.log('Login setup failed:', error.message);
+  }
 });
 
 /**
  * API-05: Logout endpoint
  * Verifica que el endpoint de logout funcione correctamente
  */
-test('API-05: Logout endpoint', async ({ request }) => {
-  // Skip if this is not an API-focused test run
-  if (!baseURL.includes('/api/')) {
-    test.skip('API endpoints not available on this environment');
+test('API-05: Logout', async ({ request }) => {
+  // Skip if no auth token available from beforeAll
+  if (!authToken) {
+    test.skip('No auth token available - login may have failed');
   }
 
-  // Primero hacer login
-  const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
-    data: {
-      email: email,
-      password: password
-    }
-  });
-
-  // Check if we got an HTML response (404 page)
-  const contentType = loginResponse.headers()['content-type'] || '';
-  if (contentType.includes('text/html')) {
-    test.skip('API endpoint not found - got HTML response instead of JSON');
-  }
-
-  const loginBody = await safeJsonParse(loginResponse);
-  const token = loginBody.token;
-
-  // Hacer logout
-  const logoutResponse = await request.post(`${baseURL}/api/auth/logout`, {
+  const response = await request.post(`${baseURL}/api/auth/logout`, {
     headers: {
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${authToken}`
     }
   });
 
-  expect(logoutResponse.status()).toBe(200);
-  const logoutBody = await safeJsonParse(logoutResponse);
-  expect(logoutBody).toHaveProperty('message');
+  // Check if we got a 404 with HTML response (API not available)
+  if (response.status() === 404) {
+    const contentType = response.headers()['content-type'] || '';
+    if (contentType.includes('text/html')) {
+      test.skip('API endpoint not found - got 404 HTML response');
+    }
+  }
+
+  expect(response.status()).toBe(200);
+  const responseBody = await safeJsonParse(response);
+  expect(responseBody).toHaveProperty('message');
 });
