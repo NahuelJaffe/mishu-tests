@@ -41,6 +41,7 @@ jobs:
         name: smoke-test-report
         path: playwright-report/
         retention-days: 7
+        if-no-files-found: ignore
 
   test-browsers:
     timeout-minutes: 60

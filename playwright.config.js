@@ -3,8 +3,18 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: process.env.CI ? 120000 : 60000, // Longer timeout for CI
-  retries: process.env.CI ? 2 : 1,
+  /* Global setup and teardown */
+  globalSetup: require.resolve('./global-setup.js'),
+  globalTeardown: require.resolve('./global-teardown.js'),
+  /* Run tests in files in parallel */
+  fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 1 : undefined,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [
     ['github'],
     ['html', { outputFolder: 'playwright-report' }],
@@ -28,6 +38,16 @@ module.exports = defineConfig({
     
     // CI-specific options
     ignoreHTTPSErrors: true,
+    
+    // Use saved authentication state
+    storageState: 'global-auth-state.json',
+    
+    // Exclude from Firebase Analytics
+    userAgent: 'PlaywrightTestBot/1.0 (automated testing; exclude from analytics)',
+    extraHTTPHeaders: {
+      'X-Test-Environment': 'automation',
+      'X-Playwright-Test': 'true'
+    },
   },
   projects: [
     // Chrome - Main browser for testing
@@ -35,19 +55,9 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        // Chrome-specific options for CI stability
+        // Configuración específica para CI
         launchOptions: {
-          args: [
-            '--disable-web-security',
-            '--disable-features=VizDisplayCompositor',
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
-            '--no-zygote',
-            '--disable-gpu'
-          ]
+          args: ['--disable-web-security', '--disable-features=VizDisplayCompositor', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--disable-gpu']
         }
       },
     },
@@ -60,7 +70,8 @@ module.exports = defineConfig({
         launchOptions: {
           firefoxUserPrefs: {
             'security.tls.insecure_fallback_hosts': 'mishu-web--pr67-faq-0n1j2wio.web.app'
-          }
+          },
+          args: ['--disable-web-security']
         }
       },
     },

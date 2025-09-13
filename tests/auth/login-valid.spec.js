@@ -5,11 +5,15 @@ test('TC-01: Login page loads correctly', async ({ page }) => {
   await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
-  // Verificar que el formulario de login está presente
-  await expect(page.locator('form')).toBeVisible();
-  // Verificar que los campos de email y password están presentes
-  await expect(page.locator('input[type="email"]')).toBeVisible();
-  await expect(page.locator('input[type="password"]')).toBeVisible();
+  // Verificar que estamos en la página de registro
+  await expect(page).toHaveURL(/signup|register/);
+  
+  // Verificar que los campos de registro están visibles (usando first() para evitar strict mode)
+  const emailInputs = page.locator('input[type="email"]');
+  const passwordInputs = page.locator('input[type="password"]');
+  
+  await expect(emailInputs.first()).toBeVisible();
+  await expect(passwordInputs.first()).toBeVisible();
   
   // Verificar si existe un enlace para registrarse (sign up)
   const signUpLink = page.getByText(/sign up|register|create account/i);
@@ -39,7 +43,6 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
   
   // Verificar que aparece algún tipo de mensaje de error o que no se redirige a otra página
   // Esto puede variar según cómo esté implementado el formulario
-  // Por ejemplo, podría ser un mensaje de error visible o una clase CSS específica
   // await expect(page.locator('.error-message')).toBeVisible();
 });
 

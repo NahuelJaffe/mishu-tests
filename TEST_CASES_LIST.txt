@@ -1,0 +1,161 @@
+LISTA COMPLETA DE TEST CASES - MISHU QA TESTS
+=====================================================
+
+SMOKE TESTS (tests/smoke-test.spec.js)
+--------------------------------------
+- Verificación de carga de aplicación
+- Test de login básico
+- Verificación de interacciones de página
+- Test de navegación básica
+
+TESTS DE AUTENTICACIÓN (tests/auth/)
+------------------------------------
+tests/auth/login-valid.spec.js:
+- TC-01: Login page loads correctly
+- TC-02: Invalid login error messages
+- TC-03: Forgot Password functionality
+- TC-04: Sign Up functionality
+
+tests/whatsapp/auth.spec.js:
+- TC-01: Login with valid credentials
+- TC-02: Login with invalid credentials
+- TC-03: Password recovery flow
+- TC-04: Remember me functionality
+
+TESTS DE WHATSAPP - CONEXIONES
+------------------------------
+tests/whatsapp/connection.spec.js:
+- TC-13: QR code scanning
+- TC-14: Connection status updates
+- TC-15: Multiple connections management
+- TC-16: Disconnect/reconnect flow
+
+tests/whatsapp/connection-analysis.spec.js:
+- Análisis completo de la página de conexiones
+
+tests/whatsapp/connection-detailed.spec.js:
+- TC-13: Botón Add Child's WhatsApp
+
+TESTS DE WHATSAPP - DASHBOARD
+-----------------------------
+tests/whatsapp/dashboard.spec.js:
+- TC-10: Empty state display
+- TC-11: Navigation menu functionality
+- TC-12: Quick actions accessibility
+
+TESTS DE WHATSAPP - MONITOREO DE MENSAJES
+-----------------------------------------
+tests/whatsapp/message-monitoring.spec.js:
+- TC-17: Message display
+- TC-18: Message grouping
+- TC-19: Manual message flagging
+- TC-20: Bulk actions on messages
+
+TESTS DE WHATSAPP - PERFIL Y CONFIGURACIÓN
+------------------------------------------
+tests/whatsapp/profile-settings.spec.js:
+- TC-25: Profile update
+- TC-26: Password change
+- TC-27: Notification preferences
+- TC-28: Account deletion
+
+TESTS DE WHATSAPP - SEGURIDAD
+-----------------------------
+tests/whatsapp/security.spec.js:
+- TC-33: Session management
+- TC-34: Data encryption
+- TC-35: Sensitive data exposure
+- TC-36: Logout functionality
+
+TESTS DE WHATSAPP - INTERFAZ DE USUARIO
+---------------------------------------
+tests/whatsapp/ui.spec.js:
+- TC-21: Responsive design
+- TC-22: Language switching
+- TC-23: RTL support (Hebrew)
+- TC-24: Dark/light mode (if applicable)
+
+TESTS DE WHATSAPP - NOTIFICACIONES
+----------------------------------
+tests/whatsapp/notifications.spec.js:
+- TC-37: Browser notifications
+- TC-38: Email notifications
+- TC-39: Notification preferences
+
+TESTS DE WHATSAPP - MANEJO DE ERRORES
+-------------------------------------
+tests/whatsapp/error-handling.spec.js:
+- TC-29: Offline behavior
+- TC-30: Network recovery
+- TC-31: Invalid QR code handling
+- TC-32: Server error states
+
+TESTS DE WHATSAPP - AYUDA Y SOPORTE
+-----------------------------------
+tests/whatsapp/help-support.spec.js:
+- TC-40: FAQ section
+- TC-41: Contact form
+- TC-42: Support email response
+
+TESTS DE WHATSAPP - REGISTRO
+----------------------------
+tests/whatsapp/signup.spec.js:
+- TC-06: New user registration
+- TC-07: Duplicate email/phone check
+- TC-08: Password requirements validation
+- TC-09: Email verification flow
+
+TESTS DE WHATSAPP - EXPLORACIÓN DE LOGIN
+----------------------------------------
+tests/whatsapp/login-exploration.spec.js:
+- TC-03: Password recovery flow - ACTUALIZADO
+
+CONFIGURACIÓN DE NAVEGADORES
+----------------------------
+- Chromium (Chrome): Tests principales con opciones de estabilidad para CI
+- Firefox: Tests de compatibilidad con configuración TLS personalizada
+- WebKit (Safari): Tests de compatibilidad simplificados para CI
+
+CONFIGURACIÓN DE ENTORNO
+------------------------
+- URL Base: https://mishu-web--pr67-faq-0n1j2wio.web.app/
+- Email de Test: nahueljaffe+bugwpp@gmail.com
+- Password de Test: Tonna2-wahwon-gupreq
+- Timeouts ajustados para CI: 15000ms acciones, 45000ms navegación
+
+TESTS DE API
+------------
+tests/api/auth-api.spec.js:
+- API-01: Login endpoint validation
+- API-02: Invalid login credentials
+- API-03: Token validation endpoint
+- API-04: Password reset request
+- API-05: Logout endpoint
+
+tests/api/whatsapp-api.spec.js:
+- API-06: Get WhatsApp connections
+- API-07: Create new WhatsApp connection
+- API-08: Get QR code for connection
+- API-09: Get messages for connection
+- API-10: Flag message as important
+- API-11: Delete WhatsApp connection
+
+tests/api/user-profile-api.spec.js:
+- API-12: Get user profile
+- API-13: Update user profile
+- API-14: Get notification preferences
+- API-15: Update notification preferences
+- API-16: Change password
+
+tests/api/system-health-api.spec.js:
+- API-17: Health check endpoint
+- API-18: API version endpoint
+- API-19: Rate limiting validation
+- API-20: CORS headers validation
+- API-21: Error handling - 404 endpoint
+- API-22: Security headers validation
+
+TOTAL DE TEST CASES: ~64 casos de prueba principales
+ARCHIVOS DE TEST: 21 archivos .spec.js (17 UI + 4 API)
+NAVEGADORES: 3 (Chromium, Firefox, WebKit)
+TIPOS DE TEST: UI/E2E Tests + API Tests
