@@ -12,7 +12,9 @@ test.describe('Smoke Tests', () => {
       
       // Verify we're on the right domain
       const currentUrl = page.url();
-      expect(currentUrl).toContain('mishu.co.il');
+      const baseURL = process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app';
+      const expectedDomain = baseURL.includes('mishu.co.il') ? 'mishu.co.il' : 'mishu-web--pr67-faq-0n1j2wio.web.app';
+      expect(currentUrl).toContain(expectedDomain);
       
       // Verify page has a title
       const title = await page.title();

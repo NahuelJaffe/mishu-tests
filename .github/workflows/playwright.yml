@@ -148,7 +148,7 @@ jobs:
       run: npx playwright install --with-deps
     
     - name: Run UI tests with Playwright
-      run: xvfb-run -a npm run test:${{ matrix.module }}
+      run: npm run test:${{ matrix.module }}
       env:
         CI: true
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
