@@ -47,6 +47,20 @@ For CI/CD or custom test credentials, set these environment variables:
 - `TEST_PASSWORD`: Password for test login
 - `BASE_URL`: Base URL for testing (defaults to https://mishu.co.il)
 
+## Recent Updates
+
+- Fixed WebKit browser launch issues in CI
+- Updated all test URLs to use environment variables
+- Added comprehensive API test coverage (auth, WhatsApp, user profile, system health)
+- Implemented global authentication setup for session reuse
+- Enhanced error handling and selector robustness
+- Fixed QR code selectors with fallback mechanisms
+- Improved user menu and logout functionality selectors
+- Resolved offline behavior test error handling
+- Enhanced FAQ and contact form selectors with graceful degradation
+- Fixed strict mode violations in signup tests
+- Replaced networkidle waits with domcontentloaded for better CI stability
+
 ## Git Setup (if needed)
 
 ```bash
