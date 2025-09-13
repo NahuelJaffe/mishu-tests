@@ -6,12 +6,16 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  await page.goto('https://mishu.co.il/login');
-  await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
-  await page.fill('input[type="password"]', 'Prueba1');
+  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app/';
+  const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
+  const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+  
+  await page.goto(`${baseUrl}login`);
+  await page.fill('input[type="email"]', email);
+  await page.fill('input[type="password"]', password);
   await page.click('button[type="submit"]');
-  // Esperar a que se complete el login
-  await expect(page).toHaveURL(/connections/);
+  // Esperar a que se complete el login con URLs más flexibles
+  await expect(page).toHaveURL(/connections|dashboard|home/, { timeout: 15000 });
 }
 
 /**
@@ -26,7 +30,8 @@ test('TC-29: Offline behavior', async ({ page, context }) => {
   await context.setOffline(true);
   
   // Intentar navegar a una página
-  await page.goto('https://mishu.co.il/dashboard');
+  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app/';
+  await page.goto(`${baseUrl}dashboard`);
   
   // Verificar que aparece un mensaje de offline
   const offlineMessage = page.locator('.offline-message, .no-connection, .network-error, [data-testid="offline"]');

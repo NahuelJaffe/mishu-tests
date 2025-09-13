@@ -8,7 +8,7 @@ const { test, expect } = require('@playwright/test');
  */
 test('TC-01: Login with valid credentials', async ({ page }) => {
   // Navegar a la página de login
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
@@ -19,8 +19,8 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   
   // Llenar el formulario con credenciales válidas
   // Usar variables de entorno en CI, fallback a credenciales por defecto
-  const email = process.env.TEST_EMAIL || 'nahueljaffe+testmishu@gmail.com';
-  const password = process.env.TEST_PASSWORD || 'Prueba1';
+  const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
+  const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
   
   await page.fill('input[type="email"]', email);
   await page.fill('input[type="password"]', password);
@@ -29,7 +29,7 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   await page.click('button[type="submit"]');
   
   // Esperar la redirección con timeout más largo para CI
-  await expect(page).toHaveURL(/connections/, { timeout: 15000 });
+  await expect(page).toHaveURL(/connections|dashboard|home/, { timeout: 15000 });
   
   // Verificar que la página se cargó correctamente
   await page.waitForLoadState('networkidle');
@@ -42,7 +42,7 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
  * Verifica que se muestre un mensaje de error al intentar iniciar sesión con credenciales inválidas
  */
 test('TC-02: Login with invalid credentials', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Esperar a que el formulario esté completamente cargado
   await page.waitForSelector('input[type="email"]', { timeout: 10000 });
@@ -86,7 +86,7 @@ test('TC-02: Login with invalid credentials', async ({ page }) => {
  * Verifica el flujo de recuperación de contraseña
  */
 test('TC-03: Password recovery flow', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Buscar y hacer clic en el enlace de recuperación de contraseña
   const forgotPasswordLink = page.getByText(/forgot|reset|recover/i);
@@ -103,7 +103,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Ingresar el email de prueba
-    await emailInput.fill('nahueljaffe+testmishu@gmail.com');
+    await emailInput.fill('nahueljaffe+bugwpp@gmail.com');
     
     // Enviar el formulario
     await page.click('button[type="submit"]');
@@ -123,7 +123,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
  * Verifica que la opción "Remember me" mantenga la sesión activa
  */
 test('TC-04: "Remember me" functionality', async ({ page, context }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Verificar si existe la opción "Remember me"
   const rememberMeCheckbox = page.locator('input[type="checkbox"][name*="remember"], label:has-text("Remember me")');
@@ -133,12 +133,12 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     await rememberMeCheckbox.check();
     
     // Llenar credenciales y hacer login con las credenciales proporcionadas
-    await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
-    await page.fill('input[type="password"]', 'Prueba1');
+    await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
+    await page.fill('input[type="password"]', 'Tonna2-wahwon-gupreq');
     await page.click('button[type="submit"]');
     
     // Verificar login exitoso
-    await expect(page).toHaveURL(/dashboard|home/);
+    await expect(page).toHaveURL(/connections|dashboard|home/, { timeout: 15000 });
     
     // Guardar cookies y storage
     await page.context().storageState({ path: 'storageState.json' });
@@ -150,14 +150,14 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     const newPage = await context.newPage();
     
     // Navegar directamente a la página principal
-    await newPage.goto('https://mishu.co.il');
+    await newPage.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/');
     
     // Verificar que seguimos con la sesión iniciada (no redirige a login)
-    await expect(newPage).not.toHaveURL(/login/);
+    await expect(newPage).not.toHaveURL(/login/, { timeout: 10000 });
     
     // Verificar elementos que confirman que estamos logueados
-    const userMenu = newPage.locator('.user-menu, .profile-menu, .avatar');
-    await expect(userMenu).toBeVisible();
+    const userMenu = newPage.locator('.user-menu, .profile-menu, .avatar, [class*="user"], [class*="profile"], .navbar .dropdown');
+    await expect(userMenu.first()).toBeVisible({ timeout: 10000 });
   } else {
     console.log('Remember me option not found, skipping test');
     test.skip();

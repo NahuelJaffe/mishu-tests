@@ -15,7 +15,7 @@ module.exports = defineConfig({
   ],
   use: {
     // Base URL for all tests
-    baseURL: process.env.BASE_URL || 'https://mishu.co.il',
+    baseURL: process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app/',
     
     // Global test options
     trace: 'on-first-retry',
@@ -28,7 +28,6 @@ module.exports = defineConfig({
     
     // CI-specific options
     ignoreHTTPSErrors: true,
-    bypassCSP: true,
   },
   projects: [
     // Chrome - Main browser for testing
@@ -60,7 +59,7 @@ module.exports = defineConfig({
         ...devices['Desktop Firefox'],
         launchOptions: {
           firefoxUserPrefs: {
-            'security.tls.insecure_fallback_hosts': 'mishu.co.il'
+            'security.tls.insecure_fallback_hosts': 'mishu-web--pr67-faq-0n1j2wio.web.app'
           }
         }
       },
@@ -71,10 +70,8 @@ module.exports = defineConfig({
       name: 'webkit',
       use: { 
         ...devices['Desktop Safari'],
-        // WebKit-specific options
-        launchOptions: {
-          args: ['--disable-web-security']
-        }
+        // WebKit doesn't support Chrome-specific launch args
+        // Keep it simple for CI compatibility
       },
     },
     

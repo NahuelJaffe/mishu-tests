@@ -101,7 +101,7 @@ jobs:
       run: npx playwright install --with-deps
     
     - name: Run all tests
-      run: npx playwright test --reporter=html
+      run: npx playwright test --reporter=html,github
       env:
         CI: true
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -144,7 +144,7 @@ jobs:
       run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium  # Only install chromium for faster execution
+      run: npx playwright install --with-deps
     
     - name: Run specific module tests
       run: npm run test:${{ matrix.module }}

@@ -7,9 +7,9 @@ const { test, expect } = require('@playwright/test');
  * Esta función se utilizará en varios tests para no repetir código
  */
 async function login(page) {
-  await page.goto('https://mishu.co.il/login');
-  await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
-  await page.fill('input[type="password"]', 'Prueba1');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
+  await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
+  await page.fill('input[type="password"]', 'Tonna2-wahwon-gupreq');
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -119,7 +119,7 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de gestión de conexiones
-  await page.goto('https://mishu.co.il/connections');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/connections');
   
   // Verificar si la aplicación soporta múltiples conexiones
   const addConnectionButton = page.locator('button:has-text("Add connection"), a:has-text("Add WhatsApp")');
@@ -156,7 +156,7 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de conexiones
-  await page.goto('https://mishu.co.il/connections');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/connections');
   
   // Verificar si hay alguna conexión activa
   const activeConnection = page.locator('.connection.active, .whatsapp-connection.connected');

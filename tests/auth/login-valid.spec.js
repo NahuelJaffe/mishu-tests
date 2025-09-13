@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 // Test para verificar que la página de login carga correctamente
 test('TC-01: Login page loads correctly', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
   // Verificar que el formulario de login está presente
@@ -24,10 +24,10 @@ test('TC-01: Login page loads correctly', async ({ page }) => {
 
 // Test para intentar login con credenciales inválidas
 test('TC-02: Login with invalid credentials shows error message', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Llenar el formulario con credenciales inválidas
-  await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
+  await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
   await page.fill('input[type="password"]', 'wrongpassword123');
   
   // Hacer clic en el botón de login
@@ -45,7 +45,7 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
 
 // Test para verificar la funcionalidad de "Forgot Password"
 test('TC-03: Forgot Password functionality', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Buscar el texto exacto "Forgot your password?" que el usuario ha confirmado que existe en la página
   // Intentamos varias estrategias de localización para encontrarlo
@@ -103,7 +103,7 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Opcional: probar el flujo de recuperación ingresando un email
-    await emailInput.fill('nahueljaffe+testmishu@gmail.com');
+    await emailInput.fill('nahueljaffe+bugwpp@gmail.com');
     
     // Buscar y hacer clic en el botón de enviar/recuperar
     // Intentar encontrar un botón específico para enviar el formulario
@@ -136,7 +136,7 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
 
 // Test para verificar la funcionalidad de registro (Sign Up)
 test('TC-04: Sign Up functionality', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
   
   // Buscar un enlace de registro (sign up)
   const signUpLink = page.getByText(/sign up|register|create account/i);
