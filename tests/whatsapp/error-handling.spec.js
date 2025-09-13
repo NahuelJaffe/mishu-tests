@@ -129,7 +129,7 @@ test('TC-30: Network recovery', async ({ page, context }) => {
     await retryButton.click();
     
     // Verificar que la acción se ejecuta correctamente
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
     
     // Verificar que no hay errores de conexión
     const connectionError = page.locator('.error-message, .alert-error, [role="alert"]');

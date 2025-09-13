@@ -32,7 +32,7 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   await expect(page).toHaveURL(/connections|dashboard|home/, { timeout: 15000 });
   
   // Verificar que la página se cargó correctamente
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   console.log('Login exitoso verificado por URL: ' + page.url());
 });

@@ -54,7 +54,7 @@ test('TC-06: New user registration', async ({ page }) => {
   
   // Verificar que el registro fue exitoso
   // Esto puede variar según la implementación: redirección, mensaje de éxito, etc.
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   // Verificar redirección o mensaje de éxito
   const successMessage = page.locator('.success-message, .alert-success, [role="alert"]');

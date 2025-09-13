@@ -94,7 +94,7 @@ test('TC-11: Navigation menu functionality', async ({ page }) => {
       
       // Verificar que la navegación funciona
       // Nota: La URL puede variar según la implementación
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Verificar que el elemento del menú está activo (si aplica)
       const activeMenuItem = menuItem.locator('.active, .selected, [aria-current="page"]');

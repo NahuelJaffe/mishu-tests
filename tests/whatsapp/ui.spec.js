@@ -99,7 +99,7 @@ test('TC-22: Language switching', async ({ page }) => {
       await spanishOption.click();
       
       // Esperar a que se recargue la página o se actualice el contenido
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Verificar que el contenido cambió al español
       // Buscar texto en español común
@@ -115,7 +115,7 @@ test('TC-22: Language switching', async ({ page }) => {
     if (await englishOption.count() > 0) {
       await englishOption.click();
       
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Verificar que el contenido cambió al inglés
       const englishText = page.locator('text=/home|messages|settings|profile/i');
@@ -130,7 +130,7 @@ test('TC-22: Language switching', async ({ page }) => {
     if (await hebrewOption.count() > 0) {
       await hebrewOption.click();
       
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Verificar que el contenido cambió al hebreo
       const hebrewText = page.locator('text=/בית|הודעות|הגדרות|פרופיל/i');
@@ -163,7 +163,7 @@ test('TC-23: RTL support (Hebrew)', async ({ page }) => {
     
     if (await hebrewOption.count() > 0) {
       await hebrewOption.click();
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Verificar que el documento tiene dirección RTL
       const htmlDir = await page.evaluate(() => document.documentElement.dir);
