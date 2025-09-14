@@ -138,10 +138,10 @@ test('TC-12: Quick actions accessibility', async ({ page }) => {
     
     // Verificar que las acciones rápidas tienen botones accesibles
     const actionButtons = quickActions.locator('button, a, .action-button');
-    await expect(actionButtons).toHaveCount({ min: 1 });
+    const actionCount = await actionButtons.count();
+    expect(actionCount).toBeGreaterThanOrEqual(1);
     
     // Verificar cada acción rápida
-    const actionCount = await actionButtons.count();
     for (let i = 0; i < actionCount; i++) {
       const button = actionButtons.nth(i);
       

@@ -73,7 +73,7 @@ test.describe('Smoke Tests', () => {
   test('Basic login flow works', async ({ page }) => {
     try {
       // Navigate to login page
-      await page.goto('/login', { timeout: 30000, waitUntil: 'domcontentloaded' });
+      await gotoWithAnalyticsDisabled(page, '/login');
       
       // Wait a bit for elements to load
       await page.waitForTimeout(2000);
@@ -123,7 +123,7 @@ test.describe('Smoke Tests', () => {
   test('Page responds to user interactions', async ({ page }) => {
     try {
       // Navigate to login page
-      await page.goto('/login', { timeout: 30000, waitUntil: 'domcontentloaded' });
+      await gotoWithAnalyticsDisabled(page, '/login');
       
       // Wait for page to load
       await page.waitForLoadState('domcontentloaded');

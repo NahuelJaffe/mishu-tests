@@ -81,7 +81,8 @@ test('TC-18: Message grouping', async ({ page }) => {
     
     // Verificar las opciones de agrupación disponibles
     const groupingOptions = groupingControl.locator('button, select, .option');
-    await expect(groupingOptions).toHaveCount({ min: 1 });
+    const groupingCount = await groupingOptions.count();
+    expect(groupingCount).toBeGreaterThanOrEqual(1);
     
     // Intentar cambiar la agrupación (si es posible)
     const firstOption = groupingOptions.first();
@@ -170,7 +171,8 @@ test('TC-20: Bulk actions on messages', async ({ page }) => {
       
       // Verificar las opciones disponibles
       const actionButtons = bulkActions.locator('button');
-      await expect(actionButtons).toHaveCount({ min: 1 });
+      const actionCount = await actionButtons.count();
+      expect(actionCount).toBeGreaterThanOrEqual(1);
       
       // Desmarcar la selección
       await selectAllCheckbox.uncheck();

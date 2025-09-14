@@ -91,7 +91,8 @@ test('TC-22: Language switching', async ({ page }) => {
     
     // Verificar idiomas disponibles
     const languageOptions = languageSelector.locator('option, .language-option');
-    await expect(languageOptions).toHaveCount({ min: 2 }); // Al menos 2 idiomas
+    const languageCount = await languageOptions.count();
+    expect(languageCount).toBeGreaterThanOrEqual(2); // Al menos 2 idiomas
     
     // Probar cambiar a español
     const spanishOption = languageSelector.locator('option[value="es"], .language-option:has-text("Español"), .language-option:has-text("Spanish")');

@@ -1,7 +1,7 @@
 {
   "name": "mishu-tests",
   "version": "1.0.0",
-  "description": "Automated QA tests for https://mishu-web--pr67-faq-0n1j2wio.web.app/ using Playwright.",
+  "description": "Automated QA tests for https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/ using Playwright.",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
@@ -32,7 +32,7 @@
     "test:report": "playwright show-report",
     "test:install": "playwright install",
     "test:install-deps": "playwright install --with-deps",
-    "test:codegen": "playwright codegen https://mishu-web--pr67-faq-0n1j2wio.web.app/",
+    "test:codegen": "playwright codegen https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/",
     "test:trace": "playwright show-trace",
     "test:clean": "rm -rf test-results playwright-report",
     "check:credentials": "node scripts/check-credentials.js"
@@ -42,6 +42,9 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.55.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
   },
   "directories": {
     "test": "tests"

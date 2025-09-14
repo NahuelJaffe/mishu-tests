@@ -46,7 +46,7 @@ module.exports = defineConfig({
       'X-Playwright-Test': 'true'
     },
     
-    // Inyectar script para deshabilitar analytics en cada página
+    // Global launch options (will be overridden by project-specific ones)
     launchOptions: {
       args: [
         '--disable-web-security',

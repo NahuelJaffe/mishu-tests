@@ -38,10 +38,10 @@ test('TC-40: FAQ section', async ({ page }) => {
   
   // Verificar que hay preguntas disponibles
   const faqItems = faqSection.locator('.faq-item, .question-item, .faq-question, .question');
-  await expect(faqItems).toHaveCount({ min: 1 });
+  const faqCount = await faqItems.count();
+  expect(faqCount).toBeGreaterThanOrEqual(1);
   
   // Probar hacer clic en las preguntas para expandir las respuestas
-  const faqCount = await faqItems.count();
   
   for (let i = 0; i < Math.min(faqCount, 5); i++) { // Probar las primeras 5 preguntas
     const faqItem = faqItems.nth(i);
