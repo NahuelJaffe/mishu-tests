@@ -107,7 +107,7 @@ GET /api/dashboard/connections-status
 ### **TC-API-01: Login API**
 ```bash
 # Test con credenciales válidas
-curl -X POST https://mishu.co.il/api/auth/login \
+curl -X POST [CONFIGURAR_BASE_URL]/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "[CONFIGURAR_EMAIL]",
@@ -122,7 +122,7 @@ curl -X POST https://mishu.co.il/api/auth/login \
 ### **TC-API-02: Login API - Credenciales Inválidas**
 ```bash
 # Test con credenciales inválidas
-curl -X POST https://mishu.co.il/api/auth/login \
+curl -X POST [CONFIGURAR_BASE_URL]/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "invalid@example.com",
@@ -137,7 +137,7 @@ curl -X POST https://mishu.co.il/api/auth/login \
 ### **TC-API-03: Obtener Perfil de Usuario**
 ```bash
 # Test con token válido
-curl -X GET https://mishu.co.il/api/user/profile \
+curl -X GET [CONFIGURAR_BASE_URL]/api/user/profile \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
 # Resultado esperado:
@@ -148,7 +148,7 @@ curl -X GET https://mishu.co.il/api/user/profile \
 ### **TC-API-04: Obtener Conexiones WhatsApp**
 ```bash
 # Test con token válido
-curl -X GET https://mishu.co.il/api/whatsapp/connections \
+curl -X GET [CONFIGURAR_BASE_URL]/api/whatsapp/connections \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
 # Resultado esperado:
@@ -159,7 +159,7 @@ curl -X GET https://mishu.co.il/api/whatsapp/connections \
 ### **TC-API-05: Obtener Código QR**
 ```bash
 # Test con token válido
-curl -X GET https://mishu.co.il/api/whatsapp/qr-code \
+curl -X GET [CONFIGURAR_BASE_URL]/api/whatsapp/qr-code \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
 # Resultado esperado:
@@ -172,7 +172,7 @@ curl -X GET https://mishu.co.il/api/whatsapp/qr-code \
 ### **TC-SEC-01: Autenticación Requerida**
 ```bash
 # Test sin token de autorización
-curl -X GET https://mishu.co.il/api/user/profile
+curl -X GET [CONFIGURAR_BASE_URL]/api/user/profile
 
 # Resultado esperado:
 # Status: 401 Unauthorized
@@ -182,7 +182,7 @@ curl -X GET https://mishu.co.il/api/user/profile
 ### **TC-SEC-02: Token Inválido**
 ```bash
 # Test con token inválido
-curl -X GET https://mishu.co.il/api/user/profile \
+curl -X GET [CONFIGURAR_BASE_URL]/api/user/profile \
   -H "Authorization: Bearer invalid_token"
 
 # Resultado esperado:
@@ -193,7 +193,7 @@ curl -X GET https://mishu.co.il/api/user/profile \
 ### **TC-SEC-03: Token Expirado**
 ```bash
 # Test con token expirado
-curl -X GET https://mishu.co.il/api/user/profile \
+curl -X GET [CONFIGURAR_BASE_URL]/api/user/profile \
   -H "Authorization: Bearer expired_token"
 
 # Resultado esperado:
@@ -205,7 +205,7 @@ curl -X GET https://mishu.co.il/api/user/profile \
 ```bash
 # Test de rate limiting (hacer muchas requests rápidas)
 for i in {1..100}; do
-  curl -X GET https://mishu.co.il/api/user/profile \
+  curl -X GET [CONFIGURAR_BASE_URL]/api/user/profile \
     -H "Authorization: Bearer YOUR_TOKEN_HERE"
 done
 
@@ -220,7 +220,7 @@ done
 ### **TC-PERF-01: Tiempo de Respuesta**
 ```bash
 # Test de tiempo de respuesta
-curl -w "@curl-format.txt" -X GET https://mishu.co.il/api/user/profile \
+curl -w "@curl-format.txt" -X GET [CONFIGURAR_BASE_URL]/api/user/profile \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
 # curl-format.txt:
@@ -238,7 +238,7 @@ curl -w "@curl-format.txt" -X GET https://mishu.co.il/api/user/profile \
 ```bash
 # Test de carga concurrente (usando Apache Bench)
 ab -n 100 -c 10 -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-   https://mishu.co.il/api/user/profile
+   [CONFIGURAR_BASE_URL]/api/user/profile
 ```
 
 ## 🧪 **Tests de Validación de Datos**
@@ -246,7 +246,7 @@ ab -n 100 -c 10 -H "Authorization: Bearer YOUR_TOKEN_HERE" \
 ### **TC-VAL-01: Email Inválido**
 ```bash
 # Test con email inválido
-curl -X POST https://mishu.co.il/api/auth/login \
+curl -X POST [CONFIGURAR_BASE_URL]/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "invalid-email",
@@ -261,7 +261,7 @@ curl -X POST https://mishu.co.il/api/auth/login \
 ### **TC-VAL-02: Campos Requeridos**
 ```bash
 # Test sin campos requeridos
-curl -X POST https://mishu.co.il/api/auth/login \
+curl -X POST [CONFIGURAR_BASE_URL]/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{}'
 
@@ -273,7 +273,7 @@ curl -X POST https://mishu.co.il/api/auth/login \
 ### **TC-VAL-03: Tipos de Datos**
 ```bash
 # Test con tipos de datos incorrectos
-curl -X POST https://mishu.co.il/api/auth/login \
+curl -X POST [CONFIGURAR_BASE_URL]/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": 123,
@@ -290,7 +290,7 @@ curl -X POST https://mishu.co.il/api/auth/login \
 ### **Configuración de Variables**
 ```json
 {
-  "base_url": "https://mishu.co.il",
+  "base_url": "[CONFIGURAR_BASE_URL]",
   "api_version": "v1",
   "test_email": "[CONFIGURAR_EMAIL]",
   "test_password": "[CONFIGURAR_PASSWORD]",
@@ -401,7 +401,7 @@ const axios = require('axios');
 async function testAPI() {
     try {
         // Login
-        const loginResponse = await axios.post('https://mishu.co.il/api/auth/login', {
+        const loginResponse = await axios.post('[CONFIGURAR_BASE_URL]/api/auth/login', {
             email: '[CONFIGURAR_EMAIL]',
             password: '[CONFIGURAR_PASSWORD]'
         });
@@ -409,7 +409,7 @@ async function testAPI() {
         const token = loginResponse.data.token;
         
         // Test profile
-        const profileResponse = await axios.get('https://mishu.co.il/api/user/profile', {
+        const profileResponse = await axios.get('[CONFIGURAR_BASE_URL]/api/user/profile', {
             headers: { Authorization: `Bearer ${token}` }
         });
         

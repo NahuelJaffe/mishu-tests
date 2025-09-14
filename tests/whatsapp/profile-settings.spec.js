@@ -111,7 +111,7 @@ test('TC-26: Password change', async ({ page }) => {
     await expect(confirmPasswordField).toBeVisible();
     
     // Llenar el formulario de cambio de contraseña
-    await currentPasswordField.fill('Prueba1'); // Contraseña actual
+    await currentPasswordField.fill(process.env.TEST_PASSWORD); // Contraseña actual
     await newPasswordField.fill('NewPassword123!');
     await confirmPasswordField.fill('NewPassword123!');
     
@@ -133,8 +133,8 @@ test('TC-26: Password change', async ({ page }) => {
     
     // Probar cambiar la contraseña de vuelta a la original
     await currentPasswordField.fill('NewPassword123!');
-    await newPasswordField.fill('Prueba1');
-    await confirmPasswordField.fill('Prueba1');
+    await newPasswordField.fill(process.env.TEST_PASSWORD);
+    await confirmPasswordField.fill(process.env.TEST_PASSWORD);
     
     await changePasswordButton.click();
     
@@ -158,7 +158,7 @@ test('TC-26: Password change', async ({ page }) => {
       const confirmPasswordField = page.locator('input[name="confirmPassword"], input[name="password_confirmation"]');
       
       if (await currentPasswordField.count() > 0) {
-        await currentPasswordField.fill('Prueba1');
+        await currentPasswordField.fill(process.env.TEST_PASSWORD);
         await newPasswordField.fill('NewPassword123!');
         await confirmPasswordField.fill('NewPassword123!');
         

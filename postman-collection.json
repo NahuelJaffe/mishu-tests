@@ -7,17 +7,17 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "https://mishu.co.il",
+      "value": "[CONFIGURAR_BASE_URL]",
       "type": "string"
     },
     {
       "key": "test_email",
-      "value": "nahueljaffe+testmishu@gmail.com",
+      "value": "[CONFIGURAR_EMAIL]",
       "type": "string"
     },
     {
       "key": "test_password",
-      "value": "Prueba1",
+      "value": "[CONFIGURAR_PASSWORD]",
       "type": "string"
     },
     {

@@ -5,11 +5,11 @@
 Para que los tests de Playwright funcionen correctamente en GitHub Actions, necesitas actualizar los siguientes secrets en tu repositorio:
 
 ### 1. TEST_EMAIL
-- **Valor**: `nahueljaffe+bugwpp@gmail.com`
+- **Valor**: `[CONFIGURAR_EMAIL]`
 - **Descripción**: Email de usuario para tests de autenticación
 
 ### 2. TEST_PASSWORD
-- **Valor**: `Tonna2-wahwon-gupreq`
+- **Valor**: `[CONFIGURAR_PASSWORD]`
 - **Descripción**: Contraseña para tests de autenticación
 
 ### 3. BASE_URL

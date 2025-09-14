@@ -141,11 +141,11 @@ npm run test:report
 
 ### Credenciales de Prueba
 Los tests utilizan las siguientes credenciales de prueba:
-- **Email**: `nahueljaffe+testmishu@gmail.com`
-- **Contraseña**: `Prueba1`
+- **Email**: `[CONFIGURAR_EMAIL]`
+- **Contraseña**: `[CONFIGURAR_PASSWORD]`
 
 ### Entorno de Prueba
-- **URL Base**: `https://mishu.co.il`
+- **URL Base**: `[CONFIGURAR_BASE_URL]`
 - **Navegadores**: Firefox (configurado), Chrome, Safari
 - **Dispositivos**: Desktop, Tablet, Mobile
 - **Idiomas**: Español, Inglés, Hebreo

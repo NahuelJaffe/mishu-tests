@@ -5,24 +5,24 @@ Esta guía te ayudará a hacer pruebas manuales de la aplicación mientras esper
 ## 📋 **Credenciales de Prueba**
 
 ```
-Email: nahueljaffe+testmishu@gmail.com
-Password: Prueba1
-URL: https://mishu.co.il
+Email: [CONFIGURAR_EMAIL]
+Password: [CONFIGURAR_PASSWORD]
+URL: [CONFIGURAR_BASE_URL]
 ```
 
 ## 🔍 **Tests de Autenticación**
 
 ### **TC-01: Login Válido**
-1. **Navegar a**: https://mishu.co.il/login
+1. **Navegar a**: [CONFIGURAR_BASE_URL]/login
 2. **Verificar**: Página de login carga correctamente
-3. **Ingresar email**: `nahueljaffe+testmishu@gmail.com`
-4. **Ingresar password**: `Prueba1`
+3. **Ingresar email**: `[CONFIGURAR_EMAIL]`
+4. **Ingresar password**: `[CONFIGURAR_PASSWORD]`
 5. **Hacer clic**: Botón "Login" o "Submit"
 6. **Verificar**: Redirección a `/connections` o `/dashboard`
 7. **✅ Resultado esperado**: Login exitoso, URL cambia
 
 ### **TC-02: Login Inválido**
-1. **Navegar a**: https://mishu.co.il/login
+1. **Navegar a**: [CONFIGURAR_BASE_URL]/login
 2. **Ingresar email**: `invalid@example.com`
 3. **Ingresar password**: `wrongpassword`
 4. **Hacer clic**: Botón "Login"
@@ -30,21 +30,21 @@ URL: https://mishu.co.il
 6. **✅ Resultado esperado**: Mensaje de error, permanece en login
 
 ### **TC-03: Recuperación de Contraseña**
-1. **Navegar a**: https://mishu.co.il/login
+1. **Navegar a**: [CONFIGURAR_BASE_URL]/login
 2. **Buscar**: Enlace "Forgot your password?" o similar
 3. **Hacer clic**: En el enlace
 4. **Verificar**: Página de recuperación carga
-5. **Ingresar email**: `nahueljaffe+testmishu@gmail.com`
+5. **Ingresar email**: `[CONFIGURAR_EMAIL]`
 6. **Hacer clic**: Botón "Send" o "Submit"
 7. **✅ Resultado esperado**: Mensaje de confirmación
 
 ### **TC-04: Remember Me**
-1. **Navegar a**: https://mishu.co.il/login
+1. **Navegar a**: [CONFIGURAR_BASE_URL]/login
 2. **Buscar**: Checkbox "Remember me"
 3. **Marcar**: El checkbox (si existe)
 4. **Hacer login**: Con credenciales válidas
 5. **Cerrar navegador**: Completamente
-6. **Abrir navegador**: Y navegar a https://mishu.co.il
+6. **Abrir navegador**: Y navegar a [CONFIGURAR_BASE_URL]
 7. **✅ Resultado esperado**: Sesión mantenida, no redirige a login
 
 ## 🔗 **Tests de Conexión WhatsApp**

@@ -19,13 +19,13 @@ Crear estos 3 secrets:
 
 ```
 Nombre: TEST_EMAIL
-Valor: nahueljaffe+testmishu@gmail.com
+Valor: [CONFIGURAR_EMAIL]
 
 Nombre: TEST_PASSWORD  
-Valor: Prueba1
+Valor: [CONFIGURAR_PASSWORD]
 
 Nombre: BASE_URL
-Valor: https://mishu.co.il
+Valor: [CONFIGURAR_BASE_URL]
 ```
 
 ### **2. Hacer Push del Código**
