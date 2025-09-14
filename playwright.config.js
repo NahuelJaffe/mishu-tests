@@ -43,7 +43,9 @@ module.exports = defineConfig({
     userAgent: 'PlaywrightTestBot/1.0 (automated testing; exclude from analytics)',
     extraHTTPHeaders: {
       'X-Test-Environment': 'automation',
-      'X-Playwright-Test': 'true'
+      'X-Playwright-Test': 'true',
+      'X-Analytics-Disabled': 'true',
+      'X-E2E-Testing': 'true'
     },
     
     // Global launch options (will be overridden by project-specific ones)
@@ -57,9 +59,33 @@ module.exports = defineConfig({
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--disable-gpu'
+        '--disable-gpu',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding'
       ]
     },
+    
+    // Inyectar script de bloqueo de analytics en todas las páginas
+    ...(process.env.CI ? {
+      // En CI, usar el bloqueador más agresivo
+      launchOptions: {
+        args: [
+          '--disable-web-security',
+          '--disable-features=VizDisplayCompositor',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-renderer-backgrounding'
+        ]
+      }
+    } : {}),
   },
   projects: [
     // Chrome - Main browser for testing
