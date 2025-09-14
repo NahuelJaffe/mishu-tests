@@ -10,8 +10,8 @@ async function loginOptimized(page) {
     // If we're on login page, the auth state might have expired
     // Fall back to manual login
     const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
-    const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-    const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+    const email = process.env.TEST_EMAIL;
+    const password = process.env.TEST_PASSWORD;
     
     await page.fill('input[type="email"]', email);
     await page.fill('input[type="password"]', password);

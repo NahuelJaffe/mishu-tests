@@ -6,9 +6,10 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  await page.goto('https://mishu.co.il/login');
-  await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
-  await page.fill('input[type="password"]', 'Prueba1');
+  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  await page.goto(`${baseURL}login`);
+  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
+  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -41,8 +42,8 @@ test('TC-21: Responsive design', async ({ page }) => {
     
     // Verificar elementos principales
     const mainContent = page.locator('main, .main-content, .dashboard');
-    await expect(mainContent).toBeVisible();
-    
+  await expect(mainContent).toBeVisible();
+  
     // Verificar navegación
     const navigation = page.locator('nav, .navigation, .sidebar');
     await expect(navigation).toBeVisible();
@@ -307,7 +308,7 @@ test('TC-24: Dark/light mode (if applicable)', async ({ page }) => {
       }
     } else {
       console.log('Theme toggle and settings not found, skipping test');
-      test.skip();
+    test.skip();
     }
   }
 });

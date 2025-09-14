@@ -29,7 +29,7 @@ test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
   console.log('✅ Campo de email encontrado');
   
   // Ingresar el email de prueba
-  await emailInput.fill('nahueljaffe+testmishu@gmail.com');
+  await emailInput.fill(process.env.TEST_EMAIL);
   
   // Buscar y hacer clic en el botón de envío
   const submitButton = page.locator('button[type="submit"], button:has-text("Send"), button:has-text("Submit"), button:has-text("Reset")');

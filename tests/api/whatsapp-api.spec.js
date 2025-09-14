@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
-const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+const email = process.env.TEST_EMAIL;
+const password = process.env.TEST_PASSWORD;
 
 let authToken;
 
