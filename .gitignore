@@ -59,6 +59,10 @@ temp/
 global-auth-state.json
 storageState.json
 
+# Local configuration files
+config.local.js
+secrets.json
+
 # Build outputs
 dist/
 build/

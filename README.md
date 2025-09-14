@@ -67,7 +67,7 @@ For CI/CD or custom test credentials, set these environment variables:
 git init
 git add .
 git commit -m "Initial commit with Playwright setup"
-git remote add origin https://github.com/NahuelJaffe/mishu-tests.git
+git remote add origin https://github.com/[USERNAME]/mishu-tests.git
 git push -u origin main --force
 ```
 

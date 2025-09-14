@@ -61,7 +61,7 @@ test('TC-37: Browser notifications', async ({ page, context }) => {
   }
   
   // Navegar a la página de configuraciones de notificación
-  await page.goto('https://mishu.co.il/settings');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
   
   // Buscar la configuración de notificaciones del navegador
   const browserNotificationToggle = page.locator('input[name="browserNotifications"], input[type="checkbox"][name*="browser"], .browser-notification-toggle');
@@ -103,7 +103,7 @@ test('TC-37: Browser notifications', async ({ page, context }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto('https://mishu.co.il/notifications');
+    await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications');
     
     const browserNotificationSetting = page.locator('.browser-notification-setting, input[name="browserNotifications"]');
     
@@ -134,7 +134,7 @@ test('TC-38: Email notifications', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto('https://mishu.co.il/settings');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
   
   // Buscar la configuración de notificaciones por email
   const emailNotificationToggle = page.locator('input[name="emailNotifications"], input[type="checkbox"][name*="email"], .email-notification-toggle');
@@ -201,7 +201,7 @@ test('TC-38: Email notifications', async ({ page }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto('https://mishu.co.il/notifications');
+    await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications');
     
     const emailNotificationSetting = page.locator('.email-notification-setting, input[name="emailNotifications"]');
     
@@ -240,7 +240,7 @@ test('TC-39: Notification preferences', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones de notificación
-  await page.goto('https://mishu.co.il/settings');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
   
   // Buscar la sección de preferencias de notificación
   const notificationSection = page.locator('.notification-section, .notification-preferences, [data-section="notifications"]');
@@ -334,7 +334,7 @@ test('TC-39: Notification preferences', async ({ page }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto('https://mishu.co.il/notifications');
+    await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications');
     
     const notificationPreferences = page.locator('.notification-preferences, .preferences, .settings');
     

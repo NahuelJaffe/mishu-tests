@@ -1,50 +1,47 @@
-# Configuración de Secrets en GitHub
+# 🔐 GitHub Secrets Configuration
 
-## 🔐 Secrets Requeridos
+## Required Secrets
 
-Necesitas crear los siguientes secrets en tu repositorio de GitHub:
+Configure these secrets in your GitHub repository settings:
 
-### **1. Credenciales de Test**
-- **Nombre**: `TEST_EMAIL`
-- **Valor**: `nahueljaffe+testmishu@gmail.com`
+### Authentication
+- `TEST_EMAIL` - Test user email address
+- `TEST_PASSWORD` - Test user password
 
-- **Nombre**: `TEST_PASSWORD`  
-- **Valor**: `Prueba1`
+### Application URLs
+- `BASE_URL` - Base URL for the application (default: https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/)
 
-### **2. URL Base (Opcional)**
-- **Nombre**: `BASE_URL`
-- **Valor**: `https://mishu.co.il`
+## How to Set Up Secrets
 
-## 📋 Pasos para Configurar
+1. Go to your GitHub repository
+2. Click on **Settings** tab
+3. In the left sidebar, click **Secrets and variables** > **Actions**
+4. Click **New repository secret**
+5. Add each secret with its corresponding value
 
-### **1. Ir a GitHub Secrets**
-1. Ve a tu repositorio en GitHub
-2. Click en **Settings**
-3. Click en **Secrets and variables** → **Actions**
-4. Click en **New repository secret**
+## Example Secrets
 
-### **2. Crear cada Secret**
 ```
-Nombre: TEST_EMAIL
-Valor: nahueljaffe+testmishu@gmail.com
-
-Nombre: TEST_PASSWORD
-Valor: Prueba1
-
-Nombre: BASE_URL
-Valor: https://mishu.co.il
+TEST_EMAIL=your-test-email@example.com
+TEST_PASSWORD=your-secure-password
+BASE_URL=https://your-app-url.com/
 ```
 
-## ⚠️ Importante
+## Security Notes
 
-- **NO** subas las credenciales al código
-- **SÍ** úsalas como variables de entorno en GitHub Actions
-- Las credenciales deben ser de una cuenta de **test/desarrollo**
-- **NUNCA** uses credenciales de producción
+- Never commit real credentials to the repository
+- Use strong, unique passwords for test accounts
+- Regularly rotate test credentials
+- Use environment-specific URLs for different testing stages
 
-## 🔧 Verificación
+## Local Development
 
-Después de configurar los secrets, puedes verificar que funcionan:
-1. Ve a **Actions** en tu repo
-2. Ejecuta cualquier workflow
-3. En los logs deberías ver que los tests usan las credenciales correctas
+For local development, create a `.env` file in the project root:
+
+```bash
+TEST_EMAIL=your-test-email@example.com
+TEST_PASSWORD=your-secure-password
+BASE_URL=https://your-app-url.com/
+```
+
+Add `.env` to your `.gitignore` file to prevent accidental commits.

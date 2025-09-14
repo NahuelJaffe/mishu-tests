@@ -6,11 +6,11 @@ const { disableAnalytics, gotoWithAnalyticsDisabled } = require('./analytics-hel
  */
 async function login(page) {
   // Obtener credenciales de variables de entorno
-  const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-  const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+  const email = process.env.TEST_EMAIL;
+  const password = process.env.TEST_PASSWORD;
   const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
   
-  console.log(`🔐 Intentando login con email: ${email}`);
+  console.log(`🔐 Intentando login con email configurado`);
   
   // Deshabilitar analytics antes de navegar
   await disableAnalytics(page);

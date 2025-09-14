@@ -68,8 +68,8 @@ async function globalSetup(config) {
       
       // Intentar hacer login para crear estado de autenticación
       console.log('🔐 Attempting login for global auth state...');
-      const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-      const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+      const email = process.env.TEST_EMAIL;
+      const password = process.env.TEST_PASSWORD;
       
       try {
         // Esperar a que los campos estén disponibles
