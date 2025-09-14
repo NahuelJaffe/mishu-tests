@@ -2,7 +2,7 @@
 const { chromium } = require('@playwright/test');
 const fs = require('fs');
 const { setupAnalyticsBrowserBlocking } = require('./analytics-route-blocker');
-const { setupAnalyticsBrowserDNSBlocking } = require('./analytics-dns-blocker');
+const { setupAnalyticsDNSBlocking } = require('./analytics-dns-blocker');
 
 async function globalSetup(config) {
   console.log('🚀 Starting global setup...');
@@ -26,12 +26,12 @@ async function globalSetup(config) {
     });
     
     // Configurar bloqueo de rutas de analytics a nivel de browser
-    await setupAnalyticsBrowserBlocking(browser);
+    const context = await setupAnalyticsBrowserBlocking(browser);
     
-    // Configurar bloqueo de DNS de analytics a nivel de browser
-    await setupAnalyticsBrowserDNSBlocking(browser);
+    // Configurar bloqueo de DNS de analytics en el mismo contexto
+    await setupAnalyticsDNSBlocking(context);
     
-    const page = await browser.newPage();
+    const page = await context.newPage();
     
     // Inyectar bloqueador de analytics NUCLEAR
     const path = require('path');

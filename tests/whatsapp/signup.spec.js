@@ -8,7 +8,7 @@ const { test, expect } = require('@playwright/test');
  */
 test('TC-06: New user registration', async ({ page }) => {
   // Navegar a la página de registro
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/register');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   // Verificar que estamos en la página de registro
   await expect(page).toHaveURL(/register|signup/);
@@ -86,7 +86,7 @@ test('TC-06: New user registration', async ({ page }) => {
  * Verifica que el sistema detecte emails duplicados
  */
 test('TC-07: Duplicate email/phone check', async ({ page }) => {
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/register');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   // Usar un email que ya existe (el email de prueba que usamos en otros tests)
   const existingEmail = process.env.TEST_EMAIL;
@@ -123,7 +123,7 @@ test('TC-07: Duplicate email/phone check', async ({ page }) => {
  * Verifica que se validen los requisitos de contraseña
  */
 test('TC-08: Password requirements validation', async ({ page }) => {
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/register');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
   const passwordField = page.locator('input[type="password"], input[name="password"]');
@@ -190,7 +190,7 @@ test('TC-09: Email verification flow', async ({ page }) => {
   // Este test simula el flujo de verificación de email
   // En un entorno real, esto requeriría interceptar emails o usar un servicio de testing
   
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/register');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   const timestamp = Date.now();
   const testEmail = `testuser${timestamp}@example.com`;

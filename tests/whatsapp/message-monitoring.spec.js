@@ -24,7 +24,7 @@ test('TC-17: Message display', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Verificar que estamos en la página de mensajes
   await expect(page).toHaveURL(/messages|chats/);
@@ -72,7 +72,7 @@ test('TC-18: Message grouping', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Verificar si existe la funcionalidad de agrupación
   const groupingControl = page.locator('.grouping-control, .view-options, .filter-options');
@@ -107,7 +107,7 @@ test('TC-19: Manual message flagging', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Verificar si hay mensajes disponibles
   const messagesList = page.locator('.messages-list, .chats-list, .conversation-list');
@@ -153,7 +153,7 @@ test('TC-20: Bulk actions on messages', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Verificar si hay mensajes disponibles
   const messagesList = page.locator('.messages-list, .chats-list, .conversation-list');

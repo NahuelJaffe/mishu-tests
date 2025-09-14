@@ -80,12 +80,16 @@ async function setupAnalyticsContextBlocking(context) {
 
 /**
  * Configura el bloqueo de rutas de analytics para un browser
+ * NOTA: browser.route() no existe en Playwright, se usa context.route()
  */
 async function setupAnalyticsBrowserBlocking(browser) {
   console.log('🚫 Setting up analytics browser blocking...');
   
+  // Crear un contexto con bloqueo de analytics
+  const context = await browser.newContext();
+  
   // Interceptar TODAS las rutas que contengan dominios de analytics
-  await browser.route('**/*', async (route) => {
+  await context.route('**/*', async (route) => {
     const url = route.request().url();
     
     // Verificar si la URL contiene algún dominio de analytics
@@ -103,6 +107,7 @@ async function setupAnalyticsBrowserBlocking(browser) {
   });
   
   console.log('🚫 Analytics browser blocking configured');
+  return context;
 }
 
 module.exports = {

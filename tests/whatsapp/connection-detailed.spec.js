@@ -110,7 +110,7 @@ test('TC-15: Navegación de la página', async ({ page }) => {
   console.log('✅ Navegación al dashboard funciona');
   
   // Volver a connections
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
   await expect(page).toHaveURL(/connections/);
   console.log('✅ Navegación de vuelta a connections funciona');
   

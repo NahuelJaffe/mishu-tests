@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/';
+  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
   await page.goto(`${baseURL}login`);
   await page.fill('input[type="email"]', process.env.TEST_EMAIL);
   await page.fill('input[type="password"]', process.env.TEST_PASSWORD);

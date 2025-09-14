@@ -27,7 +27,7 @@ test('TC-25: Profile update', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de perfil
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
   
   // Verificar que estamos en la página de perfil
   await expect(page).toHaveURL(/profile|account/);
@@ -93,7 +93,7 @@ test('TC-26: Password change', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuración de contraseña
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
   
   // Buscar la sección de cambio de contraseña
   const passwordSection = page.locator('.password-section, .change-password, [data-section="password"]');

@@ -56,7 +56,7 @@ test('TC-33: Session management', async ({ page, context }) => {
   const newPage = await context.newPage();
   
   // Navegar a una página protegida
-  await newPage.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
+  await newPage.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
   
   // Verificar que seguimos con la sesión iniciada (no redirige a login)
   await expect(newPage).not.toHaveURL(/login/);

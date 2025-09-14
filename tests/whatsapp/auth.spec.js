@@ -8,7 +8,7 @@ const { test, expect } = require('@playwright/test');
  */
 test('TC-01: Login with valid credentials', async ({ page }) => {
   // Navegar a la página de login
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
@@ -42,7 +42,7 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
  * Verifica que se muestre un mensaje de error al intentar iniciar sesión con credenciales inválidas
  */
 test('TC-02: Login with invalid credentials', async ({ page }) => {
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Esperar a que el formulario esté completamente cargado
   await page.waitForSelector('input[type="email"]', { timeout: 10000 });
@@ -86,7 +86,7 @@ test('TC-02: Login with invalid credentials', async ({ page }) => {
  * Verifica el flujo de recuperación de contraseña
  */
 test('TC-03: Password recovery flow', async ({ page }) => {
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Buscar y hacer clic en el enlace de recuperación de contraseña
   const forgotPasswordLink = page.getByText(/forgot|reset|recover/i);
@@ -123,7 +123,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
  * Verifica que la opción "Remember me" mantenga la sesión activa
  */
 test('TC-04: "Remember me" functionality', async ({ page, context }) => {
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Verificar si existe la opción "Remember me"
   const rememberMeCheckbox = page.locator('input[type="checkbox"][name*="remember"], label:has-text("Remember me")');
