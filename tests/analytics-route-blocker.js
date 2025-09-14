@@ -10,11 +10,10 @@ const analyticsDomains = [
   'facebook.com/tr',
   'connect.facebook.net',
   'facebook.net',
-  'firebase',
-  'analytics',
+  // Avoid generic substrings like 'analytics' or 'firebase' to prevent blocking own hosts
   'mixpanel.com',
   'amplitude.com',
-  'segment.com',
+  'segment.io',
   'heap.io',
   'hotjar.com',
   'fullstory.com',

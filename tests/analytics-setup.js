@@ -2,7 +2,9 @@
 // Este archivo se ejecuta antes de cada test para asegurar que analytics esté bloqueado
 
 const { setupAnalyticsRouteBlocking } = require('./analytics-route-blocker');
-const { setupAnalyticsDNSBlocking } = require('./analytics-dns-blocker');
+const fs = require('fs');
+const path = require('path');
+// DNS-level blocker removed to avoid over-blocking own hosts
 
 /**
  * Setup que se ejecuta antes de cada test para bloquear analytics
@@ -24,11 +26,10 @@ async function setupAnalyticsForTest(page) {
       'facebook.com/tr',
       'connect.facebook.net',
       'facebook.net',
-      'firebase',
-      'analytics',
+      // avoid generic substrings like 'analytics' or 'firebase'
       'mixpanel.com',
       'amplitude.com',
-      'segment.com',
+      'segment.io',
       'heap.io',
       'hotjar.com'
     ];
@@ -38,6 +39,16 @@ async function setupAnalyticsForTest(page) {
     
     if (isAnalyticsRequest) {
       console.log('🚫 TEST BLOCKED ROUTE:', url);
+      
+      // Escribir una entrada en el log de violaciones para verificación post-ejecución
+      try {
+        const outDir = path.join(process.cwd(), 'test-results');
+        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+        fs.appendFileSync(path.join(outDir, 'analytics-violations.log'), `${new Date().toISOString()}\t${url}\n`);
+      } catch (e) {
+        console.warn('⚠️ Could not write analytics violation log:', e.message);
+      }
+      
       // Abortar la request completamente
       await route.abort('blockedbyclient');
       return;
@@ -47,21 +58,11 @@ async function setupAnalyticsForTest(page) {
     await route.continue();
   });
   
-  // 2. Inyectar bloqueador nuclear de analytics
-  const fs = require('fs');
-  const path = require('path');
-  
-  try {
-    const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');
-    
-    await page.addInitScript(() => {
-      eval(blockerScript);
-    });
-    
-    console.log('✅ Nuclear analytics blocker injected');
-  } catch (error) {
-    console.warn('⚠️ Could not inject nuclear blocker:', error.message);
-  }
+  // 2. Establecer únicamente la flag antes de que cargue cualquier script de la app (nuclear blocker removed)
+  await page.addInitScript(() => {
+    // @ts-ignore
+    window.__E2E_ANALYTICS_DISABLED__ = true;
+  });
   
   // 3. Agregar parámetros de deshabilitación de analytics a las URLs (solo si no es una URL relativa)
   const originalGoto = page.goto;

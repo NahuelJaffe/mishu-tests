@@ -26,6 +26,14 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
     
+    - name: Run analytics network capture (chromium)
+      run: npx playwright test tests/analytics-network-capture.spec.js --project=chromium --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+    
     - name: Run smoke tests
       run: npx playwright test tests/smoke-test.spec.js --project=chromium --reporter=github
       env:
@@ -66,6 +74,14 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps ${{ matrix.browser }}
     
+    - name: Run analytics network capture (${{ matrix.browser }})
+      run: npx playwright test tests/analytics-network-capture.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+    
     - name: Run Playwright tests
       run: npx playwright test --project=${{ matrix.browser }} --reporter=github
       env:
@@ -101,6 +117,22 @@ jobs:
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    
+    - name: Run analytics network capture (specific-modules job - chromium)
+      run: npx playwright test tests/analytics-network-capture.spec.js --project=chromium --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+    
+    - name: Run analytics network capture (all-browsers job - chromium)
+      run: npx playwright test tests/analytics-network-capture.spec.js --project=chromium --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
     
     - name: Run all tests
       run: npx playwright test --reporter=html,github

@@ -12,13 +12,10 @@ function addAnalyticsDisableParams(url) {
  * Función para inyectar script de deshabilitación de analytics NUCLEAR
  */
 async function disableAnalytics(page) {
-  // Cargar y ejecutar el bloqueador NUCLEAR
-  const fs = require('fs');
-  const path = require('path');
-  const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');
-  
+  // Establecer solo la flag E2E antes de cualquier script de la página
   await page.addInitScript(() => {
-    eval(blockerScript);
+    // @ts-ignore
+    window.__E2E_ANALYTICS_DISABLED__ = true;
   });
 }
 

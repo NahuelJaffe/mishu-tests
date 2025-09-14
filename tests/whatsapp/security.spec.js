@@ -188,7 +188,7 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
  */
 test('TC-34: Data encryption', async ({ page }) => {
   // Verificar que la URL es HTTPS
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}`);
   const url = page.url();
   expect(url.startsWith('https://')).toBeTruthy();
   
@@ -203,7 +203,7 @@ test('TC-34: Data encryption', async ({ page }) => {
   }
   
   // Verificar que los formularios usan HTTPS
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   const loginForm = page.locator('form');
   if (await loginForm.count() > 0) {
