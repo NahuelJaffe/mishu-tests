@@ -1,4 +1,5 @@
 // Helper para manejo de credenciales de autenticación
+const { disableAnalytics, gotoWithAnalyticsDisabled } = require('./analytics-helper');
 
 /**
  * Función auxiliar para iniciar sesión usando variables de entorno
@@ -7,11 +8,16 @@ async function login(page) {
   // Obtener credenciales de variables de entorno
   const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
   const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app/';
+  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
   
   console.log(`🔐 Intentando login con email: ${email}`);
   
-  await page.goto(`${baseUrl}/login`);
+  // Deshabilitar analytics antes de navegar
+  await disableAnalytics(page);
+  
+  // Navegar con parámetros de analytics deshabilitados
+  await gotoWithAnalyticsDisabled(page, `${baseUrl}/login`);
+  
   await page.fill('input[type="email"]', email);
   await page.fill('input[type="password"]', password);
   await page.click('button[type="submit"]');

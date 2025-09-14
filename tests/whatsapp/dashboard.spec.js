@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/login');
+  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/login');
   await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
   await page.fill('input[type="password"]', 'Tonna2-wahwon-gupreq');
   await page.click('button[type="submit"]');
@@ -23,7 +23,7 @@ test('TC-10: Empty state display', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard principal
-  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/dashboard');
+  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
   
   // Verificar que estamos en el dashboard
   await expect(page).toHaveURL(/dashboard|home/);
@@ -68,7 +68,7 @@ test('TC-11: Navigation menu functionality', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/dashboard');
+  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
   
   // Verificar que existe el menú de navegación
   const navigationMenu = page.locator('nav, .navigation, .sidebar, .menu');
@@ -128,7 +128,7 @@ test('TC-12: Quick actions accessibility', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu-web--pr67-faq-0n1j2wio.web.app/dashboard');
+  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
   
   // Verificar que existen acciones rápidas
   const quickActions = page.locator('.quick-actions, .action-buttons, .dashboard-actions');

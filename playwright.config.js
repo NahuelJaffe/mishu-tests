@@ -3,9 +3,6 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  /* Global setup and teardown */
-  globalSetup: require.resolve('./global-setup.js'),
-  globalTeardown: require.resolve('./global-teardown.js'),
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -25,7 +22,7 @@ module.exports = defineConfig({
   ],
   use: {
     // Base URL for all tests
-    baseURL: process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app/',
+    baseURL: process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/',
     
     // Global test options
     trace: 'on-first-retry',
@@ -48,6 +45,21 @@ module.exports = defineConfig({
       'X-Test-Environment': 'automation',
       'X-Playwright-Test': 'true'
     },
+    
+    // Inyectar script para deshabilitar analytics en cada página
+    launchOptions: {
+      args: [
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor',
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-gpu'
+      ]
+    },
   },
   projects: [
     // Chrome - Main browser for testing
@@ -57,7 +69,17 @@ module.exports = defineConfig({
         ...devices['Desktop Chrome'],
         // Configuración específica para CI
         launchOptions: {
-          args: ['--disable-web-security', '--disable-features=VizDisplayCompositor', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--disable-gpu']
+          args: [
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor',
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+          ]
         }
       },
     },
@@ -69,7 +91,7 @@ module.exports = defineConfig({
         ...devices['Desktop Firefox'],
         launchOptions: {
           firefoxUserPrefs: {
-            'security.tls.insecure_fallback_hosts': 'mishu-web--pr67-faq-0n1j2wio.web.app'
+            'security.tls.insecure_fallback_hosts': 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app'
           },
           args: ['--disable-web-security']
         }

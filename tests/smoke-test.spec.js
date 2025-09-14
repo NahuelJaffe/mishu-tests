@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { disableAnalytics, gotoWithAnalyticsDisabled } = require('./analytics-helper');
 
 // Smoke tests - Basic functionality tests to verify the application is working
 // These tests are designed to be very robust and should pass in most environments
@@ -7,13 +8,16 @@ test.describe('Smoke Tests', () => {
   
   test('Application loads successfully', async ({ page }) => {
     try {
-      // Navigate to the application with retry logic
-      await page.goto('/', { timeout: 30000, waitUntil: 'domcontentloaded' });
+      // Disable analytics before navigation
+      await disableAnalytics(page);
+      
+      // Navigate to the application with analytics disabled
+      await gotoWithAnalyticsDisabled(page, '/');
       
       // Verify we're on the right domain
       const currentUrl = page.url();
-      const baseURL = process.env.BASE_URL || 'https://mishu-web--pr67-faq-0n1j2wio.web.app';
-      const expectedDomain = baseURL.includes('mishu.co.il') ? 'mishu.co.il' : 'mishu-web--pr67-faq-0n1j2wio.web.app';
+      const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
+      const expectedDomain = baseURL.includes('mishu.co.il') ? 'mishu.co.il' : 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
       expect(currentUrl).toContain(expectedDomain);
       
       // Verify page has a title
@@ -31,8 +35,11 @@ test.describe('Smoke Tests', () => {
 
   test('Login page is accessible', async ({ page }) => {
     try {
-      // Navigate to login page
-      await page.goto('/login', { timeout: 30000, waitUntil: 'domcontentloaded' });
+      // Disable analytics before navigation
+      await disableAnalytics(page);
+      
+      // Navigate to login page with analytics disabled
+      await gotoWithAnalyticsDisabled(page, '/login');
       
       // Verify we're on the login page
       const currentUrl = page.url();
