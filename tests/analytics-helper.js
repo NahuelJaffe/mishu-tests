@@ -9,13 +9,13 @@ function addAnalyticsDisableParams(url) {
 }
 
 /**
- * Función para inyectar script de deshabilitación de analytics ULTRA AGRESIVO
+ * Función para inyectar script de deshabilitación de analytics NUCLEAR
  */
 async function disableAnalytics(page) {
-  // Cargar y ejecutar el bloqueador ultra agresivo
+  // Cargar y ejecutar el bloqueador NUCLEAR
   const fs = require('fs');
   const path = require('path');
-  const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-ultra.js'), 'utf8');
+  const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');
   
   await page.addInitScript(() => {
     eval(blockerScript);

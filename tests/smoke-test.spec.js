@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { disableAnalytics, gotoWithAnalyticsDisabled } = require('./analytics-helper');
 const { verifyAnalyticsBlocked, blockAnalyticsRequests } = require('./analytics-verification');
 const { setupAnalyticsRouteBlocking } = require('./analytics-route-blocker');
+const { setupAnalyticsPageDNSBlocking } = require('./analytics-dns-blocker');
 
 // Smoke tests - Basic functionality tests to verify the application is working
 // These tests are designed to be very robust and should pass in most environments
@@ -10,10 +11,11 @@ test.describe('Smoke Tests', () => {
   
   test('Application loads successfully', async ({ page }) => {
     try {
-      // Setup comprehensive analytics blocking
-      await setupAnalyticsRouteBlocking(page);
-      await disableAnalytics(page);
-      await blockAnalyticsRequests(page);
+           // Setup comprehensive analytics blocking
+           await setupAnalyticsRouteBlocking(page);
+           await setupAnalyticsPageDNSBlocking(page);
+           await disableAnalytics(page);
+           await blockAnalyticsRequests(page);
       
       // Navigate to the application with analytics disabled
       await gotoWithAnalyticsDisabled(page, '/');
