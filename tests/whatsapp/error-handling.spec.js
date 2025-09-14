@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseUrl = process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/';
   const email = process.env.TEST_EMAIL;
   const password = process.env.TEST_PASSWORD;
   
@@ -30,7 +30,7 @@ test('TC-29: Offline behavior', async ({ page, context }) => {
   await context.setOffline(true);
   
   // Intentar navegar a una página (con manejo de error offline)
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseUrl = process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/';
   
   try {
     await page.goto(`${baseUrl}dashboard`, { waitUntil: 'domcontentloaded', timeout: 10000 });
@@ -90,7 +90,7 @@ test('TC-30: Network recovery', async ({ page, context }) => {
   await login(page);
   
   // Navegar a una página que requiere datos
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/messages');
   
   // Simular pérdida de conexión
   await context.setOffline(true);
@@ -156,7 +156,7 @@ test('TC-31: Invalid QR code handling', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de conexión de WhatsApp
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connect');
+  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/connect');
   
   // Verificar que se muestra algún elemento de conexión o QR
   const qrCode = page.locator('.qr-code, img[alt*="QR"], canvas, .connection-qr, [data-testid="qr"], .whatsapp-qr');
@@ -250,7 +250,7 @@ test('TC-32: Server error states', async ({ page }) => {
   });
   
   // Navegar a una página que hace llamadas a la API
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages');
+  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/messages');
   
   // Verificar que aparece un mensaje de error del servidor
   const serverError = page.locator('.server-error, .error-message, .alert-error, [role="alert"]');

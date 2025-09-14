@@ -120,7 +120,7 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de gestión de conexiones
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/connections');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
   
   // Verificar si la aplicación soporta múltiples conexiones
   const addConnectionButton = page.locator('button:has-text("Add connection"), a:has-text("Add WhatsApp")');
@@ -157,7 +157,7 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de conexiones
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/connections');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
   
   // Verificar si hay alguna conexión activa
   const activeConnection = page.locator('.connection.active, .whatsapp-connection.connected');

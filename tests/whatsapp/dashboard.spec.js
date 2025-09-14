@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseURL = process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/';
   await page.goto(`${baseURL}login`);
   await page.fill('input[type="email"]', process.env.TEST_EMAIL);
   await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
@@ -24,7 +24,7 @@ test('TC-10: Empty state display', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard principal
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Verificar que estamos en el dashboard
   await expect(page).toHaveURL(/dashboard|home/);
@@ -69,7 +69,7 @@ test('TC-11: Navigation menu functionality', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Verificar que existe el menú de navegación
   const navigationMenu = page.locator('nav, .navigation, .sidebar, .menu');
@@ -129,7 +129,7 @@ test('TC-12: Quick actions accessibility', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Verificar que existen acciones rápidas
   const quickActions = page.locator('.quick-actions, .action-buttons, .dashboard-actions');
