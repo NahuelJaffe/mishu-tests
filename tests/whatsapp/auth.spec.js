@@ -19,8 +19,8 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   
   // Llenar el formulario con credenciales válidas
   // Usar variables de entorno en CI, fallback a credenciales por defecto
-  const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-  const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+  const email = process.env.TEST_EMAIL;
+  const password = process.env.TEST_PASSWORD;
   
   await page.fill('input[type="email"]', email);
   await page.fill('input[type="password"]', password);
@@ -103,7 +103,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Ingresar el email de prueba
-    await emailInput.fill('nahueljaffe+bugwpp@gmail.com');
+    await emailInput.fill(process.env.TEST_EMAIL);
     
     // Enviar el formulario
     await page.click('button[type="submit"]');
@@ -133,8 +133,8 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     await rememberMeCheckbox.check();
     
     // Llenar credenciales y hacer login con las credenciales proporcionadas
-    await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
-    await page.fill('input[type="password"]', 'Tonna2-wahwon-gupreq');
+    await page.fill('input[type="email"]', process.env.TEST_EMAIL);
+    await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
     await page.click('button[type="submit"]');
     
     // Verificar login exitoso

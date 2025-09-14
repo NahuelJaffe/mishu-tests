@@ -56,7 +56,7 @@ test('TC-33: Session management', async ({ page, context }) => {
   const newPage = await context.newPage();
   
   // Navegar a una página protegida
-  await newPage.goto('https://mishu.co.il/dashboard');
+  await newPage.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Verificar que seguimos con la sesión iniciada (no redirige a login)
   await expect(newPage).not.toHaveURL(/login/);
@@ -117,7 +117,7 @@ test('TC-36: Logout functionality', async ({ page, context }) => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
     
   // Verificar que la sesión ha sido cerrada intentando acceder a una página protegida
-  await page.goto('https://mishu.co.il/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Deberíamos ser redirigidos a login
   await expect(page).toHaveURL(/login/);
@@ -132,7 +132,7 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de perfil o configuración
-  await page.goto('https://mishu.co.il/profile');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile');
   
   // Verificar si hay campos de contraseña
   const passwordFields = page.locator('input[type="password"]');
@@ -188,7 +188,7 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
  */
 test('TC-34: Data encryption', async ({ page }) => {
   // Verificar que la URL es HTTPS
-  await page.goto('https://mishu.co.il');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}');
   const url = page.url();
   expect(url.startsWith('https://')).toBeTruthy();
   
@@ -203,7 +203,7 @@ test('TC-34: Data encryption', async ({ page }) => {
   }
   
   // Verificar que los formularios usan HTTPS
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
   
   const loginForm = page.locator('form');
   if (await loginForm.count() > 0) {

@@ -31,7 +31,7 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
   await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/login');
   
   // Llenar el formulario con credenciales inválidas
-  await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
+  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
   await page.fill('input[type="password"]', 'wrongpassword123');
   
   // Hacer clic en el botón de login
@@ -106,7 +106,7 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Opcional: probar el flujo de recuperación ingresando un email
-    await emailInput.fill('nahueljaffe+bugwpp@gmail.com');
+    await emailInput.fill(process.env.TEST_EMAIL);
     
     // Buscar y hacer clic en el botón de enviar/recuperar
     // Intentar encontrar un botón específico para enviar el formulario

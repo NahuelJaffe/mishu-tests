@@ -6,9 +6,10 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  await page.goto('https://mishu.co.il/login');
-  await page.fill('input[type="email"]', 'nahueljaffe+testmishu@gmail.com');
-  await page.fill('input[type="password"]', 'Prueba1');
+  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  await page.goto(`${baseURL}login`);
+  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
+  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -20,7 +21,7 @@ async function login(page) {
  */
 test('TC-40: FAQ section', async ({ page }) => {
   // Navegar a la página de FAQ (puede estar disponible sin login)
-  await page.goto('https://mishu.co.il/faq');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/faq');
   
   // Verificar que estamos en la página de FAQ
   await expect(page).toHaveURL(/faq|help|support/);
@@ -134,7 +135,7 @@ test('TC-40: FAQ section', async ({ page }) => {
  */
 test('TC-41: Contact form', async ({ page }) => {
   // Navegar a la página de contacto
-  await page.goto('https://mishu.co.il/contact');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/contact');
   
   // Verificar que estamos en la página de contacto
   await expect(page).toHaveURL(/contact|support|help/);

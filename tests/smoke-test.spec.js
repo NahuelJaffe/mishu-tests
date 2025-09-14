@@ -89,8 +89,8 @@ test.describe('Smoke Tests', () => {
       await page.waitForTimeout(2000);
       
       // Use environment variables or fallback credentials
-      const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
-      const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+      const email = process.env.TEST_EMAIL;
+      const password = process.env.TEST_PASSWORD;
       
       // Try to fill login form (with flexible selectors)
       const emailInput = page.locator('input[type="email"], input[name*="email"]');

@@ -119,8 +119,8 @@ CONFIGURACIÓN DE NAVEGADORES
 CONFIGURACIÓN DE ENTORNO
 ------------------------
 - URL Base: https://mishu-web--pr67-faq-0n1j2wio.web.app/
-- Email de Test: nahueljaffe+bugwpp@gmail.com
-- Password de Test: Tonna2-wahwon-gupreq
+- Email de Test: [CONFIGURAR EN GITHUB SECRETS]
+- Password de Test: [CONFIGURAR EN GITHUB SECRETS]
 - Timeouts ajustados para CI: 15000ms acciones, 45000ms navegación
 
 TESTS DE API

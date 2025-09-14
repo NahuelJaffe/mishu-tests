@@ -6,9 +6,10 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  await page.goto('https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/login');
-  await page.fill('input[type="email"]', 'nahueljaffe+bugwpp@gmail.com');
-  await page.fill('input[type="password"]', 'Tonna2-wahwon-gupreq');
+  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  await page.goto(`${baseURL}login`);
+  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
+  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);

@@ -110,8 +110,8 @@ GET /api/dashboard/connections-status
 curl -X POST https://mishu.co.il/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "nahueljaffe+testmishu@gmail.com",
-    "password": "Prueba1"
+    "email": "[CONFIGURAR_EMAIL]",
+    "password": "[CONFIGURAR_PASSWORD]"
   }'
 
 # Resultado esperado:
@@ -292,8 +292,8 @@ curl -X POST https://mishu.co.il/api/auth/login \
 {
   "base_url": "https://mishu.co.il",
   "api_version": "v1",
-  "test_email": "nahueljaffe+testmishu@gmail.com",
-  "test_password": "Prueba1",
+  "test_email": "[CONFIGURAR_EMAIL]",
+  "test_password": "[CONFIGURAR_PASSWORD]",
   "auth_token": ""
 }
 ```
@@ -402,8 +402,8 @@ async function testAPI() {
     try {
         // Login
         const loginResponse = await axios.post('https://mishu.co.il/api/auth/login', {
-            email: 'nahueljaffe+testmishu@gmail.com',
-            password: 'Prueba1'
+            email: '[CONFIGURAR_EMAIL]',
+            password: '[CONFIGURAR_PASSWORD]'
         });
         
         const token = loginResponse.data.token;
