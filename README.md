@@ -1,6 +1,6 @@
 # Mishu Tests
 
-Automated QA tests for https://mishu-web--pr67-faq-0n1j2wio.web.app/ using Playwright.
+Automated QA tests for Mishu application using Playwright.
 
 ## Setup and Installation
 
@@ -45,7 +45,7 @@ npm run test:report
 For CI/CD or custom test credentials, set these environment variables:
 - `TEST_EMAIL`: Email for test login
 - `TEST_PASSWORD`: Password for test login
-- `BASE_URL`: Base URL for testing (defaults to https://mishu.co.il)
+- `BASE_URL`: Base URL for testing (configure in GitHub Secrets)
 
 ## Recent Updates
 
