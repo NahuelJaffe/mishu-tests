@@ -21,7 +21,7 @@ async function login(page) {
  */
 test('TC-40: FAQ section', async ({ page }) => {
   // Navegar a la página de FAQ (puede estar disponible sin login)
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/faq');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/faq`);
   
   // Verificar que estamos en la página de FAQ
   await expect(page).toHaveURL(/faq|help|support/);

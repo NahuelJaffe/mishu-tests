@@ -150,7 +150,7 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     const newPage = await context.newPage();
     
     // Navegar directamente a la página principal
-    await newPage.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/');
+    await newPage.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/`);
     
     // Verificar que seguimos con la sesión iniciada (no redirige a login)
     await expect(newPage).not.toHaveURL(/login/, { timeout: 10000 });

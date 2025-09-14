@@ -33,6 +33,29 @@ async function globalSetup(config) {
     
     const page = await context.newPage();
     
+    // Configurar bloqueo adicional a nivel de página
+    await page.route('**/*', async (route) => {
+      const url = route.request().url();
+      
+      // Bloquear dominios de analytics
+      if (
+        url.includes('google-analytics.com') ||
+        url.includes('googletagmanager.com') ||
+        url.includes('facebook.com/tr') ||
+        url.includes('doubleclick.net') ||
+        url.includes('googleadservices.com') ||
+        url.includes('googlesyndication.com') ||
+        url.includes('firebase') ||
+        url.includes('analytics')
+      ) {
+        console.log('🚫 GLOBAL SETUP BLOCKED:', url);
+        await route.abort('blockedbyclient');
+        return;
+      }
+      
+      await route.continue();
+    });
+    
     // Inyectar bloqueador de analytics NUCLEAR
     const path = require('path');
     const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');

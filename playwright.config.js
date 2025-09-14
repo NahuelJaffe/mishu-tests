@@ -113,9 +113,7 @@ module.exports = defineConfig({
     ]),
   ],
   
-  // Global setup and teardown (only in CI)
-  ...(process.env.CI ? {
-    globalSetup: require.resolve('./tests/global-setup.js'),
-    globalTeardown: require.resolve('./tests/global-teardown.js'),
-  } : {}),
+  // Global setup and teardown (always enabled for analytics blocking)
+  globalSetup: require.resolve('./tests/global-setup.js'),
+  globalTeardown: require.resolve('./tests/global-teardown.js'),
 });

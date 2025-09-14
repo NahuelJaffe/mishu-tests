@@ -117,7 +117,7 @@ test('TC-36: Logout functionality', async ({ page, context }) => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
     
   // Verificar que la sesión ha sido cerrada intentando acceder a una página protegida
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
   
   // Deberíamos ser redirigidos a login
   await expect(page).toHaveURL(/login/);

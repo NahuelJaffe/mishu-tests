@@ -90,7 +90,7 @@ test('TC-30: Network recovery', async ({ page, context }) => {
   await login(page);
   
   // Navegar a una página que requiere datos
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Simular pérdida de conexión
   await context.setOffline(true);
@@ -250,7 +250,7 @@ test('TC-32: Server error states', async ({ page }) => {
   });
   
   // Navegar a una página que hace llamadas a la API
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/messages');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
   
   // Verificar que aparece un mensaje de error del servidor
   const serverError = page.locator('.server-error, .error-message, .alert-error, [role="alert"]');

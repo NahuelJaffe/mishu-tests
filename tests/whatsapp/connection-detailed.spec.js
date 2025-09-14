@@ -167,7 +167,7 @@ test('TC-17: Metadata de la página', async ({ page }) => {
   console.log(`✅ Título de la página: ${pageTitle}`);
   
   // Verificar que la URL es correcta
-  expect(page.url()).toBe('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections');
+  expect(page.url()).toBe(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
   console.log('✅ URL correcta');
   
   // Verificar que hay un logo

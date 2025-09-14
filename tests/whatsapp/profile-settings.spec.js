@@ -145,7 +145,7 @@ test('TC-26: Password change', async ({ page }) => {
     
   } else {
     // Buscar en la página de configuraciones
-    await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
+    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
     
     const passwordLink = page.locator('a:has-text("Password"), a:has-text("Security"), button:has-text("Password")');
     
@@ -188,7 +188,7 @@ test('TC-27: Notification preferences', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
   
   // Buscar la sección de notificaciones
   const notificationsSection = page.locator('.notifications-section, .notification-settings, [data-section="notifications"]');
@@ -286,7 +286,7 @@ test('TC-28: Account deletion', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
   
   // Buscar la sección de eliminación de cuenta
   const deleteAccountSection = page.locator('.delete-account, .account-deletion, [data-section="delete"]');
