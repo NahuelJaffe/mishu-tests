@@ -22,7 +22,7 @@ module.exports = defineConfig({
   ],
   use: {
     // Base URL for all tests
-    baseURL: process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/',
+    baseURL: process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/',
     
     // Global test options
     trace: 'on-first-retry',
