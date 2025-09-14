@@ -156,7 +156,7 @@ test('TC-31: Invalid QR code handling', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de conexión de WhatsApp
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/connect');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connect`);
   
   // Verificar que se muestra algún elemento de conexión o QR
   const qrCode = page.locator('.qr-code, img[alt*="QR"], canvas, .connection-qr, [data-testid="qr"], .whatsapp-qr');

@@ -135,7 +135,7 @@ test('TC-40: FAQ section', async ({ page }) => {
  */
 test('TC-41: Contact form', async ({ page }) => {
   // Navegar a la página de contacto
-  await page.goto('${process.env.BASE_URL || '${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/'}/contact');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/contact`);
   
   // Verificar que estamos en la página de contacto
   await expect(page).toHaveURL(/contact|support|help/);

@@ -132,7 +132,7 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de perfil o configuración
-  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile');
+  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
   
   // Verificar si hay campos de contraseña
   const passwordFields = page.locator('input[type="password"]');
