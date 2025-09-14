@@ -35,7 +35,7 @@ test('TC-21: Responsive design', async ({ page }) => {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     
     // Navegar al dashboard
-    await page.goto('https://mishu.co.il/dashboard');
+    await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
     
     // Verificar que la página se carga correctamente
     await expect(page).toHaveURL(/dashboard|home/);
@@ -82,7 +82,7 @@ test('TC-22: Language switching', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu.co.il/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Buscar el selector de idioma
   const languageSelector = page.locator('.language-selector, .locale-selector, select[name="language"], .lang-switcher');
@@ -156,7 +156,7 @@ test('TC-23: RTL support (Hebrew)', async ({ page }) => {
   await login(page);
   
   // Cambiar idioma a hebreo si es posible
-  await page.goto('https://mishu.co.il/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   const languageSelector = page.locator('.language-selector, .locale-selector, select[name="language"], .lang-switcher');
   
@@ -217,7 +217,7 @@ test('TC-24: Dark/light mode (if applicable)', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto('https://mishu.co.il/dashboard');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard');
   
   // Buscar el toggle de modo oscuro/claro
   const themeToggle = page.locator('.theme-toggle, .dark-mode-toggle, .light-mode-toggle, button[aria-label*="theme"], button[aria-label*="mode"]');

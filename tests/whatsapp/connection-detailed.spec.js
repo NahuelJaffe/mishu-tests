@@ -110,7 +110,7 @@ test('TC-15: Navegación de la página', async ({ page }) => {
   console.log('✅ Navegación al dashboard funciona');
   
   // Volver a connections
-  await page.goto('https://mishu.co.il/connections');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections');
   await expect(page).toHaveURL(/connections/);
   console.log('✅ Navegación de vuelta a connections funciona');
   
@@ -167,7 +167,7 @@ test('TC-17: Metadata de la página', async ({ page }) => {
   console.log(`✅ Título de la página: ${pageTitle}`);
   
   // Verificar que la URL es correcta
-  expect(page.url()).toBe('https://mishu.co.il/connections');
+  expect(page.url()).toBe('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections');
   console.log('✅ URL correcta');
   
   // Verificar que hay un logo

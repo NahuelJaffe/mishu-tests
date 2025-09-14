@@ -26,7 +26,7 @@ test.describe('Smoke Tests', () => {
       // Verify we're on the right domain
       const currentUrl = page.url();
       const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
-      const expectedDomain = baseURL.includes('mishu.co.il') ? 'mishu.co.il' : 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
+      const expectedDomain = baseURL.replace(/^https?:\/\//, '').replace(/\/$/, '');
       expect(currentUrl).toContain(expectedDomain);
       
       // Verify page has a title

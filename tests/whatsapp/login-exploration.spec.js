@@ -7,7 +7,7 @@ const { test, expect } = require('@playwright/test');
  * Basado en la información del usuario sobre el botón "Forgot your password"
  */
 test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
   
   // Buscar el botón "Forgot your password" que el usuario confirmó que existe
   const forgotPasswordLink = page.locator('text=/forgot.*password|forgot.*contraseña|reset.*password|reset.*contraseña/i');
@@ -62,7 +62,7 @@ test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
  * Test adicional para explorar más elementos de la página de login
  */
 test('Exploración completa de la página de login', async ({ page }) => {
-  await page.goto('https://mishu.co.il/login');
+  await page.goto('${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login');
   
   console.log('=== EXPLORACIÓN DE LA PÁGINA DE LOGIN ===');
   console.log('URL:', page.url());

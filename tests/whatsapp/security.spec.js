@@ -195,7 +195,7 @@ test('TC-34: Data encryption', async ({ page }) => {
   // Intentar acceder por HTTP y verificar redirección a HTTPS
   // Nota: Esto podría no funcionar en todos los entornos
   try {
-    await page.goto('http://mishu.co.il');
+    await page.goto(`http://${process.env.BASE_URL || 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}`);
     const redirectedUrl = page.url();
     expect(redirectedUrl.startsWith('https://')).toBeTruthy();
   } catch (error) {
