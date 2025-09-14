@@ -2,12 +2,25 @@
 const { chromium } = require('@playwright/test');
 const fs = require('fs');
 const { setupAnalyticsBrowserBlocking } = require('./analytics-route-blocker');
-const { setupAnalyticsDNSBlocking } = require('./analytics-dns-blocker');
+// DNS-level analytics blocking removed to avoid blocking own hosts
 
 async function globalSetup(config) {
   console.log('🚀 Starting global setup...');
   
   try {
+    // Clear previous analytics violation log at the very beginning
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const outDir = path.join(process.cwd(), 'test-results');
+      const logPath = path.join(outDir, 'analytics-violations.log');
+      if (fs.existsSync(logPath)) {
+        fs.unlinkSync(logPath);
+        console.log('🧹 Cleared previous analytics violations log');
+      }
+    } catch (e) {
+      console.warn('⚠️ Could not clear analytics violations log:', e.message);
+    }
     // Create a browser instance for global setup
     const browser = await chromium.launch({
       headless: true,
@@ -25,15 +38,12 @@ async function globalSetup(config) {
       ]
     });
     
-    // Configurar bloqueo de rutas de analytics a nivel de browser
+    // Configurar bloqueo de rutas de analytics a nivel de browser (keep minimal)
     const context = await setupAnalyticsBrowserBlocking(browser);
-    
-    // Configurar bloqueo de DNS de analytics en el mismo contexto
-    await setupAnalyticsDNSBlocking(context);
     
     const page = await context.newPage();
     
-    // Configurar bloqueo adicional a nivel de página
+    // Configurar bloqueo adicional a nivel de página (explicit analytics providers only)
     await page.route('**/*', async (route) => {
       const url = route.request().url();
       
@@ -45,8 +55,11 @@ async function globalSetup(config) {
         url.includes('doubleclick.net') ||
         url.includes('googleadservices.com') ||
         url.includes('googlesyndication.com') ||
-        url.includes('firebase') ||
-        url.includes('analytics')
+        url.includes('mixpanel.com') ||
+        url.includes('amplitude.com') ||
+        url.includes('segment.io') ||
+        url.includes('heap.io') ||
+        url.includes('hotjar.com')
       ) {
         console.log('🚫 GLOBAL SETUP BLOCKED:', url);
         await route.abort('blockedbyclient');
@@ -56,12 +69,10 @@ async function globalSetup(config) {
       await route.continue();
     });
     
-    // Inyectar bloqueador de analytics NUCLEAR
-    const path = require('path');
-    const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');
-    
+    // Establecer únicamente la flag E2E antes de cualquier script de la app (nuclear blocker removed)
     await page.addInitScript(() => {
-      eval(blockerScript);
+      // @ts-ignore
+      window.__E2E_ANALYTICS_DISABLED__ = true;
     });
     
     // Set longer timeout for CI

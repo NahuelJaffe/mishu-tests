@@ -1,12 +1,14 @@
 // Test final para verificar que el bloqueo de analytics funciona sin interferir con otros tests
 const { test, expect } = require('@playwright/test');
+const { disableAnalytics, gotoWithAnalyticsDisabled } = require('./analytics-helper');
 
 test.describe('Final Analytics Blocking Test', () => {
   test('Should block analytics without breaking other tests', async ({ page }) => {
     console.log('🔍 Testing analytics blocking in isolation...');
     
-    // Navegar a la página principal
-    await page.goto('/');
+    // Deshabilitar analytics lo antes posible y navegar con el parámetro
+    await disableAnalytics(page);
+    await gotoWithAnalyticsDisabled(page, '/');
     await page.waitForLoadState('networkidle');
     
     // Verificar que las variables de bloqueo están definidas
