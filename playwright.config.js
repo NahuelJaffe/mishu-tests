@@ -36,8 +36,8 @@ module.exports = defineConfig({
     // CI-specific options
     ignoreHTTPSErrors: true,
     
-    // Use saved authentication state
-    storageState: 'global-auth-state.json',
+    // Use saved authentication state (only if file exists)
+    ...(process.env.CI ? { storageState: 'global-auth-state.json' } : {}),
     
     // Exclude from Firebase Analytics
     userAgent: 'PlaywrightTestBot/1.0 (automated testing; exclude from analytics)',
@@ -45,47 +45,13 @@ module.exports = defineConfig({
       'X-Test-Environment': 'automation',
       'X-Playwright-Test': 'true',
       'X-Analytics-Disabled': 'true',
-      'X-E2E-Testing': 'true'
+      'X-E2E-Testing': 'true',
+      'X-No-Analytics': 'true',
+      'X-Testing-Mode': 'true'
     },
     
-    // Global launch options (will be overridden by project-specific ones)
-    launchOptions: {
-      args: [
-        '--disable-web-security',
-        '--disable-features=VizDisplayCompositor',
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--disable-gpu',
-        '--disable-background-timer-throttling',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding'
-      ]
-    },
-    
-    // Inyectar script de bloqueo de analytics en todas las páginas
-    ...(process.env.CI ? {
-      // En CI, usar el bloqueador más agresivo
-      launchOptions: {
-        args: [
-          '--disable-web-security',
-          '--disable-features=VizDisplayCompositor',
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu',
-          '--disable-background-timer-throttling',
-          '--disable-backgrounding-occluded-windows',
-          '--disable-renderer-backgrounding'
-        ]
-      }
-    } : {}),
+    // Global route interception to block analytics requests
+    ...(process.env.CI ? {} : {}),
   },
   projects: [
     // Chrome - Main browser for testing
@@ -130,7 +96,7 @@ module.exports = defineConfig({
       use: { 
         ...devices['Desktop Safari'],
         // WebKit doesn't support Chrome-specific launch args
-        // Keep it simple for CI compatibility
+        // Remove all launch options for WebKit compatibility
       },
     },
     

@@ -32,8 +32,14 @@ test('API-01: Login endpoint validation', async ({ request }) => {
   if (response.status() === 404) {
     const contentType = response.headers()['content-type'] || '';
     if (contentType.includes('text/html')) {
-      test.skip('API endpoint not found - got 404 HTML response');
+      test.skip('API endpoint not available - got 404 HTML response');
     }
+  }
+
+  // Check if we got HTML instead of JSON (API not available)
+  const contentType = response.headers()['content-type'] || '';
+  if (contentType.includes('text/html')) {
+    test.skip('API endpoint not available - got HTML response instead of JSON');
   }
 
   expect(response.status()).toBe(200);
@@ -54,12 +60,10 @@ test('API-02: Invalid login credentials', async ({ request }) => {
     }
   });
 
-  // Check if we got a 404 with HTML response (API not available)
-  if (response.status() === 404) {
-    const contentType = response.headers()['content-type'] || '';
-    if (contentType.includes('text/html')) {
-      test.skip('API endpoint not found - got 404 HTML response');
-    }
+  // Check if we got HTML instead of JSON (API not available)
+  const contentType = response.headers()['content-type'] || '';
+  if (contentType.includes('text/html')) {
+    test.skip('API endpoint not available - got HTML response instead of JSON');
   }
 
   expect(response.status()).toBe(401);

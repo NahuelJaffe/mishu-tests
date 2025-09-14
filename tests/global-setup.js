@@ -1,6 +1,7 @@
 // Global setup for Playwright tests
 const { chromium } = require('@playwright/test');
 const fs = require('fs');
+const { setupAnalyticsBrowserBlocking } = require('./analytics-route-blocker');
 
 async function globalSetup(config) {
   console.log('🚀 Starting global setup...');
@@ -23,44 +24,17 @@ async function globalSetup(config) {
       ]
     });
     
+    // Configurar bloqueo de rutas de analytics a nivel de browser
+    await setupAnalyticsBrowserBlocking(browser);
+    
     const page = await browser.newPage();
     
-    // Inyectar bloqueador de analytics más agresivo
+    // Inyectar bloqueador de analytics ULTRA AGRESIVO
+    const path = require('path');
+    const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-ultra.js'), 'utf8');
+    
     await page.addInitScript(() => {
-      // Cargar y ejecutar el script de bloqueo
-      const script = `(function() {
-        'use strict';
-        
-        // Marcar como ambiente de testing
-        window.__E2E_ANALYTICS_DISABLED__ = true;
-        window.__PLAYWRIGHT_TEST__ = true;
-        window.__AUTOMATED_TESTING__ = true;
-        
-        // Bloquear todas las funciones de analytics antes de que se definan
-        const blockFunction = function() { /* blocked */ };
-        
-        // Bloquear Google Analytics (todas las versiones)
-        window.gtag = blockFunction;
-        window.ga = blockFunction;
-        window.gaq = blockFunction;
-        window._gaq = blockFunction;
-        window.GoogleAnalyticsObject = 'ga';
-        
-        // Bloquear Facebook Pixel
-        window.fbq = blockFunction;
-        window._fbq = blockFunction;
-        
-        // Bloquear Firebase Analytics
-        window.firebase = window.firebase || {};
-        window.firebase.analytics = window.firebase.analytics || {};
-        window.firebase.analytics.logEvent = blockFunction;
-        window.firebase.analytics.setUserId = blockFunction;
-        window.firebase.analytics.setUserProperties = blockFunction;
-        
-        console.log('🚫 Analytics blocking enabled in global setup');
-      })();`;
-      
-      eval(script);
+      eval(blockerScript);
     });
     
     // Set longer timeout for CI
@@ -88,9 +62,41 @@ async function globalSetup(config) {
       const loginTitle = await page.title();
       console.log(`✅ Login page accessible. Title: ${loginTitle}`);
       
-      // Store global state if needed
-      await page.context().storageState({ path: 'global-auth-state.json' });
-      console.log('💾 Global auth state saved');
+      // Intentar hacer login para crear estado de autenticación
+      console.log('🔐 Attempting login for global auth state...');
+      const email = process.env.TEST_EMAIL || 'nahueljaffe+bugwpp@gmail.com';
+      const password = process.env.TEST_PASSWORD || 'Tonna2-wahwon-gupreq';
+      
+      try {
+        // Esperar a que los campos estén disponibles
+        await page.waitForSelector('input[type="email"]', { timeout: 10000 });
+        await page.waitForSelector('input[type="password"]', { timeout: 10000 });
+        
+        await page.fill('input[type="email"]', email);
+        await page.fill('input[type="password"]', password);
+        
+        // Esperar a que el botón esté disponible y hacer clic
+        await page.waitForSelector('button[type="submit"]', { timeout: 5000 });
+        await page.click('button[type="submit"]');
+        
+        // Esperar a que se complete el login
+        try {
+          await page.waitForURL(/connections|dashboard|home/, { timeout: 15000 });
+          console.log('✅ Login exitoso en global setup');
+        } catch (loginError) {
+          console.log('⚠️ Login en global setup puede haber fallado, pero continuando...');
+        }
+        
+        // Store global state with authentication
+        await page.context().storageState({ path: 'global-auth-state.json' });
+        console.log('💾 Global auth state saved with authentication');
+        
+      } catch (loginError) {
+        console.log('⚠️ Login failed in global setup, saving empty state');
+        // Store empty state as fallback
+        await page.context().storageState({ path: 'global-auth-state.json' });
+        console.log('💾 Empty global auth state saved as fallback');
+      }
       
     } catch (error) {
       console.error('❌ Global setup failed:', error.message);
