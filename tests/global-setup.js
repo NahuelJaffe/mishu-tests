@@ -100,6 +100,23 @@ async function globalSetup(config) {
       
     } catch (error) {
       console.error('❌ Global setup failed:', error.message);
+      
+      // Asegurar que siempre se cree un archivo de estado, incluso si falla
+      try {
+        const context = await browser.newContext();
+        await context.storageState({ path: 'global-auth-state.json' });
+        console.log('💾 Fallback global auth state created');
+        await context.close();
+      } catch (stateError) {
+        console.error('❌ Failed to create fallback auth state:', stateError.message);
+        // Crear archivo vacío como último recurso
+        fs.writeFileSync('global-auth-state.json', JSON.stringify({
+          cookies: [],
+          origins: []
+        }, null, 2));
+        console.log('💾 Empty fallback global auth state created');
+      }
+      
       // Don't throw error in CI to allow tests to continue
       if (!process.env.CI) {
         throw error;
@@ -112,6 +129,18 @@ async function globalSetup(config) {
     
   } catch (error) {
     console.error('❌ Browser launch failed:', error.message);
+    
+    // Crear archivo de estado vacío como último recurso si falla el browser
+    try {
+      fs.writeFileSync('global-auth-state.json', JSON.stringify({
+        cookies: [],
+        origins: []
+      }, null, 2));
+      console.log('💾 Emergency fallback global auth state created');
+    } catch (writeError) {
+      console.error('❌ Failed to create emergency auth state:', writeError.message);
+    }
+    
     if (!process.env.CI) {
       throw error;
     }

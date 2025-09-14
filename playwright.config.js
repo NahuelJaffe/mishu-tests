@@ -36,8 +36,8 @@ module.exports = defineConfig({
     // CI-specific options
     ignoreHTTPSErrors: true,
     
-    // Use saved authentication state (only if file exists)
-    ...(process.env.CI ? { storageState: 'global-auth-state.json' } : {}),
+    // Use saved authentication state (only if file exists and we're in CI)
+    ...(process.env.CI && require('fs').existsSync('global-auth-state.json') ? { storageState: 'global-auth-state.json' } : {}),
     
     // Exclude from Firebase Analytics
     userAgent: 'PlaywrightTestBot/1.0 (automated testing; exclude from analytics)',
