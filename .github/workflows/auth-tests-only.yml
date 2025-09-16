@@ -1,0 +1,115 @@
+name: Authentication Tests - All Browsers
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of authentication tests'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+        - core
+        - extended
+        - all
+
+jobs:
+  auth-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install ${{ matrix.browser }}
+    
+    - name: Run Authentication Tests
+      run: |
+        echo "🔐 Ejecutando tests de autenticación en ${{ matrix.browser }}"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          TESTS="tests/whatsapp/auth.spec.js"
+          echo "📋 Scope: Core authentication tests"
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js"
+          echo "📋 Scope: Extended authentication tests"
+        else
+          TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js tests/auth/login-valid.spec.js"
+          echo "📋 Scope: All authentication tests"
+        fi
+        
+        echo "🧪 Tests a ejecutar: $TESTS"
+        echo "🌐 Browser: ${{ matrix.browser }}"
+        
+        # Ejecutar tests con timeout extendido
+        npx playwright test $TESTS \
+          --project=${{ matrix.browser }} \
+          --reporter=html \
+          --timeout=90000 \
+          --max-failures=10
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: auth-test-results-${{ matrix.browser }}
+        path: playwright-report/
+        retention-days: 30
+
+  auth-summary:
+    needs: auth-tests
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Download all test results
+      uses: actions/download-artifact@v4
+      with:
+        pattern: auth-test-results-*
+        path: test-results/
+        merge-multiple: true
+    
+    - name: Generate authentication test summary
+      run: |
+        echo "## 🔐 Authentication Tests Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Scope:** ${{ github.event.inputs.test_scope }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Core:** Basic login tests (TC-01, TC-02, TC-03, TC-04)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Extended:** Core + Real login validation" >> $GITHUB_STEP_SUMMARY
+        echo "- **All:** Extended + Login accessibility tests" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Objetivo: Validar funcionalidad de autenticación en todos los navegadores" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "- tests/whatsapp/auth.spec.js" >> $GITHUB_STEP_SUMMARY
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "- tests/whatsapp/auth.spec.js" >> $GITHUB_STEP_SUMMARY
+          echo "- tests/whatsapp/real-login-test.spec.js" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "- tests/whatsapp/auth.spec.js" >> $GITHUB_STEP_SUMMARY
+          echo "- tests/whatsapp/real-login-test.spec.js" >> $GITHUB_STEP_SUMMARY
+          echo "- tests/auth/login-valid.spec.js" >> $GITHUB_STEP_SUMMARY
+        fi

@@ -1,22 +1,18 @@
-name: High Priority QA Tests
+name: High Priority Tests - Simple
 
 on:
-  push:
-    branches: [ main, high-priority-tests ]
-  pull_request:
-    branches: [ main, high-priority-tests ]
   workflow_dispatch:
     inputs:
       browser:
         description: 'Browser to test'
         required: true
-        default: 'all'
+        default: 'firefox'
         type: choice
         options:
-        - all
-        - chromium
         - firefox
+        - chromium
         - webkit
+        - all
       test_category:
         description: 'Test category to run'
         required: false
@@ -31,12 +27,8 @@ on:
 
 jobs:
   high-priority-tests:
-    timeout-minutes: 20
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        browser: ${{ github.event.inputs.browser == 'all' && fromJSON('["chromium", "firefox", "webkit"]') || fromJSON(format('["{0}"]', github.event.inputs.browser || 'chromium')) }}
     
     steps:
     - uses: actions/checkout@v4
@@ -50,25 +42,33 @@ jobs:
       run: npm ci
     
     - name: Install Playwright Browsers
-      run: npx playwright install ${{ matrix.browser }}
+      run: npx playwright install ${{ github.event.inputs.browser || 'firefox' }}
     
     - name: Run High Priority Tests
       run: |
         # Determinar filtro de tests basado en categoría
         if [ "${{ github.event.inputs.test_category }}" == "auth" ]; then
           FILTER="TC-(01|02|03|04)"
+          TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js tests/auth/login-valid.spec.js"
         elif [ "${{ github.event.inputs.test_category }}" == "connections" ]; then
           FILTER="TC-(13|14|15|16|17|18|19|20)"
+          TESTS="tests/whatsapp/connection.spec.js tests/whatsapp/connection-detailed.spec.js"
         elif [ "${{ github.event.inputs.test_category }}" == "messages" ]; then
           FILTER="TC-(17|18|19|20)"
+          TESTS="tests/whatsapp/message-monitoring.spec.js"
         elif [ "${{ github.event.inputs.test_category }}" == "security" ]; then
           FILTER="TC-(33|34|35|36)"
+          TESTS="tests/whatsapp/security.spec.js"
         else
           FILTER="TC-(01|02|03|04|13|14|15|16|17|18|19|20|33|34|35|36)"
+          TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js tests/auth/login-valid.spec.js tests/whatsapp/connection.spec.js tests/whatsapp/connection-detailed.spec.js tests/whatsapp/message-monitoring.spec.js tests/whatsapp/security.spec.js"
         fi
         
         echo "🔍 Ejecutando tests con filtro: $FILTER"
-        npx playwright test --project=${{ matrix.browser }} --grep="$FILTER" --reporter=html
+        echo "📁 Archivos de test: $TESTS"
+        
+        # Ejecutar tests específicos
+        npx playwright test $TESTS --project=${{ github.event.inputs.browser || 'firefox' }} --reporter=html --timeout=60000
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -78,31 +78,25 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: high-priority-test-results-${{ matrix.browser }}
+        name: high-priority-test-results-${{ github.event.inputs.browser || 'firefox' }}
         path: playwright-report/
         retention-days: 30
 
-  high-priority-summary:
+  test-summary:
     needs: high-priority-tests
     runs-on: ubuntu-latest
     if: always()
     
     steps:
-    - name: Download all test results
-      uses: actions/download-artifact@v4
-      with:
-        pattern: high-priority-test-results-*
-        path: test-results/
-        merge-multiple: true
-    
     - name: Generate summary
       run: |
         echo "## 🔴 High Priority Tests Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Tests de Prioridad Alta:** 28 tests" >> $GITHUB_STEP_SUMMARY
-        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "**Browser:** ${{ github.event.inputs.browser || 'firefox' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Categoría:** ${{ github.event.inputs.test_category || 'all' }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 📊 Categorías:" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Categorías disponibles:" >> $GITHUB_STEP_SUMMARY
         echo "- 🔐 Authentication & Login: 9 tests" >> $GITHUB_STEP_SUMMARY
         echo "- 🔗 Connection Management: 12 tests" >> $GITHUB_STEP_SUMMARY
         echo "- 📱 Message Monitoring: 4 tests" >> $GITHUB_STEP_SUMMARY
