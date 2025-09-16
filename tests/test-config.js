@@ -76,7 +76,7 @@ module.exports = {
     }
     
     // Fallback a mock login - solo establecer variables de sesión
-    console.log('🎭 Usando mock login (solo variables de sesión)...');
+    console.log('🎭 Usando mock login (solo variables de sesión - SIN analytics)...');
     
     // Verificar que la página esté disponible antes de ejecutar evaluate
     try {
@@ -85,6 +85,13 @@ module.exports = {
         console.log('⚠️ Página cerrada, saltando mock login');
         return;
       }
+      
+      // IMPORTANTE: Mock login NO genera analytics porque:
+      // - Solo modifica localStorage/sessionStorage
+      // - No hace requests HTTP
+      // - No navega a páginas
+      // - No ejecuta scripts de analytics
+      console.log('🔒 Mock login seguro - no genera analytics');
       
       // Establecer variables de sesión simuladas con verificación de seguridad
       await page.evaluate(() => {
