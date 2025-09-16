@@ -42,9 +42,15 @@ async function setupAnalyticsForTest(page) {
     const url = route.request().url();
     const method = route.request().method();
     
-    // Solo abortar requests de analytics, no navegación principal
-    if (method === 'GET' && (url.includes('/login') || url.includes('/dashboard') || url.includes('/connections'))) {
-      // Permitir navegación principal incluso si tiene parámetros de analytics
+    // Permitir navegación principal y recursos esenciales de la aplicación
+    if (method === 'GET' && (
+      url.includes('/login') || url.includes('/dashboard') || url.includes('/connections') ||
+      url.includes('/assets/') || url.includes('/static/') || url.includes('/public/') ||
+      url.includes('.css') || url.includes('.js') || url.includes('.png') || url.includes('.svg') ||
+      url.includes('.ico') || url.includes('.woff') || url.includes('.woff2') || url.includes('.jpg') ||
+      url.includes('.jpeg') || url.includes('.gif') || url.includes('.webp')
+    )) {
+      // Permitir recursos esenciales de la aplicación
       await route.continue();
       return;
     }
@@ -98,14 +104,8 @@ async function setupAnalyticsForTest(page) {
       'amazon-adsystem.com'
     ];
     
-    // Verificar si es una request de analytics real (no navegación)
-    const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain)) ||
-                               url.includes('analytics') || 
-                               url.includes('tracking') ||
-                               url.includes('gtag') ||
-                               url.includes('google-analytics') ||
-                               url.includes('facebook.com/tr') ||
-                               url.includes('doubleclick.net');
+    // Verificar si es una request de analytics real (solo dominios explícitos)
+    const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain));
     
     if (isAnalyticsRequest) {
       console.log('🚫 TEST BLOCKED ROUTE:', url);
