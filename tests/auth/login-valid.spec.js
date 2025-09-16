@@ -20,7 +20,7 @@ test('TC-01: Login page loads correctly', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`);
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
   
@@ -47,7 +47,7 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`);
   
   // Llenar el formulario con credenciales inválidas
   await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
@@ -70,7 +70,7 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`);
   
   // Buscar el texto exacto "Forgot your password?" que el usuario ha confirmado que existe en la página
   // Intentamos varias estrategias de localización para encontrarlo
@@ -164,7 +164,7 @@ test('TC-04: Sign Up functionality', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`);
   
   // Buscar un enlace de registro (sign up)
   const signUpLink = page.getByText(/sign up|register|create account/i);

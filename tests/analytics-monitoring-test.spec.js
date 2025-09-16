@@ -229,7 +229,7 @@ test.describe('Analytics Monitoring Test', () => {
     
     // Navegar a la página principal
     console.log('🌐 Navegando a la página principal...');
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/', {
+    await page.goto(process.env.BASE_URL || 'https://your-app.example.com/', {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -240,7 +240,7 @@ test.describe('Analytics Monitoring Test', () => {
     
     // Navegar a otras páginas para capturar más tráfico
     console.log('🌐 Navegando a página de login...');
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`, {
+    await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`, {
       waitUntil: 'networkidle',
       timeout: 30000
     });

@@ -66,3 +66,20 @@ secrets.json
 # Build outputs
 dist/
 build/
+
+# Security - Additional sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+service-account.json
+firebase-adminsdk-*.json
+
+# Local test data
+test-data/
+local-secrets/
+*.credentials
+
+# Analytics violation logs (may contain sensitive URLs)
+analytics-violations.log

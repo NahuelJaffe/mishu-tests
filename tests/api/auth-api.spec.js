@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 
-const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
+const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
 const email = process.env.TEST_EMAIL;
 const password = process.env.TEST_PASSWORD;
 

@@ -1,15 +1,19 @@
 # 🔐 GitHub Secrets Configuration
 
-## Required Secrets
+## ⚠️ IMPORTANTE - SEGURIDAD
 
-Configure these secrets in your GitHub repository settings:
+**ESTE REPOSITORIO ES PÚBLICO**. Nunca incluyas información sensible en el código fuente. Todas las credenciales deben estar en GitHub Secrets.
 
-### Authentication
-- `TEST_EMAIL` - Test user email address
-- `TEST_PASSWORD` - Test user password
+## Secrets Requeridos
 
-### Application URLs
-- `BASE_URL` - Base URL for the application (default: https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/)
+Configura estos secrets en la configuración de tu repositorio de GitHub:
+
+### Autenticación
+- `TEST_EMAIL` - Email del usuario de prueba (NO usar credenciales reales de producción)
+- `TEST_PASSWORD` - Contraseña del usuario de prueba (NO usar credenciales reales de producción)
+
+### URLs de Aplicación
+- `BASE_URL` - URL base de la aplicación (default: https://your-app.example.com/)
 
 ## How to Set Up Secrets
 
@@ -27,12 +31,13 @@ TEST_PASSWORD=your-secure-password
 BASE_URL=https://your-app-url.com/
 ```
 
-## Security Notes
+## Notas de Seguridad
 
-- Never commit real credentials to the repository
-- Use strong, unique passwords for test accounts
-- Regularly rotate test credentials
-- Use environment-specific URLs for different testing stages
+- **NUNCA** commitees credenciales reales al repositorio
+- Usa contraseñas fuertes y únicas para cuentas de prueba
+- Rota regularmente las credenciales de prueba
+- Usa URLs específicas del entorno para diferentes etapas de testing
+- **ESTE REPOSITORIO ES PÚBLICO** - toda información sensible debe estar en secrets
 
 ## Local Development
 

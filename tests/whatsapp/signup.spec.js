@@ -50,7 +50,7 @@ test('TC-06: New user registration', async ({ page }) => {
   // Generar datos únicos para el test
   const timestamp = Date.now();
   const testEmail = `testuser${timestamp}@example.com`;
-  const testPassword = 'TestPassword123!';
+  const testPassword = 'ExamplePassword123!';
   const testName = `Test User ${timestamp}`;
   
   // Llenar el formulario de registro
@@ -111,7 +111,7 @@ test('TC-07: Duplicate email/phone check', async ({ page }) => {
   
   // Usar un email que ya existe (el email de prueba que usamos en otros tests)
   const existingEmail = testConfig.TEST_EMAIL;
-  const testPassword = 'TestPassword123!';
+  const testPassword = 'ExamplePassword123!';
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
   const passwordField = page.locator('input[type="password"], input[name="password"]');
@@ -221,7 +221,7 @@ test('TC-09: Email verification flow', async ({ page }) => {
   
   const timestamp = Date.now();
   const testEmail = `testuser${timestamp}@example.com`;
-  const testPassword = 'TestPassword123!';
+  const testPassword = 'ExamplePassword123!';
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
   const passwordField = page.locator('input[type="password"], input[name="password"]');

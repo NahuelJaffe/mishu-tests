@@ -26,8 +26,8 @@ test.describe('Real Login Tests', () => {
     await setupAnalyticsForLogin(page);
     
     // Verificar si tenemos credenciales reales
-    const hasRealCredentials = testConfig.TEST_EMAIL !== 'test@mishu.com' && 
-                              testConfig.TEST_PASSWORD !== 'TestPassword123!';
+    const hasRealCredentials = testConfig.TEST_EMAIL !== 'test@example.com' && 
+                              testConfig.TEST_PASSWORD !== 'ExamplePassword123!';
     
     if (!hasRealCredentials) {
       console.log('⚠️ No hay credenciales reales disponibles, saltando test');
@@ -93,8 +93,8 @@ test.describe('Real Login Tests', () => {
     await setupAnalyticsForLogin(page);
     
     // Verificar si tenemos credenciales reales
-    const hasRealCredentials = testConfig.TEST_EMAIL !== 'test@mishu.com' && 
-                              testConfig.TEST_PASSWORD !== 'TestPassword123!';
+    const hasRealCredentials = testConfig.TEST_EMAIL !== 'test@example.com' && 
+                              testConfig.TEST_PASSWORD !== 'ExamplePassword123!';
     
     if (!hasRealCredentials) {
       console.log('⚠️ No hay credenciales reales disponibles, saltando test');

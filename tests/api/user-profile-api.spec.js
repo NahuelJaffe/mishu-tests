@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app';
+const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
 const email = process.env.TEST_EMAIL;
 const password = process.env.TEST_PASSWORD;
 
@@ -182,8 +182,8 @@ test('API-16: Change password', async ({ request }) => {
     },
     data: {
       currentPassword: password,
-      newPassword: 'NewTestPassword123!',
-      confirmPassword: 'NewTestPassword123!'
+      newPassword: 'NewExamplePassword123!',
+      confirmPassword: 'NewExamplePassword123!'
     }
   });
 
@@ -205,7 +205,7 @@ test('API-16: Change password', async ({ request }) => {
         'Authorization': `Bearer ${authToken}`
       },
       data: {
-        currentPassword: 'NewTestPassword123!',
+        currentPassword: 'NewExamplePassword123!',
         newPassword: password,
         confirmPassword: password
       }

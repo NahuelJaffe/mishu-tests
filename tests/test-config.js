@@ -3,11 +3,11 @@
 
 module.exports = {
   // Credenciales de testing - usar secrets en CI, valores por defecto en local
-  TEST_EMAIL: process.env.TEST_EMAIL || 'test@mishu.com',
-  TEST_PASSWORD: process.env.TEST_PASSWORD || 'TestPassword123!',
+  TEST_EMAIL: process.env.TEST_EMAIL || 'test@example.com',
+  TEST_PASSWORD: process.env.TEST_PASSWORD || 'ExamplePassword123!',
   
   // URL base para testing - usar secret en CI, valor por defecto en local
-  BASE_URL: process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/',
+  BASE_URL: process.env.BASE_URL || 'https://your-app.example.com/',
   
   // Configuración de testing
   TEST_MODE: true,
@@ -15,7 +15,7 @@ module.exports = {
   ANALYTICS_DISABLED: true,
   
   // Configuración de API
-  API_BASE_URL: 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/api',
+  API_BASE_URL: 'https://your-app.example.com/api',
   API_TIMEOUT: 30000,
   
   // Configuración de timeouts
@@ -34,7 +34,7 @@ module.exports = {
   // Función helper para login - intenta login real primero, fallback a mock
   mockLogin: async function(page) {
     // Si tenemos credenciales reales (de secrets), intentar login real
-    if (this.TEST_EMAIL !== 'test@mishu.com' && this.TEST_PASSWORD !== 'TestPassword123!') {
+    if (this.TEST_EMAIL !== 'test@example.com' && this.TEST_PASSWORD !== 'ExamplePassword123!') {
       console.log('🔐 Intentando login real con credenciales de secrets...');
       try {
         await page.goto(`${this.BASE_URL}login`);
@@ -67,7 +67,7 @@ module.exports = {
       // Simular que el usuario está autenticado
       localStorage.setItem('user', JSON.stringify({
         id: 'test-user-123',
-        email: 'test@mishu.com',
+        email: 'test@example.com',
         name: 'Test User',
         authenticated: true
       }));

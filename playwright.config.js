@@ -22,7 +22,7 @@ module.exports = defineConfig({
   ],
   use: {
     // Base URL for all tests
-    baseURL: process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/',
+    baseURL: process.env.BASE_URL || 'https://your-app.example.com/',
     
     // Global test options
     trace: 'on-first-retry',
@@ -129,7 +129,7 @@ module.exports = defineConfig({
         ...devices['Desktop Firefox'],
         launchOptions: {
           firefoxUserPrefs: {
-            'security.tls.insecure_fallback_hosts': 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app'
+              'security.tls.insecure_fallback_hosts': 'your-app.example.com'
           },
           args: ['--disable-web-security']
         }
