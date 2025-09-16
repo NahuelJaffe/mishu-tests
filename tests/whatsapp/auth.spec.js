@@ -41,9 +41,11 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
   
   // Llenar el formulario con credenciales válidas
-  // Usar variables de entorno en CI, fallback a credenciales por defecto
+  // FORZAR login real para generar analytics y probar el bloqueo
   const email = testConfig.TEST_EMAIL;
   const password = testConfig.TEST_PASSWORD;
+  
+  console.log('🔐 FORZANDO LOGIN REAL para generar analytics y probar bloqueo');
   
   await emailInput.fill(email);
   await passwordInput.fill(password);
