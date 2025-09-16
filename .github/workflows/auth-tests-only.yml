@@ -1,4 +1,4 @@
-name: Authentication Tests - All Browsers
+name: Authentication Tests - Fixed
 
 on:
   workflow_dispatch:
