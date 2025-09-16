@@ -23,6 +23,7 @@
     "test:security": "playwright test tests/whatsapp/security.spec.js",
     "test:signup": "playwright test tests/whatsapp/signup.spec.js",
     "test:high-priority": "node scripts/run-high-priority-tests.js",
+    "trigger:high-priority": "./scripts/trigger-high-priority-workflow.sh",
     "test:profile": "playwright test tests/whatsapp/profile-settings.spec.js",
     "test:errors": "playwright test tests/whatsapp/error-handling.spec.js",
     "test:notifications": "playwright test tests/whatsapp/notifications.spec.js",

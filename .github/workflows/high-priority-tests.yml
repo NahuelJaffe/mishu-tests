@@ -5,6 +5,29 @@ on:
     branches: [ high-priority-tests ]
   pull_request:
     branches: [ high-priority-tests ]
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Browser to test'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - chromium
+        - firefox
+        - webkit
+      test_category:
+        description: 'Test category to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - auth
+        - connections
+        - messages
+        - security
 
 jobs:
   high-priority-tests:
@@ -13,7 +36,7 @@ jobs:
     
     strategy:
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: ${{ github.event.inputs.browser == 'all' && fromJSON('["chromium", "firefox", "webkit"]') || fromJSON(format('["{0}"]', github.event.inputs.browser || 'chromium')) }}
     
     steps:
     - uses: actions/checkout@v4
@@ -30,7 +53,22 @@ jobs:
       run: npx playwright install ${{ matrix.browser }}
     
     - name: Run High Priority Tests
-      run: npx playwright test --project=${{ matrix.browser }} --grep="TC-(01|02|03|04|13|14|15|16|17|18|19|20|33|34|35|36)" --reporter=html
+      run: |
+        # Determinar filtro de tests basado en categoría
+        if [ "${{ github.event.inputs.test_category }}" == "auth" ]; then
+          FILTER="TC-(01|02|03|04)"
+        elif [ "${{ github.event.inputs.test_category }}" == "connections" ]; then
+          FILTER="TC-(13|14|15|16|17|18|19|20)"
+        elif [ "${{ github.event.inputs.test_category }}" == "messages" ]; then
+          FILTER="TC-(17|18|19|20)"
+        elif [ "${{ github.event.inputs.test_category }}" == "security" ]; then
+          FILTER="TC-(33|34|35|36)"
+        else
+          FILTER="TC-(01|02|03|04|13|14|15|16|17|18|19|20|33|34|35|36)"
+        fi
+        
+        echo "🔍 Ejecutando tests con filtro: $FILTER"
+        npx playwright test --project=${{ matrix.browser }} --grep="$FILTER" --reporter=html
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
