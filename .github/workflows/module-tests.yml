@@ -1,0 +1,120 @@
+name: Module Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  auth-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Auth tests
+      run: npm run test:auth
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: auth-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
+
+  connection-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Connection tests
+      run: npm run test:connection
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: connection-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
+
+  dashboard-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Dashboard tests
+      run: npm run test:dashboard
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: dashboard-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore

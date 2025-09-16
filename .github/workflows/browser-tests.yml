@@ -1,0 +1,120 @@
+name: Browser Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  chromium-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Chromium tests
+      run: npx playwright test --project=chromium --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: chromium-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
+
+  firefox-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Firefox
+      run: npx playwright install --with-deps firefox
+    
+    - name: Run Firefox tests
+      run: npx playwright test --project=firefox --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: firefox-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
+
+  webkit-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright WebKit
+      run: npx playwright install --with-deps webkit
+    
+    - name: Run WebKit tests
+      run: npx playwright test --project=webkit --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: webkit-test-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
