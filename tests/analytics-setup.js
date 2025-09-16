@@ -107,19 +107,32 @@ async function setupAnalyticsForTest(page) {
     // Verificar si es una request de analytics real (solo dominios explícitos)
     const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain));
     
-    if (isAnalyticsRequest) {
+    // También bloquear requests que contengan palabras clave de analytics
+    const isAnalyticsKeyword = url.includes('analytics') || url.includes('tracking') || 
+                              url.includes('gtag') || url.includes('google-analytics') ||
+                              url.includes('facebook.com/tr') || url.includes('doubleclick.net') ||
+                              url.includes('googletagmanager') || url.includes('mixpanel') ||
+                              url.includes('amplitude') || url.includes('segment') ||
+                              url.includes('hotjar') || url.includes('clarity');
+    
+    if (isAnalyticsRequest || isAnalyticsKeyword) {
       console.log('🚫 TEST BLOCKED ROUTE:', url);
       
       // Log de violación
       logAnalyticsViolation('REQUEST', url, {
         method,
         blocked: true,
-        reason: 'Analytics domain detected'
+        reason: isAnalyticsRequest ? 'Analytics domain detected' : 'Analytics keyword detected'
       });
       
       // Abortar la request de analytics
       await route.abort('blockedbyclient');
       return;
+    }
+    
+    // Log de requests permitidas para debug
+    if (url.includes('google') || url.includes('facebook') || url.includes('analytics')) {
+      console.log('✅ ALLOWED REQUEST (not analytics):', url);
     }
     
     // Si no es analytics, continuar con la request normal
