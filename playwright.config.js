@@ -118,13 +118,22 @@ module.exports = defineConfig({
     {
       name: 'webkit',
       use: { 
-        ...devices['Desktop Safari'],
+        // Custom WebKit configuration to avoid compatibility issues
+        // Don't use devices['Desktop Safari'] as it has incompatible settings
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+        viewport: { width: 1280, height: 720 },
+        deviceScaleFactor: 1,
+        isMobile: false,
+        hasTouch: false,
         // WebKit doesn't support Chrome-specific launch args
-        // Use only WebKit-compatible options
-        launchOptions: {
-          args: [
-            // WebKit compatible arguments only
-          ]
+        launchOptions: {},
+        // WebKit specific context options
+        contextOptions: {
+          ignoreHTTPSErrors: true,
+          extraHTTPHeaders: {
+            'X-Analytics-Disabled': 'true',
+            'X-No-Analytics': 'true'
+          }
         }
       },
     },
