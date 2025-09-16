@@ -30,6 +30,10 @@ async function setupAnalyticsForTest(page) {
   console.log('🚫 Setting up analytics blocking for individual test...');
   console.log('🔍 DEBUG: setupAnalyticsForTest called from global setup');
   
+  // TEMPORAL: Deshabilitar bloqueo de analytics para debug
+  console.log('⚠️ TEMPORAL: Analytics blocking DISABLED for debugging');
+  return;
+  
   // Limpiar archivo de violaciones previo
   const violationsLogPath = 'test-results/analytics-violations.log';
   if (fs.existsSync(violationsLogPath)) {
