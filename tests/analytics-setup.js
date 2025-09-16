@@ -113,13 +113,12 @@ async function setupAnalyticsForTest(page) {
     await route.continue();
   });
   
-  // 2. Inyectar bloqueador nuclear de analytics
+  // 2. Inyectar bloqueador nuclear de analytics ANTES de cualquier contenido
   try {
     const blockerScript = fs.readFileSync(path.join(__dirname, 'analytics-blocker-nuclear.js'), 'utf8');
     
-    await page.addInitScript(() => {
-      eval(blockerScript);
-    });
+    // Usar addInitScript para ejecutar ANTES del contenido de la página
+    await page.addInitScript(blockerScript);
     
     console.log('✅ Nuclear analytics blocker injected');
   } catch (error) {

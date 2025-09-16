@@ -16,14 +16,20 @@
   const noop = function() { return false; };
   const noopPromise = function() { return Promise.resolve(); };
   
-  // Google Analytics - TODAS las versiones
-  window.gtag = noop;
-  window.ga = noop;
-  window.gaq = noop;
-  window._gaq = noop;
-  window.GoogleAnalyticsObject = 'ga';
-  window.dataLayer = [];
-  window.dataLayer.push = noop;
+  // Función para re-aplicar bloqueo continuamente
+  function reapplyBlocking() {
+    // Google Analytics - TODAS las versiones
+    window.gtag = noop;
+    window.ga = noop;
+    window.gaq = noop;
+    window._gaq = noop;
+    window.GoogleAnalyticsObject = 'ga';
+    window.dataLayer = [];
+    window.dataLayer.push = noop;
+  }
+  
+  // Aplicar bloqueo inicial
+  reapplyBlocking();
   
   // Facebook Pixel
   window.fbq = noop;
@@ -436,6 +442,9 @@
   // ===== 20. BLOQUEAR FIREBASE CONFIG =====
   window.firebaseConfig = {};
   window.firebaseOptions = {};
+  
+  // ===== 21. RE-APLICAR BLOQUEO CONTINUAMENTE =====
+  setInterval(reapplyBlocking, 100); // Re-aplicar cada 100ms
   
   console.log('🚫 NUCLEAR ANALYTICS BLOCKER FULLY ACTIVATED - IMPOSSIBLE TO EVADE');
 })();
