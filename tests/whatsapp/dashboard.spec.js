@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para el Dashboard en WhatsApp Monitor
 
 /**
+ * Setup de analytics para todos los tests de dashboard
+ */
+async function setupAnalyticsForDashboard(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de dashboard');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para dashboard:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
@@ -20,6 +34,9 @@ async function login(page) {
  * Verifica que se muestre correctamente el estado vacío cuando no hay datos
  */
 test('TC-10: Empty state display', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForDashboard(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -65,6 +82,9 @@ test('TC-10: Empty state display', async ({ page }) => {
  * Verifica que el menú de navegación funcione correctamente
  */
 test('TC-11: Navigation menu functionality', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForDashboard(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -125,6 +145,9 @@ test('TC-11: Navigation menu functionality', async ({ page }) => {
  * Verifica que las acciones rápidas sean accesibles y funcionen correctamente
  */
 test('TC-12: Quick actions accessibility', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForDashboard(page);
+  
   // Iniciar sesión
   await login(page);
   

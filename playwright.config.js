@@ -67,15 +67,25 @@ module.exports = defineConfig({
     },
     
     // Setup que se ejecuta antes de cada test
-    setup: async ({ page }) => {
-      // 1. Configurar bloqueo de analytics (sin verificación estricta)
-      const { setupAnalyticsForTest } = require('./tests/analytics-setup.js');
-      await setupAnalyticsForTest(page);
-      
-      // 2. Verificación de bloqueo deshabilitada temporalmente para permitir tests
-      // const { setupAnalyticsVerification } = require('./tests/analytics-blocking-verifier.js');
-      // await setupAnalyticsVerification(page);
-    },
+    // setup: async ({ page }) => {
+    //   console.log('🔍 DEBUG: Global setup starting...');
+    //   try {
+    //     // 1. Configurar bloqueo de analytics (sin verificación estricta)
+    //     console.log('🔍 DEBUG: Requiring analytics-setup.js...');
+    //     const { setupAnalyticsForTest } = require('./tests/analytics-setup.js');
+    //     console.log('🔍 DEBUG: Calling setupAnalyticsForTest...');
+    //     await setupAnalyticsForTest(page);
+    //     console.log('🔍 DEBUG: setupAnalyticsForTest completed successfully');
+        
+    //     // 2. Verificación de bloqueo deshabilitada temporalmente para permitir tests
+    //     // const { setupAnalyticsVerification } = require('./tests/analytics-blocking-verifier.js');
+    //     // await setupAnalyticsVerification(page);
+    //   } catch (error) {
+    //     console.error('❌ ERROR in global setup:', error);
+    //     throw error;
+    //   }
+    //   console.log('🔍 DEBUG: Global setup completed');
+    // },
   },
   projects: [
     // Chrome - Main browser for testing
@@ -98,6 +108,18 @@ module.exports = defineConfig({
           ]
         }
       },
+      // Setup específico para chromium
+      setup: async ({ page }) => {
+        console.log('🔍 DEBUG: Chromium setup starting...');
+        try {
+          const { setupAnalyticsForTest } = require('./tests/analytics-setup.js');
+          await setupAnalyticsForTest(page);
+          console.log('🔍 DEBUG: Chromium setup completed');
+        } catch (error) {
+          console.error('❌ ERROR in chromium setup:', error);
+          throw error;
+        }
+      },
     },
     
     // Firefox - Secondary browser
@@ -110,6 +132,18 @@ module.exports = defineConfig({
             'security.tls.insecure_fallback_hosts': 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app'
           },
           args: ['--disable-web-security']
+        }
+      },
+      // Setup específico para firefox
+      setup: async ({ page }) => {
+        console.log('🔍 DEBUG: Firefox setup starting...');
+        try {
+          const { setupAnalyticsForTest } = require('./tests/analytics-setup.js');
+          await setupAnalyticsForTest(page);
+          console.log('🔍 DEBUG: Firefox setup completed');
+        } catch (error) {
+          console.error('❌ ERROR in firefox setup:', error);
+          throw error;
         }
       },
     },

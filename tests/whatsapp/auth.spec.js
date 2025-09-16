@@ -3,10 +3,27 @@ const { test, expect } = require('@playwright/test');
 // Test suite para la autenticación en WhatsApp Monitor
 
 /**
+ * Setup de analytics para todos los tests de auth
+ */
+async function setupAnalyticsForAuth(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de auth');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para auth:', error);
+    throw error;
+  }
+}
+
+/**
  * TC-01: Login with valid credentials
  * Verifica que un usuario pueda iniciar sesión con credenciales válidas
  */
 test('TC-01: Login with valid credentials', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   // Navegar a la página de login
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
@@ -42,6 +59,9 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
  * Verifica que se muestre un mensaje de error al intentar iniciar sesión con credenciales inválidas
  */
 test('TC-02: Login with invalid credentials', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Esperar a que el formulario esté completamente cargado
@@ -86,6 +106,9 @@ test('TC-02: Login with invalid credentials', async ({ page }) => {
  * Verifica el flujo de recuperación de contraseña
  */
 test('TC-03: Password recovery flow', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Buscar y hacer clic en el enlace de recuperación de contraseña
@@ -123,6 +146,9 @@ test('TC-03: Password recovery flow', async ({ page }) => {
  * Verifica que la opción "Remember me" mantenga la sesión activa
  */
 test('TC-04: "Remember me" functionality', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Verificar si existe la opción "Remember me"

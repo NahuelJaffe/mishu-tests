@@ -1,12 +1,27 @@
 const { test, expect } = require('@playwright/test');
 
+/**
+ * Setup de analytics para tests de auth
+ */
+async function setupAnalyticsForAuth(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de auth');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para auth:', error);
+    throw error;
+  }
+}
+
 // Test para verificar que la página de login carga correctamente
 test('TC-01: Login page loads correctly', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
-  // Verificar que estamos en la página de registro
-  await expect(page).toHaveURL(/signup|register/);
   
   // Verificar que los campos de registro están visibles (usando first() para evitar strict mode)
   const emailInputs = page.locator('input[type="email"]');
@@ -28,6 +43,9 @@ test('TC-01: Login page loads correctly', async ({ page }) => {
 
 // Test para intentar login con credenciales inválidas
 test('TC-02: Login with invalid credentials shows error message', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Llenar el formulario con credenciales inválidas
@@ -48,6 +66,9 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
 
 // Test para verificar la funcionalidad de "Forgot Password"
 test('TC-03: Forgot Password functionality', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Buscar el texto exacto "Forgot your password?" que el usuario ha confirmado que existe en la página
@@ -139,6 +160,9 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
 
 // Test para verificar la funcionalidad de registro (Sign Up)
 test('TC-04: Sign Up functionality', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForAuth(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Buscar un enlace de registro (sign up)

@@ -10,6 +10,17 @@ test.describe('Analytics Monitoring Test', () => {
   test('Monitorear violaciones de analytics sin fallar', async ({ page, context }) => {
     console.log('🔍 Iniciando monitoreo de analytics...');
     
+    // Llamar explícitamente al setup de analytics
+    console.log('🚫 Configurando bloqueo de analytics explícitamente...');
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Setup de analytics completado exitosamente');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Limpiar archivo de violaciones previo
     const violationsLogPath = 'test-results/analytics-violations.log';
     if (fs.existsSync(violationsLogPath)) {
@@ -27,7 +38,48 @@ test.describe('Analytics Monitoring Test', () => {
     const networkResponses = [];
     const analyticsViolations = [];
     
-    // Interceptar todas las requests
+    // PRIMERO: Configurar bloqueo de analytics ANTES de los listeners
+    await page.route('**/*', async (route) => {
+      const url = route.request().url();
+      
+      const analyticsDomains = [
+        'google-analytics.com',
+        'googletagmanager.com',
+        'facebook.com/tr',
+        'connect.facebook.net',
+        'doubleclick.net',
+        'googleadservices.com',
+        'googlesyndication.com',
+        'mixpanel.com',
+        'amplitude.com',
+        'segment.io',
+        'heap.com',
+        'hotjar.com',
+        'clarity.ms',
+        'linkedin.com/li.lms',
+        'twitter.com/i/adsct',
+        'analytics.tiktok.com',
+        'tr.snapchat.com',
+        'ads.pinterest.com',
+        'events.redditmedia.com',
+        'quantserve.com',
+        'scorecardresearch.com',
+        'adsystem.amazon.com',
+        'amazon-adsystem.com'
+      ];
+      
+      const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain));
+      
+      if (isAnalyticsRequest) {
+        console.log('🚫 BLOQUEANDO REQUEST DE ANALYTICS:', url);
+        await route.abort('blockedbyclient');
+        return;
+      }
+      
+      await route.continue();
+    });
+    
+    // SEGUNDO: Interceptar todas las requests (para detectar violaciones que se escaparon)
     page.on('request', request => {
       const url = request.url();
       const method = request.method();
@@ -173,46 +225,7 @@ test.describe('Analytics Monitoring Test', () => {
       }
     });
     
-    // Configurar bloqueo de analytics
-    await page.route('**/*', async (route) => {
-      const url = route.request().url();
-      
-      const analyticsDomains = [
-        'google-analytics.com',
-        'googletagmanager.com',
-        'facebook.com/tr',
-        'connect.facebook.net',
-        'doubleclick.net',
-        'googleadservices.com',
-        'googlesyndication.com',
-        'mixpanel.com',
-        'amplitude.com',
-        'segment.io',
-        'heap.com',
-        'hotjar.com',
-        'clarity.ms',
-        'linkedin.com/li.lms',
-        'twitter.com/i/adsct',
-        'analytics.tiktok.com',
-        'tr.snapchat.com',
-        'ads.pinterest.com',
-        'events.redditmedia.com',
-        'quantserve.com',
-        'scorecardresearch.com',
-        'adsystem.amazon.com',
-        'amazon-adsystem.com'
-      ];
-      
-      const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain));
-      
-      if (isAnalyticsRequest) {
-        console.log('🚫 BLOQUEANDO REQUEST DE ANALYTICS:', url);
-        await route.abort('blockedbyclient');
-        return;
-      }
-      
-      await route.continue();
-    });
+    // El bloqueo ya está configurado arriba
     
     // Navegar a la página principal
     console.log('🌐 Navegando a la página principal...');

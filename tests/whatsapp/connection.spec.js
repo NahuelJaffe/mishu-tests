@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para la conexión de WhatsApp en WhatsApp Monitor
 
 /**
+ * Setup de analytics para todos los tests de conexión
+ */
+async function setupAnalyticsForConnection(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de conexión');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para conexión:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  * Esta función se utilizará en varios tests para no repetir código
  */
@@ -21,6 +35,9 @@ async function login(page) {
  * Verifica que se muestre el código QR para escanear y conectar WhatsApp
  */
 test('TC-13: QR code scanning', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnection(page);
+  
   // Iniciar sesión primero
   await login(page);
   
@@ -64,6 +81,9 @@ test('TC-13: QR code scanning', async ({ page }) => {
  * Verifica que se muestren actualizaciones del estado de conexión
  */
 test('TC-14: Connection status updates', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnection(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -116,6 +136,9 @@ test('TC-14: Connection status updates', async ({ page }) => {
  * Verifica la gestión de múltiples conexiones de WhatsApp (si la aplicación lo soporta)
  */
 test('TC-15: Multiple connections management', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnection(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -153,6 +176,9 @@ test('TC-15: Multiple connections management', async ({ page }) => {
  * Verifica el flujo de desconexión y reconexión de WhatsApp
  */
 test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnection(page);
+  
   // Iniciar sesión
   await login(page);
   

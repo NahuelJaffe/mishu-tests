@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para la interfaz de usuario en WhatsApp Monitor
 
 /**
+ * Setup de analytics para todos los tests de UI
+ */
+async function setupAnalyticsForUI(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de UI');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para UI:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
@@ -20,6 +34,9 @@ async function login(page) {
  * Verifica que la aplicación sea responsive en diferentes tamaños de pantalla
  */
 test('TC-21: Responsive design', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForUI(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -78,6 +95,9 @@ test('TC-21: Responsive design', async ({ page }) => {
  * Verifica que el cambio de idioma funcione correctamente
  */
 test('TC-22: Language switching', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForUI(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -152,6 +172,9 @@ test('TC-22: Language switching', async ({ page }) => {
  * Verifica que la aplicación soporte correctamente el texto de derecha a izquierda
  */
 test('TC-23: RTL support (Hebrew)', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForUI(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -213,6 +236,9 @@ test('TC-23: RTL support (Hebrew)', async ({ page }) => {
  * Verifica que el modo oscuro/claro funcione correctamente
  */
 test('TC-24: Dark/light mode (if applicable)', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForUI(page);
+  
   // Iniciar sesión
   await login(page);
   
