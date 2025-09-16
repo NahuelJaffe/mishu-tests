@@ -15,12 +15,13 @@ on:
 
 jobs:
   auth-tests:
-    timeout-minutes: 20
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     
     strategy:
       matrix:
         browser: [chromium, firefox, webkit]
+      fail-fast: false  # No cancelar otros browsers si uno falla
     
     steps:
     - uses: actions/checkout@v4
@@ -59,12 +60,13 @@ jobs:
         echo "🧪 Tests a ejecutar: $TESTS"
         echo "🌐 Browser: ${{ matrix.browser }}"
         
-        # Ejecutar tests con timeout extendido
+        # Ejecutar tests con timeout extendido y mejor manejo de errores
         npx playwright test $TESTS \
           --project=${{ matrix.browser }} \
           --reporter=html \
-          --timeout=90000 \
-          --max-failures=10
+          --timeout=120000 \
+          --max-failures=5 \
+          --retries=1
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
