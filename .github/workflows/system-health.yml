@@ -1,0 +1,55 @@
+name: System Health Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  system-health:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium firefox webkit
+    
+    - name: Run system health tests
+      run: npx playwright test tests/system-health.spec.js --project=firefox --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - name: Run login accessibility tests
+      run: npx playwright test tests/whatsapp/login-accessibility.spec.js --project=firefox --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: system-health-reports
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
