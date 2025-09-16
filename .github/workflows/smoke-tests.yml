@@ -24,7 +24,7 @@ jobs:
       run: npm ci --ignore-optional || npm install --ignore-optional
     
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
+      run: npx playwright install --with-deps chromium firefox webkit
     
     - name: Run analytics monitoring test
       run: npx playwright test tests/analytics-monitoring-test.spec.js --project=chromium --reporter=github
