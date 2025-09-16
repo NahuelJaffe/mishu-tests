@@ -35,14 +35,7 @@ module.exports = defineConfig({
     
     // 🚫 ANALYTICS BLOCKING FOR ALL TESTS
     // Block analytics requests at context level
-    launchOptions: {
-      args: [
-        '--disable-web-security',
-        '--disable-features=VizDisplayCompositor',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding'
-      ]
-    },
+    // launchOptions se configuran por browser individual para compatibilidad
     
     // CI-specific options
     ignoreHTTPSErrors: true,
@@ -127,7 +120,12 @@ module.exports = defineConfig({
       use: { 
         ...devices['Desktop Safari'],
         // WebKit doesn't support Chrome-specific launch args
-        // Remove all launch options for WebKit compatibility
+        // Use only WebKit-compatible options
+        launchOptions: {
+          args: [
+            // WebKit compatible arguments only
+          ]
+        }
       },
     },
     
