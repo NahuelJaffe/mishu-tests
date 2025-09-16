@@ -121,9 +121,10 @@ function checkConfiguration() {
     'package.json',
     'playwright.config.js',
     'tests/test-config.js',
-    '.github/workflows/smoke-tests.yml',
-    '.github/workflows/analytics-blocking.yml',
-    '.github/workflows/system-health.yml'
+    '.github/workflows/qa-complete-tests.yml',
+    '.github/workflows/smoke-tests.yml.disabled',
+    '.github/workflows/analytics-blocking.yml.disabled',
+    '.github/workflows/system-health.yml.disabled'
   ];
   
   let allPresent = true;

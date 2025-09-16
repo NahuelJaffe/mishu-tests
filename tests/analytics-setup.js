@@ -104,7 +104,14 @@ async function setupAnalyticsForTest(page) {
         reason: 'Analytics domain detected'
       });
       
-      // Abortar la request completamente
+      // Solo abortar requests de analytics, no navegación principal
+      if (method === 'GET' && (url.includes('/login') || url.includes('/dashboard') || url.includes('/connections'))) {
+        // Permitir navegación principal
+        await route.continue();
+        return;
+      }
+      
+      // Abortar la request de analytics
       await route.abort('blockedbyclient');
       return;
     }

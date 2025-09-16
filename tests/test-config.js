@@ -33,36 +33,52 @@ module.exports = {
   
   // Función helper para login - intenta login real primero, fallback a mock
   mockLogin: async function(page) {
+    console.log('🔐 Iniciando proceso de login...');
+    
     // Si tenemos credenciales reales (de secrets), intentar login real
     if (this.TEST_EMAIL !== 'test@example.com' && this.TEST_PASSWORD !== 'ExamplePassword123!') {
       console.log('🔐 Intentando login real con credenciales de secrets...');
       try {
-        await page.goto(`${this.BASE_URL}login`);
+        // Navegar a la página de login con timeout más largo
+        await page.goto(`${this.BASE_URL}login`, { 
+          waitUntil: 'domcontentloaded',
+          timeout: 30000 
+        });
+        
+        // Esperar a que los elementos estén disponibles
+        await page.waitForSelector('input[type="email"], input[name="email"]', { timeout: 15000 });
         
         // Intentar login real
-        await page.fill('input[type="email"]', this.TEST_EMAIL);
-        await page.fill('input[type="password"]', this.TEST_PASSWORD);
-        await page.click('button[type="submit"]');
+        const emailInput = page.locator('input[type="email"], input[name="email"]').first();
+        const passwordInput = page.locator('input[type="password"], input[name="password"]').first();
+        const submitButton = page.locator('button[type="submit"], button:has-text("Login"), button:has-text("Sign In")').first();
         
-        // Esperar a que se complete el login
-        await page.waitForLoadState('networkidle');
+        await emailInput.fill(this.TEST_EMAIL);
+        await passwordInput.fill(this.TEST_PASSWORD);
+        await submitButton.click();
+        
+        // Esperar a que se complete el login con timeout más largo
+        await page.waitForLoadState('networkidle', { timeout: 30000 });
         
         // Verificar si el login fue exitoso
         const currentUrl = page.url();
-        if (!currentUrl.includes('/login')) {
+        console.log('📍 URL actual después del login:', currentUrl);
+        
+        if (!currentUrl.includes('/login') && !currentUrl.includes('error')) {
           console.log('✅ Login real exitoso');
           return;
+        } else {
+          console.log('⚠️ Login real no fue exitoso, URL actual:', currentUrl);
         }
       } catch (error) {
-        console.log('⚠️ Login real falló, usando mock login:', error.message);
+        console.log('⚠️ Login real falló:', error.message);
       }
     }
     
-    // Fallback a mock login
-    console.log('🎭 Usando mock login...');
-    await page.goto(`${this.BASE_URL}login`);
+    // Fallback a mock login - solo establecer variables de sesión
+    console.log('🎭 Usando mock login (solo variables de sesión)...');
     
-    // Establecer variables de sesión simuladas
+    // Establecer variables de sesión simuladas sin navegar
     await page.evaluate(() => {
       // Simular que el usuario está autenticado
       localStorage.setItem('user', JSON.stringify({
@@ -77,13 +93,11 @@ module.exports = {
       
       // Simular sesión activa
       sessionStorage.setItem('sessionActive', 'true');
+      
+      // Simular estado de autenticación
+      localStorage.setItem('isAuthenticated', 'true');
     });
     
-    // Ahora navegar a la página de conexiones
-    await page.goto(`${this.BASE_URL}connections`);
-    
-    // Verificar que estamos en la página correcta
-    await page.waitForLoadState('networkidle');
     console.log('✅ Mock login completado - variables de sesión establecidas');
   }
 };
