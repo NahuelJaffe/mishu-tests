@@ -31,8 +31,8 @@ jobs:
     
     - name: Install Chromium
       run: |
-        echo "Installing Chromium..."
-        npx playwright install --with-deps chromium
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
         echo "Verifying Chromium installation..."
         npx playwright install --dry-run
     
@@ -92,8 +92,8 @@ jobs:
     
     - name: Install Firefox
       run: |
-        echo "Installing Firefox..."
-        npx playwright install --with-deps firefox
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
         echo "Verifying Firefox installation..."
         npx playwright install --dry-run
     
@@ -153,8 +153,8 @@ jobs:
     
     - name: Install WebKit
       run: |
-        echo "Installing WebKit..."
-        npx playwright install --with-deps webkit
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
         echo "Verifying WebKit installation..."
         npx playwright install --dry-run
     
