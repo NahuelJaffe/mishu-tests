@@ -170,6 +170,18 @@ module.exports = defineConfig({
           }
         }
       },
+      // Setup específico para webkit
+      setup: async ({ page }) => {
+        console.log('🔍 DEBUG: WebKit setup starting...');
+        try {
+          const { setupAnalyticsForTest } = require('./tests/analytics-setup.js');
+          await setupAnalyticsForTest(page);
+          console.log('🔍 DEBUG: WebKit setup completed');
+        } catch (error) {
+          console.error('❌ ERROR in webkit setup:', error);
+          throw error;
+        }
+      },
     },
     
     // Mobile testing (only in local development)
