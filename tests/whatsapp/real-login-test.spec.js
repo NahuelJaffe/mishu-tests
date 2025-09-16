@@ -46,14 +46,27 @@ test.describe('Real Login Tests', () => {
     await expect(page).toHaveURL(/login/);
     
     // Llenar el formulario con credenciales reales
-    await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
-    await page.fill('input[type="password"]', testConfig.TEST_PASSWORD);
+    // Usar selectores más robustos para el formulario de login
+    const emailInput = page.locator('input[type="email"], input[name="email"], input[placeholder*="email"]').first();
+    const passwordInput = page.locator('input[type="password"], input[name="password"], input[placeholder*="password"]').first();
+    const submitButton = page.locator('button[type="submit"], button:has-text("Login"), button:has-text("Sign In")').first();
+    
+    // Esperar a que los elementos estén disponibles
+    await emailInput.waitFor({ state: 'visible', timeout: 10000 });
+    await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
+    
+    await emailInput.fill(testConfig.TEST_EMAIL);
+    await passwordInput.fill(testConfig.TEST_PASSWORD);
     
     // Hacer clic en el botón de login
-    await page.click('button[type="submit"]');
+    await submitButton.click();
     
-    // Esperar a que se procese el login
-    await page.waitForLoadState('networkidle');
+    // Esperar a que se procese el login con timeout más corto
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 20000 });
+    } catch (error) {
+      console.log('⚠️ Timeout esperando networkidle, continuando...');
+    }
     
     // Verificar si el login fue exitoso
     const currentUrl = page.url();
