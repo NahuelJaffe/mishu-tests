@@ -36,7 +36,8 @@
     "test:trace": "playwright show-trace",
     "test:clean": "rm -rf test-results playwright-report",
     "check:credentials": "node scripts/check-credentials.js",
-    "monitor:ci": "node scripts/monitor-ci.js"
+    "monitor:ci": "node scripts/monitor-ci.js",
+    "health:check": "node scripts/daily-health-check.js"
   },
   "keywords": [],
   "author": "",

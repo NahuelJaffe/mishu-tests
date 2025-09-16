@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-09-16T13:59:14.538Z",
+  "overall_status": "HEALTHY",
+  "checks": {
+    "ci_status": true,
+    "security": true,
+    "analytics_blocking": true,
+    "configuration": true
+  },
+  "summary": {
+    "total_checks": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}
