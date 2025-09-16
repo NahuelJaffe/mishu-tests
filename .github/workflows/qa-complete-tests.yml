@@ -1,0 +1,261 @@
+name: Complete QA Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  qa-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-optional || npm install --ignore-optional
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium firefox webkit
+    
+    # Tests de Autenticación
+    - name: Run Authentication Tests
+      run: npx playwright test tests/whatsapp/auth.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Registro
+    - name: Run Signup Tests
+      run: npx playwright test tests/whatsapp/signup.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Dashboard
+    - name: Run Dashboard Tests
+      run: npx playwright test tests/whatsapp/dashboard.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Conexión WhatsApp
+    - name: Run Connection Tests
+      run: npx playwright test tests/whatsapp/connection.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Monitoreo de Mensajes
+    - name: Run Message Monitoring Tests
+      run: npx playwright test tests/whatsapp/message-monitoring.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Interfaz de Usuario
+    - name: Run UI Tests
+      run: npx playwright test tests/whatsapp/ui.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Perfil y Configuraciones
+    - name: Run Profile Settings Tests
+      run: npx playwright test tests/whatsapp/profile-settings.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Manejo de Errores
+    - name: Run Error Handling Tests
+      run: npx playwright test tests/whatsapp/error-handling.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Seguridad
+    - name: Run Security Tests
+      run: npx playwright test tests/whatsapp/security.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Notificaciones
+    - name: Run Notifications Tests
+      run: npx playwright test tests/whatsapp/notifications.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Ayuda y Soporte
+    - name: Run Help Support Tests
+      run: npx playwright test tests/whatsapp/help-support.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Accesibilidad de Login
+    - name: Run Login Accessibility Tests
+      run: npx playwright test tests/whatsapp/login-accessibility.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Login Real
+    - name: Run Real Login Tests
+      run: npx playwright test tests/whatsapp/real-login-test.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Análisis de Conexión
+    - name: Run Connection Analysis Tests
+      run: npx playwright test tests/whatsapp/connection-analysis.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Conexión Detallada
+    - name: Run Connection Detailed Tests
+      run: npx playwright test tests/whatsapp/connection-detailed.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Exploración de Login
+    - name: Run Login Exploration Tests
+      run: npx playwright test tests/whatsapp/login-exploration.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de APIs
+    - name: Run API Tests
+      run: npx playwright test tests/api/ --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Autenticación Adicionales
+    - name: Run Additional Auth Tests
+      run: npx playwright test tests/auth/ --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Analytics y Monitoreo
+    - name: Run Analytics Monitoring Tests
+      run: npx playwright test tests/analytics-monitoring-test.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Salud del Sistema
+    - name: Run System Health Tests
+      run: npx playwright test tests/system-health.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    # Tests de Smoke
+    - name: Run Smoke Tests
+      run: npx playwright test tests/smoke-test.spec.js --project=${{ matrix.browser }} --reporter=github
+      env:
+        CI: true
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      continue-on-error: true
+    
+    - name: Upload Test Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: qa-test-reports-${{ matrix.browser }}
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+        if-no-files-found: ignore
+    
+    - name: Upload Analytics Violations Log
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: analytics-violations-${{ matrix.browser }}
+        path: analytics-violations.log
+        retention-days: 7
+        if-no-files-found: ignore

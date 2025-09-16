@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
 const testConfig = require('../test-config');
-const testConfig = require('../test-config');
 
 // Test suite para la autenticación en WhatsApp Monitor
 
