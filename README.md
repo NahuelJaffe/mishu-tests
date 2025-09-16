@@ -166,6 +166,37 @@ DEBUG=pw:api npx playwright test
 - Documentar nuevos tests
 - No incluir información sensible
 
+## 🚀 GitHub Actions
+
+El proyecto incluye workflows automatizados para testing continuo:
+
+### Workflows Disponibles
+
+1. **Smoke Tests** (`smoke-tests.yml`)
+   - Tests básicos de funcionalidad
+   - Monitoreo de analytics
+   - Ejecuta en Chromium
+
+2. **Analytics Blocking** (`analytics-blocking.yml`)
+   - Verificación de bloqueo de analytics
+   - Tests en Chromium, Firefox y WebKit
+   - Asegura 0 analytics durante tests
+
+3. **System Health** (`system-health.yml`)
+   - Tests de salud del sistema
+   - Tests de accesibilidad
+   - Ejecuta en Firefox
+
+### Verificar Estado de CI
+
+```bash
+# Verificar salud del sistema
+npm run health:check
+
+# Monitorear CI (requiere gh CLI)
+npm run monitor:ci
+```
+
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia MIT. Ver `LICENSE` para más detalles.
