@@ -35,7 +35,8 @@
     "test:codegen": "playwright codegen https://your-app.example.com/",
     "test:trace": "playwright show-trace",
     "test:clean": "rm -rf test-results playwright-report",
-    "check:credentials": "node scripts/check-credentials.js"
+    "check:credentials": "node scripts/check-credentials.js",
+    "monitor:ci": "node scripts/monitor-ci.js"
   },
   "keywords": [],
   "author": "",
