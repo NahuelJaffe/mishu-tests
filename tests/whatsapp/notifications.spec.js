@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para notificaciones en WhatsApp Monitor
 
@@ -20,9 +21,9 @@ async function setupAnalyticsForNotifications(page) {
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const baseUrl = testConfig.BASE_URL;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.goto(`${baseUrl}login`);
   await page.fill('input[type="email"]', email);
@@ -78,7 +79,7 @@ test('TC-37: Browser notifications', async ({ page, context }) => {
   }
   
   // Navegar a la página de configuraciones de notificación
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+  await page.goto(`${testConfig.BASE_URL}/settings`);
   
   // Buscar la configuración de notificaciones del navegador
   const browserNotificationToggle = page.locator('input[name="browserNotifications"], input[type="checkbox"][name*="browser"], .browser-notification-toggle');
@@ -120,7 +121,7 @@ test('TC-37: Browser notifications', async ({ page, context }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications`);
+    await page.goto(`${testConfig.BASE_URL}/notifications`);
     
     const browserNotificationSetting = page.locator('.browser-notification-setting, input[name="browserNotifications"]');
     
@@ -154,7 +155,7 @@ test('TC-38: Email notifications', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+  await page.goto(`${testConfig.BASE_URL}/settings`);
   
   // Buscar la configuración de notificaciones por email
   const emailNotificationToggle = page.locator('input[name="emailNotifications"], input[type="checkbox"][name*="email"], .email-notification-toggle');
@@ -221,7 +222,7 @@ test('TC-38: Email notifications', async ({ page }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications`);
+    await page.goto(`${testConfig.BASE_URL}/notifications`);
     
     const emailNotificationSetting = page.locator('.email-notification-setting, input[name="emailNotifications"]');
     
@@ -263,7 +264,7 @@ test('TC-39: Notification preferences', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones de notificación
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+  await page.goto(`${testConfig.BASE_URL}/settings`);
   
   // Buscar la sección de preferencias de notificación
   const notificationSection = page.locator('.notification-section, .notification-preferences, [data-section="notifications"]');
@@ -357,7 +358,7 @@ test('TC-39: Notification preferences', async ({ page }) => {
     
   } else {
     // Buscar en la página de notificaciones específica
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/notifications`);
+    await page.goto(`${testConfig.BASE_URL}/notifications`);
     
     const notificationPreferences = page.locator('.notification-preferences, .preferences, .settings');
     

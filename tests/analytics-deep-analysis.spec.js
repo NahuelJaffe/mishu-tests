@@ -2,11 +2,22 @@
 // Este test está diseñado para identificar exactamente por qué siguen apareciendo usuarios
 
 const { test, expect } = require('@playwright/test');
+const testConfig = require('./test-config');
 
 test.describe('Análisis Profundo de Analytics Blocking', () => {
   
   test('Análisis completo de bloqueo de analytics', async ({ page, context, browser }) => {
     console.log('🔍 INICIANDO ANÁLISIS PROFUNDO DE ANALYTICS BLOCKING');
+    
+    // Configurar bloqueo de analytics
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para análisis profundo');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
     
     // 1. Verificar configuración del contexto
     console.log('📋 Verificando configuración del contexto...');
@@ -92,7 +103,7 @@ test.describe('Análisis Profundo de Analytics Blocking', () => {
     });
     
     // Navegar a la página
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/', {
+    await page.goto(testConfig.BASE_URL, {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -243,8 +254,18 @@ test.describe('Análisis Profundo de Analytics Blocking', () => {
   test('Test de bloqueo de Firebase específico', async ({ page }) => {
     console.log('🔍 TESTING FIREBASE BLOCKING ESPECÍFICO');
     
+    // Configurar bloqueo de analytics
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de Firebase');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Navegar a la página
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/', {
+    await page.goto(testConfig.BASE_URL, {
       waitUntil: 'networkidle',
       timeout: 30000
     });

@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para el monitoreo de mensajes en WhatsApp Monitor
 
@@ -6,10 +7,10 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseURL = testConfig.BASE_URL;
   await page.goto(`${baseURL}login`);
-  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
-  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
+  await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
+  await page.fill('input[type="password"]', testConfig.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -41,7 +42,7 @@ test('TC-17: Message display', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
+  await page.goto(`${testConfig.BASE_URL}/messages`);
   
   // Verificar que estamos en la página de mensajes
   await expect(page).toHaveURL(/messages|chats/);
@@ -89,7 +90,7 @@ test('TC-18: Message grouping', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
+  await page.goto(`${testConfig.BASE_URL}/messages`);
   
   // Verificar si existe la funcionalidad de agrupación
   const groupingControl = page.locator('.grouping-control, .view-options, .filter-options');
@@ -124,7 +125,7 @@ test('TC-19: Manual message flagging', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
+  await page.goto(`${testConfig.BASE_URL}/messages`);
   
   // Verificar si hay mensajes disponibles
   const messagesList = page.locator('.messages-list, .chats-list, .conversation-list');
@@ -170,7 +171,7 @@ test('TC-20: Bulk actions on messages', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de mensajes
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/messages`);
+  await page.goto(`${testConfig.BASE_URL}/messages`);
   
   // Verificar si hay mensajes disponibles
   const messagesList = page.locator('.messages-list, .chats-list, .conversation-list');

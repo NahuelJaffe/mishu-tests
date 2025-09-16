@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 /**
  * Setup de analytics para tests de auth
@@ -49,7 +50,7 @@ test('TC-02: Login with invalid credentials shows error message', async ({ page 
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Llenar el formulario con credenciales inválidas
-  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
+  await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
   await page.fill('input[type="password"]', 'wrongpassword123');
   
   // Hacer clic en el botón de login
@@ -127,7 +128,7 @@ test('TC-03: Forgot Password functionality', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Opcional: probar el flujo de recuperación ingresando un email
-    await emailInput.fill(process.env.TEST_EMAIL);
+    await emailInput.fill(testConfig.TEST_EMAIL);
     
     // Buscar y hacer clic en el botón de enviar/recuperar
     // Intentar encontrar un botón específico para enviar el formulario
@@ -180,7 +181,7 @@ test('TC-04: Sign Up functionality', async ({ page }) => {
     
     // Verificar que hay un formulario de registro con campos típicos
     const emailInput = page.locator('input[type="email"]');
-    const passwordInput = page.locator('input[type="password"]');
+    const passwordInput = page.locator('input[type="password"]').first(); // Usar .first() para evitar ambigüedad
     
     if (await emailInput.count() > 0 && await passwordInput.count() > 0) {
       await expect(emailInput).toBeVisible();

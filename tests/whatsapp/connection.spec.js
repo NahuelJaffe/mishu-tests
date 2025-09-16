@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para la conexión de WhatsApp en WhatsApp Monitor
 
@@ -21,10 +22,10 @@ async function setupAnalyticsForConnection(page) {
  * Esta función se utilizará en varios tests para no repetir código
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseURL = testConfig.BASE_URL;
   await page.goto(`${baseURL}login`);
-  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
-  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
+  await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
+  await page.fill('input[type="password"]', testConfig.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -143,7 +144,7 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de gestión de conexiones
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
+  await page.goto(`${testConfig.BASE_URL}/connections`);
   
   // Verificar si la aplicación soporta múltiples conexiones
   const addConnectionButton = page.locator('button:has-text("Add connection"), a:has-text("Add WhatsApp")');
@@ -183,7 +184,7 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de conexiones
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
+  await page.goto(`${testConfig.BASE_URL}/connections`);
   
   // Verificar si hay alguna conexión activa
   const activeConnection = page.locator('.connection.active, .whatsapp-connection.connected');

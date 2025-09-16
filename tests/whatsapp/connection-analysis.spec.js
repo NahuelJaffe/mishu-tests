@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite completo para la página de conexiones de WhatsApp Monitor
 
@@ -6,9 +7,9 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const baseUrl = testConfig.BASE_URL;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.goto(`${baseUrl}login`);
   await page.fill('input[type="email"]', email);

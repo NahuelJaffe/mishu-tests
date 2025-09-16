@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite específico para la página de conexiones basado en el análisis real
 
@@ -6,9 +7,9 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const baseUrl = testConfig.BASE_URL;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.goto(`${baseUrl}login`);
   await page.fill('input[type="email"]', email);
@@ -133,7 +134,7 @@ test('TC-15: Navegación de la página', async ({ page }) => {
   console.log('✅ Navegación al dashboard funciona');
   
   // Volver a connections
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
+  await page.goto(`${testConfig.BASE_URL}/connections`);
   await expect(page).toHaveURL(/connections/);
   console.log('✅ Navegación de vuelta a connections funciona');
   
@@ -196,7 +197,7 @@ test('TC-17: Metadata de la página', async ({ page }) => {
   console.log(`✅ Título de la página: ${pageTitle}`);
   
   // Verificar que la URL es correcta
-  expect(page.url()).toBe(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/connections`);
+  expect(page.url()).toBe(`${testConfig.BASE_URL}/connections`);
   console.log('✅ URL correcta');
   
   // Verificar que hay un logo

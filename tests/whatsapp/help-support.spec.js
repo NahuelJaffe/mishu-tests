@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para ayuda y soporte en WhatsApp Monitor
 
@@ -6,10 +7,10 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseURL = testConfig.BASE_URL;
   await page.goto(`${baseURL}login`);
-  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
-  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
+  await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
+  await page.fill('input[type="password"]', testConfig.TEST_PASSWORD);
   await page.click('button[type="submit"]');
   // Esperar a que se complete el login
   await expect(page).toHaveURL(/connections/);
@@ -21,7 +22,7 @@ async function login(page) {
  */
 test('TC-40: FAQ section', async ({ page }) => {
   // Navegar a la página de FAQ (puede estar disponible sin login)
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/faq`);
+  await page.goto(`${testConfig.BASE_URL}/faq`);
   
   // Verificar que estamos en la página de FAQ
   await expect(page).toHaveURL(/faq|help|support/);
@@ -135,7 +136,7 @@ test('TC-40: FAQ section', async ({ page }) => {
  */
 test('TC-41: Contact form', async ({ page }) => {
   // Navegar a la página de contacto
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/contact`);
+  await page.goto(`${testConfig.BASE_URL}/contact`);
   
   // Verificar que estamos en la página de contacto
   await expect(page).toHaveURL(/contact|support|help/);
@@ -259,7 +260,7 @@ test('TC-42: Support email response', async ({ page }) => {
   // En un entorno real, esto requeriría interceptar emails o usar un servicio de testing
   
   // Navegar a la página de contacto
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
+  const baseURL = testConfig.BASE_URL;
   await page.goto(`${baseURL}/contact`);
   
   // Buscar formulario de contacto con selectores más amplios

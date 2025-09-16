@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para perfil y configuraciones en WhatsApp Monitor
 
@@ -6,9 +7,9 @@ const { test, expect } = require('@playwright/test');
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const baseUrl = testConfig.BASE_URL;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.goto(`${baseUrl}login`);
   await page.fill('input[type="email"]', email);
@@ -27,7 +28,7 @@ test('TC-25: Profile update', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de perfil
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
+  await page.goto(`${testConfig.BASE_URL}/profile`);
   
   // Verificar que estamos en la página de perfil
   await expect(page).toHaveURL(/profile|account/);
@@ -93,7 +94,7 @@ test('TC-26: Password change', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuración de contraseña
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
+  await page.goto(`${testConfig.BASE_URL}/profile`);
   
   // Buscar la sección de cambio de contraseña
   const passwordSection = page.locator('.password-section, .change-password, [data-section="password"]');
@@ -111,7 +112,7 @@ test('TC-26: Password change', async ({ page }) => {
     await expect(confirmPasswordField).toBeVisible();
     
     // Llenar el formulario de cambio de contraseña
-    await currentPasswordField.fill(process.env.TEST_PASSWORD); // Contraseña actual
+    await currentPasswordField.fill(testConfig.TEST_PASSWORD); // Contraseña actual
     await newPasswordField.fill('NewPassword123!');
     await confirmPasswordField.fill('NewPassword123!');
     
@@ -133,8 +134,8 @@ test('TC-26: Password change', async ({ page }) => {
     
     // Probar cambiar la contraseña de vuelta a la original
     await currentPasswordField.fill('NewPassword123!');
-    await newPasswordField.fill(process.env.TEST_PASSWORD);
-    await confirmPasswordField.fill(process.env.TEST_PASSWORD);
+    await newPasswordField.fill(testConfig.TEST_PASSWORD);
+    await confirmPasswordField.fill(testConfig.TEST_PASSWORD);
     
     await changePasswordButton.click();
     
@@ -145,7 +146,7 @@ test('TC-26: Password change', async ({ page }) => {
     
   } else {
     // Buscar en la página de configuraciones
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+    await page.goto(`${testConfig.BASE_URL}/settings`);
     
     const passwordLink = page.locator('a:has-text("Password"), a:has-text("Security"), button:has-text("Password")');
     
@@ -158,7 +159,7 @@ test('TC-26: Password change', async ({ page }) => {
       const confirmPasswordField = page.locator('input[name="confirmPassword"], input[name="password_confirmation"]');
       
       if (await currentPasswordField.count() > 0) {
-        await currentPasswordField.fill(process.env.TEST_PASSWORD);
+        await currentPasswordField.fill(testConfig.TEST_PASSWORD);
         await newPasswordField.fill('NewPassword123!');
         await confirmPasswordField.fill('NewPassword123!');
         
@@ -188,7 +189,7 @@ test('TC-27: Notification preferences', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+  await page.goto(`${testConfig.BASE_URL}/settings`);
   
   // Buscar la sección de notificaciones
   const notificationsSection = page.locator('.notifications-section, .notification-settings, [data-section="notifications"]');
@@ -286,7 +287,7 @@ test('TC-28: Account deletion', async ({ page }) => {
   await login(page);
   
   // Navegar a la página de configuraciones
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/settings`);
+  await page.goto(`${testConfig.BASE_URL}/settings`);
   
   // Buscar la sección de eliminación de cuenta
   const deleteAccountSection = page.locator('.delete-account, .account-deletion, [data-section="delete"]');

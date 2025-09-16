@@ -1,4 +1,6 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
+const testConfig = require('../test-config');
 
 // Test suite para la autenticación en WhatsApp Monitor
 
@@ -25,7 +27,7 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   await setupAnalyticsForAuth(page);
   
   // Navegar a la página de login
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   // Verificar que estamos en la página de login
   await expect(page).toHaveURL(/login/);
@@ -36,8 +38,8 @@ test('TC-01: Login with valid credentials', async ({ page }) => {
   
   // Llenar el formulario con credenciales válidas
   // Usar variables de entorno en CI, fallback a credenciales por defecto
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.fill('input[type="email"]', email);
   await page.fill('input[type="password"]', password);
@@ -62,7 +64,7 @@ test('TC-02: Login with invalid credentials', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   // Esperar a que el formulario esté completamente cargado
   await page.waitForSelector('input[type="email"]', { timeout: 10000 });
@@ -109,7 +111,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   // Buscar y hacer clic en el enlace de recuperación de contraseña
   const forgotPasswordLink = page.getByText(/forgot|reset|recover/i);
@@ -126,7 +128,7 @@ test('TC-03: Password recovery flow', async ({ page }) => {
     await expect(emailInput).toBeVisible();
     
     // Ingresar el email de prueba
-    await emailInput.fill(process.env.TEST_EMAIL);
+    await emailInput.fill(testConfig.TEST_EMAIL);
     
     // Enviar el formulario
     await page.click('button[type="submit"]');
@@ -149,7 +151,7 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForAuth(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   // Verificar si existe la opción "Remember me"
   const rememberMeCheckbox = page.locator('input[type="checkbox"][name*="remember"], label:has-text("Remember me")');
@@ -159,8 +161,8 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     await rememberMeCheckbox.check();
     
     // Llenar credenciales y hacer login con las credenciales proporcionadas
-    await page.fill('input[type="email"]', process.env.TEST_EMAIL);
-    await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
+    await page.fill('input[type="email"]', testConfig.TEST_EMAIL);
+    await page.fill('input[type="password"]', testConfig.TEST_PASSWORD);
     await page.click('button[type="submit"]');
     
     // Verificar login exitoso
@@ -176,7 +178,7 @@ test('TC-04: "Remember me" functionality', async ({ page, context }) => {
     const newPage = await context.newPage();
     
     // Navegar directamente a la página principal
-    await newPage.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/`);
+    await newPage.goto(`${testConfig.BASE_URL}/`);
     
     // Verificar que seguimos con la sesión iniciada (no redirige a login)
     await expect(newPage).not.toHaveURL(/login/, { timeout: 10000 });

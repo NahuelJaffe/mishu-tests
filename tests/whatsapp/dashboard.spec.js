@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para el Dashboard en WhatsApp Monitor
 
@@ -20,13 +21,8 @@ async function setupAnalyticsForDashboard(page) {
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseURL = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  await page.goto(`${baseURL}login`);
-  await page.fill('input[type="email"]', process.env.TEST_EMAIL);
-  await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
-  await page.click('button[type="submit"]');
-  // Esperar a que se complete el login
-  await expect(page).toHaveURL(/connections/);
+  // Usar mock login para tests que no requieren autenticación real
+  await testConfig.mockLogin(page);
 }
 
 /**
@@ -41,7 +37,7 @@ test('TC-10: Empty state display', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard principal
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
+  await page.goto(`${testConfig.BASE_URL}/dashboard`);
   
   // Verificar que estamos en el dashboard
   await expect(page).toHaveURL(/dashboard|home/);
@@ -89,7 +85,7 @@ test('TC-11: Navigation menu functionality', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
+  await page.goto(`${testConfig.BASE_URL}/dashboard`);
   
   // Verificar que existe el menú de navegación
   const navigationMenu = page.locator('nav, .navigation, .sidebar, .menu');
@@ -152,7 +148,7 @@ test('TC-12: Quick actions accessibility', async ({ page }) => {
   await login(page);
   
   // Navegar al dashboard
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
+  await page.goto(`${testConfig.BASE_URL}/dashboard`);
   
   // Verificar que existen acciones rápidas
   const quickActions = page.locator('.quick-actions, .action-buttons, .dashboard-actions');

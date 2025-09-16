@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para la seguridad en WhatsApp Monitor
 
@@ -20,9 +21,9 @@ async function setupAnalyticsForSecurity(page) {
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
-  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/';
-  const email = process.env.TEST_EMAIL;
-  const password = process.env.TEST_PASSWORD;
+  const baseUrl = testConfig.BASE_URL;
+  const email = testConfig.TEST_EMAIL;
+  const password = testConfig.TEST_PASSWORD;
   
   await page.goto(`${baseUrl}login`);
   await page.fill('input[type="email"]', email);
@@ -73,7 +74,7 @@ test('TC-33: Session management', async ({ page, context }) => {
   const newPage = await context.newPage();
   
   // Navegar a una página protegida
-  await newPage.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
+  await newPage.goto(`${testConfig.BASE_URL}/dashboard`);
   
   // Verificar que seguimos con la sesión iniciada (no redirige a login)
   await expect(newPage).not.toHaveURL(/login/);
@@ -137,7 +138,7 @@ test('TC-36: Logout functionality', async ({ page, context }) => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
     
   // Verificar que la sesión ha sido cerrada intentando acceder a una página protegida
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/dashboard`);
+  await page.goto(`${testConfig.BASE_URL}/dashboard`);
   
   // Deberíamos ser redirigidos a login
   await expect(page).toHaveURL(/login/);
@@ -155,7 +156,7 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
   await login(page);
   
   // Navegar a la sección de perfil o configuración
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/profile`);
+  await page.goto(`${testConfig.BASE_URL}/profile`);
   
   // Verificar si hay campos de contraseña
   const passwordFields = page.locator('input[type="password"]');
@@ -214,14 +215,14 @@ test('TC-34: Data encryption', async ({ page }) => {
   await setupAnalyticsForSecurity(page);
   
   // Verificar que la URL es HTTPS
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}`);
+  await page.goto(`${testConfig.BASE_URL}`);
   const url = page.url();
   expect(url.startsWith('https://')).toBeTruthy();
   
   // Intentar acceder por HTTP y verificar redirección a HTTPS
   // Nota: Esto podría no funcionar en todos los entornos
   try {
-    await page.goto(`http://${process.env.BASE_URL || 'mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}`);
+    await page.goto(`http://${testConfig.BASE_URL}`);
     const redirectedUrl = page.url();
     expect(redirectedUrl.startsWith('https://')).toBeTruthy();
   } catch (error) {
@@ -229,7 +230,7 @@ test('TC-34: Data encryption', async ({ page }) => {
   }
   
   // Verificar que los formularios usan HTTPS
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   const loginForm = page.locator('form');
   if (await loginForm.count() > 0) {

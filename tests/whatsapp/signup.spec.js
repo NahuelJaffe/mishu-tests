@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test suite para el registro de usuarios en WhatsApp Monitor
 
@@ -25,7 +26,7 @@ test('TC-06: New user registration', async ({ page }) => {
   await setupAnalyticsForSignup(page);
   
   // Navegar a la página de registro
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
+  await page.goto(`${testConfig.BASE_URL}/register`);
   
   // Verificar que estamos en la página de registro
   await expect(page).toHaveURL(/register|signup/);
@@ -106,10 +107,10 @@ test('TC-07: Duplicate email/phone check', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForSignup(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
+  await page.goto(`${testConfig.BASE_URL}/register`);
   
   // Usar un email que ya existe (el email de prueba que usamos en otros tests)
-  const existingEmail = process.env.TEST_EMAIL;
+  const existingEmail = testConfig.TEST_EMAIL;
   const testPassword = 'TestPassword123!';
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
@@ -146,7 +147,7 @@ test('TC-08: Password requirements validation', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForSignup(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
+  await page.goto(`${testConfig.BASE_URL}/register`);
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
   const passwordField = page.locator('input[type="password"], input[name="password"]');
@@ -216,7 +217,7 @@ test('TC-09: Email verification flow', async ({ page }) => {
   // Este test simula el flujo de verificación de email
   // En un entorno real, esto requeriría interceptar emails o usar un servicio de testing
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
+  await page.goto(`${testConfig.BASE_URL}/register`);
   
   const timestamp = Date.now();
   const testEmail = `testuser${timestamp}@example.com`;

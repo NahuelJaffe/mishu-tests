@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
 
 // Test específico para el flujo de recuperación de contraseña
 
@@ -24,7 +25,7 @@ test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForLoginExploration(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   // Buscar el botón "Forgot your password" que el usuario confirmó que existe
   const forgotPasswordLink = page.locator('text=/forgot.*password|forgot.*contraseña|reset.*password|reset.*contraseña/i');
@@ -46,7 +47,7 @@ test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
   console.log('✅ Campo de email encontrado');
   
   // Ingresar el email de prueba
-  await emailInput.fill(process.env.TEST_EMAIL);
+  await emailInput.fill(testConfig.TEST_EMAIL);
   
   // Buscar y hacer clic en el botón de envío
   const submitButton = page.locator('button[type="submit"], button:has-text("Send"), button:has-text("Submit"), button:has-text("Reset")');
@@ -82,7 +83,7 @@ test('Exploración completa de la página de login', async ({ page }) => {
   // Configurar bloqueo de analytics
   await setupAnalyticsForLoginExploration(page);
   
-  await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
+  await page.goto(`${testConfig.BASE_URL}/login`);
   
   console.log('=== EXPLORACIÓN DE LA PÁGINA DE LOGIN ===');
   console.log('URL:', page.url());
