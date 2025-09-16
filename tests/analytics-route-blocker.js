@@ -2,26 +2,94 @@
 // Este archivo se usa para interceptar requests ANTES de que salgan del navegador
 
 const analyticsDomains = [
+  // Google Analytics
   'google-analytics.com',
-  'googletagmanager.com', 
+  'www.google-analytics.com',
+  'ssl.google-analytics.com',
+  'googletagmanager.com',
+  'www.googletagmanager.com',
+  'ssl.googletagmanager.com',
   'googleadservices.com',
+  'www.googleadservices.com',
   'googlesyndication.com',
+  'www.googlesyndication.com',
   'doubleclick.net',
+  'www.doubleclick.net',
+  
+  // Facebook
   'facebook.com/tr',
+  'www.facebook.com/tr',
   'connect.facebook.net',
+  'www.connect.facebook.net',
   'facebook.net',
-  'firebase',
-  'analytics',
+  'www.facebook.net',
+  
+  // Firebase (solo dominios específicos)
+  'firebaseapp.com',
+  'firebaseio.com',
+  'firebase.googleapis.com',
+  'firebaseinstallations.googleapis.com',
+  'firebaseremoteconfig.googleapis.com',
+  
+  // Mixpanel
   'mixpanel.com',
+  'api.mixpanel.com',
+  'cdn.mxpnl.com',
+  
+  // Amplitude
   'amplitude.com',
-  'segment.com',
-  'heap.io',
+  'api.amplitude.com',
+  'cdn.amplitude.com',
+  
+  // Segment
+  'segment.io',
+  'api.segment.io',
+  'cdn.segment.io',
+  
+  // Heap
+  'heap.com',
+  'api.heap.io',
+  'cdn.heap.io',
+  
+  // Hotjar
   'hotjar.com',
-  'fullstory.com',
-  'logrocket.com',
-  'sentry.io',
-  'bugsnag.com',
-  'rollbar.com'
+  'static.hotjar.com',
+  'script.hotjar.com',
+  
+  // Clarity
+  'clarity.ms',
+  'www.clarity.ms',
+  'c.clarity.ms',
+  
+  // LinkedIn
+  'linkedin.com/li.lms',
+  'px.ads.linkedin.com',
+  
+  // Twitter
+  'twitter.com/i/adsct',
+  't.co',
+  
+  // TikTok
+  'tiktok.com/i18n/pixel',
+  'analytics.tiktok.com',
+  
+  // Snapchat
+  'snapchat.com',
+  'tr.snapchat.com',
+  
+  // Pinterest
+  'pinterest.com',
+  'ads.pinterest.com',
+  
+  // Reddit
+  'reddit.com/api/v2',
+  'events.redditmedia.com',
+  
+  // Amazon
+  'quantserve.com',
+  'scorecardresearch.com',
+  'adsystem.amazon.com',
+  'amazon-adsystem.com'
 ];
 
 /**

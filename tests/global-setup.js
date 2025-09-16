@@ -7,6 +7,24 @@ const { setupAnalyticsDNSBlocking } = require('./analytics-dns-blocker');
 async function globalSetup(config) {
   console.log('🚀 Starting global setup...');
   
+  // Limpiar archivo de violaciones previo
+  const violationsLogPath = 'test-results/analytics-violations.log';
+  if (fs.existsSync(violationsLogPath)) {
+    fs.unlinkSync(violationsLogPath);
+    console.log('🧹 Archivo de violaciones previo eliminado');
+  }
+  
+  // Asegurar que el directorio test-results existe
+  if (!fs.existsSync('test-results')) {
+    fs.mkdirSync('test-results', { recursive: true });
+  }
+  
+  // Establecer bandera E2E temprana
+  process.env.__E2E_ANALYTICS_DISABLED__ = 'true';
+  process.env.__PLAYWRIGHT_TEST__ = 'true';
+  process.env.__AUTOMATED_TESTING__ = 'true';
+  process.env.__NUCLEAR_ANALYTICS_BLOCKER__ = 'true';
+  
   try {
     // Create a browser instance for global setup
     const browser = await chromium.launch({

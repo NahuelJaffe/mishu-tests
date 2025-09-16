@@ -27,18 +27,38 @@ async function verifyAnalyticsBlocked(page) {
   // Verificar que no hay scripts de analytics cargados
   const analyticsScripts = await page.evaluate(() => {
     const scripts = Array.from(document.querySelectorAll('script[src]'));
+    const analyticsDomains = [
+      'google-analytics.com',
+      'googletagmanager.com',
+      'facebook.net',
+      'connect.facebook.net',
+      'doubleclick.net',
+      'googleadservices.com',
+      'googlesyndication.com',
+      'firebaseapp.com',
+      'firebaseio.com',
+      'firebase.googleapis.com',
+      'mixpanel.com',
+      'amplitude.com',
+      'segment.io',
+      'heap.com',
+      'hotjar.com',
+      'clarity.ms',
+      'linkedin.com/li.lms',
+      'twitter.com/i/adsct',
+      'analytics.tiktok.com',
+      'tr.snapchat.com',
+      'ads.pinterest.com',
+      'events.redditmedia.com',
+      'quantserve.com',
+      'scorecardresearch.com',
+      'adsystem.amazon.com',
+      'amazon-adsystem.com'
+    ];
+    
     return scripts
       .map(script => script.src)
-      .filter(src => 
-        src.includes('google-analytics.com') ||
-        src.includes('googletagmanager.com') ||
-        src.includes('facebook.net') ||
-        src.includes('doubleclick.net') ||
-        src.includes('googleadservices.com') ||
-        src.includes('googlesyndication.com') ||
-        src.includes('firebase') ||
-        src.includes('analytics')
-      );
+      .filter(src => analyticsDomains.some(domain => src.includes(domain)));
   });
   
   if (analyticsScripts.length > 0) {
@@ -51,15 +71,40 @@ async function verifyAnalyticsBlocked(page) {
   const networkRequests = await page.evaluate(() => {
     // Esta función se ejecuta en el contexto de la página
     // Verificar si hay requests de analytics pendientes
+    const analyticsDomains = [
+      'google-analytics.com',
+      'googletagmanager.com',
+      'facebook.com/tr',
+      'connect.facebook.net',
+      'doubleclick.net',
+      'googleadservices.com',
+      'googlesyndication.com',
+      'firebaseapp.com',
+      'firebaseio.com',
+      'firebase.googleapis.com',
+      'mixpanel.com',
+      'amplitude.com',
+      'segment.io',
+      'heap.com',
+      'hotjar.com',
+      'clarity.ms',
+      'linkedin.com/li.lms',
+      'twitter.com/i/adsct',
+      'analytics.tiktok.com',
+      'tr.snapchat.com',
+      'ads.pinterest.com',
+      'events.redditmedia.com',
+      'quantserve.com',
+      'scorecardresearch.com',
+      'adsystem.amazon.com',
+      'amazon-adsystem.com'
+    ];
+    
     return {
       hasAnalyticsRequests: window.performance && 
         window.performance.getEntriesByType('resource') &&
         window.performance.getEntriesByType('resource').some(entry => 
-          entry.name.includes('google-analytics.com') ||
-          entry.name.includes('googletagmanager.com') ||
-          entry.name.includes('facebook.com/tr') ||
-          entry.name.includes('doubleclick.net') ||
-          entry.name.includes('firebase')
+          analyticsDomains.some(domain => entry.name.includes(domain))
         )
     };
   });
@@ -85,17 +130,38 @@ async function blockAnalyticsRequests(page) {
   await page.route('**/*', async (route) => {
     const url = route.request().url();
     
+    // Lista de dominios de analytics específicos
+    const analyticsDomains = [
+      'google-analytics.com',
+      'googletagmanager.com',
+      'facebook.com/tr',
+      'connect.facebook.net',
+      'doubleclick.net',
+      'googleadservices.com',
+      'googlesyndication.com',
+      'firebaseapp.com',
+      'firebaseio.com',
+      'firebase.googleapis.com',
+      'mixpanel.com',
+      'amplitude.com',
+      'segment.io',
+      'heap.com',
+      'hotjar.com',
+      'clarity.ms',
+      'linkedin.com/li.lms',
+      'twitter.com/i/adsct',
+      'analytics.tiktok.com',
+      'tr.snapchat.com',
+      'ads.pinterest.com',
+      'events.redditmedia.com',
+      'quantserve.com',
+      'scorecardresearch.com',
+      'adsystem.amazon.com',
+      'amazon-adsystem.com'
+    ];
+    
     // Bloquear dominios de analytics
-    if (
-      url.includes('google-analytics.com') ||
-      url.includes('googletagmanager.com') ||
-      url.includes('facebook.com/tr') ||
-      url.includes('doubleclick.net') ||
-      url.includes('googleadservices.com') ||
-      url.includes('googlesyndication.com') ||
-      url.includes('firebase') ||
-      url.includes('analytics')
-    ) {
+    if (analyticsDomains.some(domain => url.includes(domain))) {
       console.log('🚫 Blocked analytics request:', url);
       await route.abort('blockedbyclient');
       return;

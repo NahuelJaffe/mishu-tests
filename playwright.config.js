@@ -144,7 +144,7 @@ module.exports = defineConfig({
     ]),
   ],
   
-  // Global setup and teardown (always enabled for analytics blocking)
-  globalSetup: require.resolve('./tests/global-setup.js'),
-  globalTeardown: require.resolve('./tests/global-teardown.js'),
+  // Global setup and teardown (temporarily disabled due to Mac compatibility issues)
+  // globalSetup: require.resolve('./tests/global-setup.js'),
+  // globalTeardown: require.resolve('./tests/global-teardown.js'),
 });
