@@ -128,11 +128,36 @@ test('TC-03: Password recovery flow', async ({ page }) => {
   
   await page.goto(`${testConfig.BASE_URL}/login`);
   
-  // Buscar y hacer clic en el enlace de recuperación de contraseña
-  const forgotPasswordLink = page.getByText(/forgot|reset|recover/i);
+  // Buscar y hacer clic en el enlace de recuperación de contraseña con múltiples selectores
+  const forgotPasswordSelectors = [
+    page.getByText(/forgot|reset|recover/i),
+    page.locator('a[href*="forgot"]'),
+    page.locator('a[href*="reset"]'),
+    page.locator('a[href*="recover"]'),
+    page.locator('a[href*="password"]'),
+    page.locator('button:has-text("Forgot")'),
+    page.locator('button:has-text("Reset")'),
+    page.locator('[data-testid*="forgot"]'),
+    page.locator('[data-testid*="reset"]'),
+    page.locator('[data-testid*="password"]')
+  ];
+  
+  let forgotPasswordLink = null;
+  let foundSelector = null;
+  
+  // Probar cada selector hasta encontrar uno que funcione
+  for (const selector of forgotPasswordSelectors) {
+    if (await selector.count() > 0) {
+      forgotPasswordLink = selector;
+      foundSelector = selector.toString();
+      break;
+    }
+  }
+  
+  console.log(`🔍 Password recovery selector found: ${foundSelector}`);
   
   // Verificar si el enlace existe
-  if (await forgotPasswordLink.count() > 0) {
+  if (forgotPasswordLink) {
     await forgotPasswordLink.click();
     
     // Verificar que estamos en la página de recuperación de contraseña
@@ -158,7 +183,8 @@ test('TC-03: Password recovery flow', async ({ page }) => {
       // Si no encontramos el mensaje de confirmación, el test continúa
     }
   } else {
-    console.log('Password recovery link not found, skipping test');
+    console.log('❌ Password recovery link not found with any selector, skipping test');
+    console.log('🔍 Tried selectors: text, href attributes, buttons, data-testid');
     test.skip();
   }
 });
