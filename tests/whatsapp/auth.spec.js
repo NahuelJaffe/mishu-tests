@@ -132,31 +132,64 @@ test('TC-03: Password recovery flow', async ({ page }) => {
   
   // Buscar y hacer clic en el enlace de recuperación de contraseña con múltiples selectores
   const forgotPasswordSelectors = [
+    // Selectores por texto
     page.getByText(/forgot|reset|recover/i),
+    page.getByText(/forgot/i),
+    page.getByText(/reset/i),
+    page.getByText(/recover/i),
+    page.getByText(/password/i),
+    
+    // Selectores por href
     page.locator('a[href*="forgot"]'),
     page.locator('a[href*="reset"]'),
     page.locator('a[href*="recover"]'),
     page.locator('a[href*="password"]'),
+    
+    // Selectores por botones
     page.locator('button:has-text("Forgot")'),
     page.locator('button:has-text("Reset")'),
+    page.locator('button:has-text("Recover")'),
+    page.locator('button:has-text("Password")'),
+    
+    // Selectores por data-testid
     page.locator('[data-testid*="forgot"]'),
     page.locator('[data-testid*="reset"]'),
-    page.locator('[data-testid*="password"]')
+    page.locator('[data-testid*="password"]'),
+    page.locator('[data-testid*="recover"]'),
+    
+    // Selectores por clase CSS
+    page.locator('.forgot-password'),
+    page.locator('.reset-password'),
+    page.locator('.recover-password'),
+    page.locator('.password-link'),
+    
+    // Selectores por ID
+    page.locator('#forgot-password'),
+    page.locator('#reset-password'),
+    page.locator('#recover-password')
   ];
   
   let forgotPasswordLink = null;
   let foundSelector = null;
   
   // Probar cada selector hasta encontrar uno que funcione
-  for (const selector of forgotPasswordSelectors) {
-    if (await selector.count() > 0) {
+  for (let i = 0; i < forgotPasswordSelectors.length; i++) {
+    const selector = forgotPasswordSelectors[i];
+    const count = await selector.count();
+    console.log(`🔍 Probando selector ${i + 1}/${forgotPasswordSelectors.length}: ${selector.toString()} → ${count} elementos encontrados`);
+    
+    if (count > 0) {
       forgotPasswordLink = selector;
       foundSelector = selector.toString();
+      console.log(`✅ Password recovery encontrado con selector: ${foundSelector}`);
       break;
     }
   }
   
-  console.log(`🔍 Password recovery selector found: ${foundSelector}`);
+  if (!forgotPasswordLink) {
+    console.log(`❌ Ningún selector encontró password recovery`);
+    console.log(`🔍 Selectores probados: ${forgotPasswordSelectors.length}`);
+  }
   
   // Verificar si el enlace existe
   if (forgotPasswordLink) {
