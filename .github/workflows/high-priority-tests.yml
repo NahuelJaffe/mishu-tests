@@ -1,0 +1,73 @@
+name: High Priority QA Tests
+
+on:
+  push:
+    branches: [ high-priority-tests ]
+  pull_request:
+    branches: [ high-priority-tests ]
+
+jobs:
+  high-priority-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install ${{ matrix.browser }}
+    
+    - name: Run High Priority Tests
+      run: npx playwright test --project=${{ matrix.browser }} --grep="TC-(01|02|03|04|13|14|15|16|17|18|19|20|33|34|35|36)" --reporter=html
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: high-priority-test-results-${{ matrix.browser }}
+        path: playwright-report/
+        retention-days: 30
+
+  high-priority-summary:
+    needs: high-priority-tests
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Download all test results
+      uses: actions/download-artifact@v4
+      with:
+        pattern: high-priority-test-results-*
+        path: test-results/
+        merge-multiple: true
+    
+    - name: Generate summary
+      run: |
+        echo "## 🔴 High Priority Tests Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Tests de Prioridad Alta:** 28 tests" >> $GITHUB_STEP_SUMMARY
+        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Categorías:" >> $GITHUB_STEP_SUMMARY
+        echo "- 🔐 Authentication & Login: 9 tests" >> $GITHUB_STEP_SUMMARY
+        echo "- 🔗 Connection Management: 12 tests" >> $GITHUB_STEP_SUMMARY
+        echo "- 📱 Message Monitoring: 4 tests" >> $GITHUB_STEP_SUMMARY
+        echo "- 🔒 Security: 4 tests" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Objetivo: 0 errores en tests de prioridad alta" >> $GITHUB_STEP_SUMMARY
