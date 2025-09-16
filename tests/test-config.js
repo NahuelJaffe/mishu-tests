@@ -76,8 +76,7 @@ module.exports = {
     }
     
     // Fallback a mock login - solo establecer variables de sesión
-    console.log('🎭 DESHABILITADO: Mock login deshabilitado para forzar login real y generar analytics');
-    throw new Error('Mock login deshabilitado para probar bloqueo de analytics');
+    console.log('🎭 Usando mock login (solo variables de sesión)...');
     
     // Verificar que la página esté disponible antes de ejecutar evaluate
     try {
