@@ -166,11 +166,71 @@ test('TC-04: Sign Up functionality', async ({ page }) => {
   
   await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`);
   
-  // Buscar un enlace de registro (sign up)
-  const signUpLink = page.getByText(/sign up|register|create account/i);
+  // Buscar un enlace de registro (sign up) con múltiples selectores
+  const signUpSelectors = [
+    // Selectores por texto
+    page.getByText(/sign up|register|create account/i),
+    page.getByText(/sign up/i),
+    page.getByText(/register/i),
+    page.getByText(/create account/i),
+    page.getByText(/join/i),
+    page.getByText(/new user/i),
+    
+    // Selectores por href
+    page.locator('a[href*="signup"]'),
+    page.locator('a[href*="register"]'),
+    page.locator('a[href*="join"]'),
+    page.locator('a[href*="create"]'),
+    
+    // Selectores por botones
+    page.locator('button:has-text("Sign Up")'),
+    page.locator('button:has-text("Register")'),
+    page.locator('button:has-text("Create Account")'),
+    page.locator('button:has-text("Join")'),
+    
+    // Selectores por data-testid
+    page.locator('[data-testid*="signup"]'),
+    page.locator('[data-testid*="register"]'),
+    page.locator('[data-testid*="join"]'),
+    
+    // Selectores por clase CSS
+    page.locator('.signup-link'),
+    page.locator('.register-link'),
+    page.locator('.join-link'),
+    
+    // Selectores por ID
+    page.locator('#signup'),
+    page.locator('#register'),
+    page.locator('#join')
+  ];
+  
+  let signUpLink = null;
+  let foundSelector = null;
+  
+  // Probar cada selector hasta encontrar uno que funcione
+  for (let i = 0; i < signUpSelectors.length; i++) {
+    const selector = signUpSelectors[i];
+    const count = await selector.count();
+    console.log(`🔍 Probando selector de Sign Up ${i + 1}/${signUpSelectors.length}: ${selector.toString()} → ${count} elementos encontrados`);
+    
+    if (count > 0) {
+      signUpLink = selector;
+      foundSelector = selector.toString();
+      console.log(`✅ Sign Up encontrado con selector: ${foundSelector}`);
+      break;
+    }
+  }
+  
+  if (!signUpLink) {
+    console.log(`❌ Ningún selector encontró Sign Up`);
+    console.log(`🔍 Selectores probados: ${signUpSelectors.length}`);
+    console.log('Sign Up functionality not found or not implemented');
+    test.skip();
+    return;
+  }
   
   // Verificar si el enlace existe
-  if (await signUpLink.count() > 0) {
+  if (signUpLink) {
     console.log('Sign up link found, clicking it...');
     // Hacer clic en el enlace
     await signUpLink.click();
@@ -198,12 +258,10 @@ test('TC-04: Sign Up functionality', async ({ page }) => {
       }
       
       // No enviamos el formulario para evitar crear cuentas reales
-      console.log('Form fields filled but not submitted to avoid creating real accounts');
+      console.log('✅ Sign Up form found and filled successfully');
+    } else {
+      console.log('⚠️ Sign Up form not found, but link was clicked');
     }
-  } else {
-    // Si no encontramos el enlace, registramos que la funcionalidad no está disponible
-    console.log('Sign Up functionality not found or not implemented');
-    test.skip();
   }
 });
 
