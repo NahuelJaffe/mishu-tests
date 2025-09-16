@@ -19,10 +19,27 @@ async function login(page) {
 }
 
 /**
+ * Setup de analytics para tests de conexión detallada
+ */
+async function setupAnalyticsForConnectionDetailed(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de conexión detallada');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para conexión detallada:', error);
+    throw error;
+  }
+}
+
+/**
  * TC-13: Verificación del botón "Add Child's WhatsApp"
  * Basado en el análisis real de la página
  */
 test('TC-13: Botón Add Child\'s WhatsApp', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Buscar el botón específico encontrado en el análisis
@@ -64,6 +81,9 @@ test('TC-13: Botón Add Child\'s WhatsApp', async ({ page }) => {
  * Basado en el mensaje encontrado en el análisis
  */
 test('TC-14: Estado vacío de conexiones', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Verificar el mensaje de estado vacío encontrado en el análisis
@@ -90,6 +110,9 @@ test('TC-14: Estado vacío de conexiones', async ({ page }) => {
  * Basado en los enlaces encontrados en el análisis
  */
 test('TC-15: Navegación de la página', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Verificar enlaces de navegación encontrados en el análisis
@@ -125,6 +148,9 @@ test('TC-15: Navegación de la página', async ({ page }) => {
  * Basado en el botón encontrado en el análisis
  */
 test('TC-16: Toggle del sidebar', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Buscar el botón de toggle del sidebar encontrado en el análisis
@@ -159,6 +185,9 @@ test('TC-16: Toggle del sidebar', async ({ page }) => {
  * TC-17: Verificación del título y metadata de la página
  */
 test('TC-17: Metadata de la página', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Verificar el título encontrado en el análisis
@@ -185,6 +214,9 @@ test('TC-17: Metadata de la página', async ({ page }) => {
  * TC-18: Verificación de responsividad básica
  */
 test('TC-18: Responsividad básica', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Probar diferentes tamaños de pantalla
@@ -214,6 +246,9 @@ test('TC-18: Responsividad básica', async ({ page }) => {
  * TC-19: Verificación de accesibilidad básica
  */
 test('TC-19: Accesibilidad básica', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Verificar que los botones tienen texto descriptivo
@@ -244,6 +279,9 @@ test('TC-19: Accesibilidad básica', async ({ page }) => {
  * TC-20: Verificación de elementos de estado
  */
 test('TC-20: Elementos de estado', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForConnectionDetailed(page);
+  
   await login(page);
   
   // Buscar los 4 indicadores de estado encontrados en el análisis

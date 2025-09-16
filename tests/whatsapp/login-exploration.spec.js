@@ -3,10 +3,27 @@ const { test, expect } = require('@playwright/test');
 // Test específico para el flujo de recuperación de contraseña
 
 /**
+ * Setup de analytics para tests de login exploration
+ */
+async function setupAnalyticsForLoginExploration(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de login exploration');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para login exploration:', error);
+    throw error;
+  }
+}
+
+/**
  * TC-03: Password recovery flow - ACTUALIZADO
  * Basado en la información del usuario sobre el botón "Forgot your password"
  */
 test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForLoginExploration(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   // Buscar el botón "Forgot your password" que el usuario confirmó que existe
@@ -62,6 +79,9 @@ test('TC-03: Password recovery flow - ACTUALIZADO', async ({ page }) => {
  * Test adicional para explorar más elementos de la página de login
  */
 test('Exploración completa de la página de login', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForLoginExploration(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/login`);
   
   console.log('=== EXPLORACIÓN DE LA PÁGINA DE LOGIN ===');

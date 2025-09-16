@@ -7,6 +7,16 @@ test.describe('Analytics Blocking Failure Simulation', () => {
   test('Should be cancelled if analytics blocking fails', async ({ page }) => {
     console.log('🧪 Simulando fallo en bloqueo de analytics...');
     
+    // Configurar bloqueo de analytics explícitamente primero
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de fallo');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Este test está diseñado para demostrar qué pasa cuando el bloqueo falla
     // En un escenario real, si el bloqueo no funciona, este test se cancelaría automáticamente
     

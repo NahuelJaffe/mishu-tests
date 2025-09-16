@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para notificaciones en WhatsApp Monitor
 
 /**
+ * Setup de analytics para tests de notifications
+ */
+async function setupAnalyticsForNotifications(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de notifications');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para notifications:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
@@ -23,6 +37,9 @@ async function login(page) {
  * Verifica que las notificaciones del navegador funcionen correctamente
  */
 test('TC-37: Browser notifications', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForNotifications(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -130,6 +147,9 @@ test('TC-37: Browser notifications', async ({ page, context }) => {
  * Verifica que las notificaciones por email funcionen correctamente
  */
 test('TC-38: Email notifications', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForNotifications(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -236,6 +256,9 @@ test('TC-38: Email notifications', async ({ page }) => {
  * Verifica que las preferencias de notificación se puedan configurar correctamente
  */
 test('TC-39: Notification preferences', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForNotifications(page);
+  
   // Iniciar sesión
   await login(page);
   

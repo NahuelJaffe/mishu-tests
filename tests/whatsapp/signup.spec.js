@@ -3,10 +3,27 @@ const { test, expect } = require('@playwright/test');
 // Test suite para el registro de usuarios en WhatsApp Monitor
 
 /**
+ * Setup de analytics para tests de signup
+ */
+async function setupAnalyticsForSignup(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de signup');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para signup:', error);
+    throw error;
+  }
+}
+
+/**
  * TC-06: New user registration
  * Verifica que un nuevo usuario pueda registrarse correctamente
  */
 test('TC-06: New user registration', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSignup(page);
+  
   // Navegar a la página de registro
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
@@ -86,6 +103,9 @@ test('TC-06: New user registration', async ({ page }) => {
  * Verifica que el sistema detecte emails duplicados
  */
 test('TC-07: Duplicate email/phone check', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSignup(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   // Usar un email que ya existe (el email de prueba que usamos en otros tests)
@@ -123,6 +143,9 @@ test('TC-07: Duplicate email/phone check', async ({ page }) => {
  * Verifica que se validen los requisitos de contraseña
  */
 test('TC-08: Password requirements validation', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSignup(page);
+  
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}/register`);
   
   const emailField = page.locator('input[type="email"], input[name="email"]');
@@ -187,6 +210,9 @@ test('TC-08: Password requirements validation', async ({ page }) => {
  * Verifica el flujo de verificación de email
  */
 test('TC-09: Email verification flow', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSignup(page);
+  
   // Este test simula el flujo de verificación de email
   // En un entorno real, esto requeriría interceptar emails o usar un servicio de testing
   

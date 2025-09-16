@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para manejo de errores en WhatsApp Monitor
 
 /**
+ * Setup de analytics para tests de error handling
+ */
+async function setupAnalyticsForErrorHandling(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de error handling');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para error handling:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
@@ -23,6 +37,9 @@ async function login(page) {
  * Verifica el comportamiento de la aplicación cuando está offline
  */
 test('TC-29: Offline behavior', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForErrorHandling(page);
+  
   // Iniciar sesión primero
   await login(page);
   
@@ -86,6 +103,9 @@ test('TC-29: Offline behavior', async ({ page, context }) => {
  * Verifica que la aplicación se recupere correctamente cuando vuelve la conexión
  */
 test('TC-30: Network recovery', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForErrorHandling(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -152,6 +172,9 @@ test('TC-30: Network recovery', async ({ page, context }) => {
  * Verifica el manejo de códigos QR inválidos
  */
 test('TC-31: Invalid QR code handling', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForErrorHandling(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -235,6 +258,9 @@ test('TC-31: Invalid QR code handling', async ({ page }) => {
  * Verifica el manejo de errores del servidor
  */
 test('TC-32: Server error states', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForErrorHandling(page);
+  
   // Iniciar sesión
   await login(page);
   

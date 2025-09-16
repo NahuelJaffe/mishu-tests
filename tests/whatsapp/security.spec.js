@@ -3,6 +3,20 @@ const { test, expect } = require('@playwright/test');
 // Test suite para la seguridad en WhatsApp Monitor
 
 /**
+ * Setup de analytics para tests de security
+ */
+async function setupAnalyticsForSecurity(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de security');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para security:', error);
+    throw error;
+  }
+}
+
+/**
  * Función auxiliar para iniciar sesión
  */
 async function login(page) {
@@ -40,6 +54,9 @@ async function login(page) {
  * Verifica la gestión de sesiones
  */
 test('TC-33: Session management', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSecurity(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -73,6 +90,9 @@ test('TC-33: Session management', async ({ page, context }) => {
  * Verifica la funcionalidad de cierre de sesión
  */
 test('TC-36: Logout functionality', async ({ page, context }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSecurity(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -128,6 +148,9 @@ test('TC-36: Logout functionality', async ({ page, context }) => {
  * Verifica que no se expongan datos sensibles en la interfaz
  */
 test('TC-35: Sensitive data exposure', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSecurity(page);
+  
   // Iniciar sesión
   await login(page);
   
@@ -187,6 +210,9 @@ test('TC-35: Sensitive data exposure', async ({ page }) => {
  * Verifica que la comunicación sea segura (HTTPS)
  */
 test('TC-34: Data encryption', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForSecurity(page);
+  
   // Verificar que la URL es HTTPS
   await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr68-e2e-analytics-disabl-v7gcnvxb.web.app/'}`);
   const url = page.url();

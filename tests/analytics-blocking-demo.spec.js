@@ -7,6 +7,16 @@ test.describe('Analytics Blocking Verification System', () => {
   test('Should pass if analytics blocking is working', async ({ page }) => {
     console.log('🧪 Ejecutando test con bloqueo de analytics...');
     
+    // Configurar bloqueo de analytics explícitamente
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de verificación');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Este test solo se ejecutará si el bloqueo de analytics funciona
     // Si el bloqueo no funciona, el test se cancela automáticamente en el setup
     
@@ -51,6 +61,16 @@ test.describe('Analytics Blocking Verification System', () => {
   test('Should verify Firebase Analytics is blocked', async ({ page }) => {
     console.log('🔥 Verificando bloqueo específico de Firebase Analytics...');
     
+    // Configurar bloqueo de analytics explícitamente
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de Firebase');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Navegar a la página principal
     await page.goto('/');
     
@@ -74,6 +94,16 @@ test.describe('Analytics Blocking Verification System', () => {
   
   test('Should verify Google Analytics is blocked', async ({ page }) => {
     console.log('📊 Verificando bloqueo específico de Google Analytics...');
+    
+    // Configurar bloqueo de analytics explícitamente
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de Google Analytics');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
     
     // Navegar a la página principal
     await page.goto('/');

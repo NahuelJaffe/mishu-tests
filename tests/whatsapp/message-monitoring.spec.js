@@ -16,10 +16,27 @@ async function login(page) {
 }
 
 /**
+ * Setup de analytics para tests de message monitoring
+ */
+async function setupAnalyticsForMessageMonitoring(page) {
+  try {
+    const { setupAnalyticsForTest } = require('../analytics-setup.js');
+    await setupAnalyticsForTest(page);
+    console.log('✅ Analytics bloqueado para test de message monitoring');
+  } catch (error) {
+    console.error('❌ Error al configurar analytics para message monitoring:', error);
+    throw error;
+  }
+}
+
+/**
  * TC-17: Message display
  * Verifica que los mensajes de WhatsApp se muestren correctamente
  */
 test('TC-17: Message display', async ({ page }) => {
+  // Configurar bloqueo de analytics
+  await setupAnalyticsForMessageMonitoring(page);
+  
   // Iniciar sesión
   await login(page);
   

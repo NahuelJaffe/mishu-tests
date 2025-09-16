@@ -5,6 +5,16 @@ test.describe('Analytics Blocking Verification', () => {
   test('Should block analytics requests and show 0 users', async ({ page }) => {
     console.log('🔍 Testing analytics blocking...');
     
+    // Configurar bloqueo de analytics explícitamente
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de verificación');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
+    
     // Navegar a la página principal
     await page.goto('/');
     
@@ -60,6 +70,16 @@ test.describe('Analytics Blocking Verification', () => {
   
   test('Should block Firebase Analytics specifically', async ({ page }) => {
     console.log('🔍 Testing Firebase Analytics blocking...');
+    
+    // Configurar bloqueo de analytics explícitamente
+    try {
+      const { setupAnalyticsForTest } = require('./analytics-setup.js');
+      await setupAnalyticsForTest(page);
+      console.log('✅ Analytics bloqueado para test de Firebase');
+    } catch (error) {
+      console.error('❌ Error al configurar analytics:', error);
+      throw error;
+    }
     
     // Navegar a la página principal
     await page.goto('/');
