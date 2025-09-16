@@ -113,8 +113,13 @@ test('TC-07: Duplicate email/phone check', async ({ page }) => {
   const existingEmail = testConfig.TEST_EMAIL;
   const testPassword = 'ExamplePassword123!';
   
-  const emailField = page.locator('input[type="email"], input[name="email"]');
-  const passwordField = page.locator('input[type="password"], input[name="password"]');
+  // Usar selectores más robustos y esperar a que estén disponibles
+  const emailField = page.locator('input[type="email"], input[name="email"], input[placeholder*="email"], input[placeholder*="Email"]').first();
+  const passwordField = page.locator('input[type="password"], input[name="password"], input[placeholder*="password"], input[placeholder*="Password"]').first();
+  
+  // Esperar a que los campos estén disponibles
+  await emailField.waitFor({ state: 'visible', timeout: 10000 });
+  await passwordField.waitFor({ state: 'visible', timeout: 10000 });
   
   await emailField.fill(existingEmail);
   await passwordField.fill(testPassword);
@@ -149,8 +154,13 @@ test('TC-08: Password requirements validation', async ({ page }) => {
   
   await page.goto(`${testConfig.BASE_URL}/register`);
   
-  const emailField = page.locator('input[type="email"], input[name="email"]');
-  const passwordField = page.locator('input[type="password"], input[name="password"]');
+  // Usar selectores más robustos y esperar a que estén disponibles
+  const emailField = page.locator('input[type="email"], input[name="email"], input[placeholder*="email"], input[placeholder*="Email"]').first();
+  const passwordField = page.locator('input[type="password"], input[name="password"], input[placeholder*="password"], input[placeholder*="Password"]').first();
+  
+  // Esperar a que los campos estén disponibles
+  await emailField.waitFor({ state: 'visible', timeout: 10000 });
+  await passwordField.waitFor({ state: 'visible', timeout: 10000 });
   
   // Usar un email válido
   const timestamp = Date.now();
@@ -223,8 +233,13 @@ test('TC-09: Email verification flow', async ({ page }) => {
   const testEmail = `testuser${timestamp}@example.com`;
   const testPassword = 'ExamplePassword123!';
   
-  const emailField = page.locator('input[type="email"], input[name="email"]');
-  const passwordField = page.locator('input[type="password"], input[name="password"]');
+  // Usar selectores más robustos y esperar a que estén disponibles
+  const emailField = page.locator('input[type="email"], input[name="email"], input[placeholder*="email"], input[placeholder*="Email"]').first();
+  const passwordField = page.locator('input[type="password"], input[name="password"], input[placeholder*="password"], input[placeholder*="Password"]').first();
+  
+  // Esperar a que los campos estén disponibles
+  await emailField.waitFor({ state: 'visible', timeout: 10000 });
+  await passwordField.waitFor({ state: 'visible', timeout: 10000 });
   
   await emailField.fill(testEmail);
   await passwordField.fill(testPassword);

@@ -78,26 +78,38 @@ module.exports = {
     // Fallback a mock login - solo establecer variables de sesión
     console.log('🎭 Usando mock login (solo variables de sesión)...');
     
-    // Establecer variables de sesión simuladas sin navegar
-    await page.evaluate(() => {
-      // Simular que el usuario está autenticado
-      localStorage.setItem('user', JSON.stringify({
-        id: 'test-user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        authenticated: true
-      }));
+    // Verificar que la página esté disponible antes de ejecutar evaluate
+    try {
+      // Verificar que la página no esté cerrada
+      if (page.isClosed()) {
+        console.log('⚠️ Página cerrada, saltando mock login');
+        return;
+      }
       
-      // Simular token de autenticación
-      localStorage.setItem('authToken', 'mock-auth-token-123');
+      // Establecer variables de sesión simuladas con verificación de seguridad
+      await page.evaluate(() => {
+        // Simular que el usuario está autenticado
+        localStorage.setItem('user', JSON.stringify({
+          id: 'test-user-123',
+          email: 'test@example.com',
+          name: 'Test User',
+          authenticated: true
+        }));
+        
+        // Simular token de autenticación
+        localStorage.setItem('authToken', 'mock-auth-token-123');
+        
+        // Simular sesión activa
+        sessionStorage.setItem('sessionActive', 'true');
+        
+        // Simular estado de autenticación
+        localStorage.setItem('isAuthenticated', 'true');
+      });
       
-      // Simular sesión activa
-      sessionStorage.setItem('sessionActive', 'true');
-      
-      // Simular estado de autenticación
-      localStorage.setItem('isAuthenticated', 'true');
-    });
-    
-    console.log('✅ Mock login completado - variables de sesión establecidas');
+      console.log('✅ Mock login completado - variables de sesión establecidas');
+    } catch (error) {
+      console.log('⚠️ Error en mock login (página cerrada o no disponible):', error.message);
+      // No lanzar error, solo registrar y continuar
+    }
   }
 };

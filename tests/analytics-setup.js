@@ -104,13 +104,23 @@ async function setupAnalyticsForTest(page) {
         reason: 'Analytics domain detected'
       });
       
-      // Solo abortar requests de analytics, no navegación principal
-      if (method === 'GET' && (url.includes('/login') || url.includes('/dashboard') || url.includes('/connections'))) {
-        // Permitir navegación principal
-        await route.continue();
-        return;
-      }
-      
+    // Solo abortar requests de analytics, no navegación principal
+    if (method === 'GET' && (url.includes('/login') || url.includes('/dashboard') || url.includes('/connections'))) {
+      // Permitir navegación principal incluso si tiene parámetros de analytics
+      await route.continue();
+      return;
+    }
+    
+    // Verificar si es una request de analytics real (no navegación)
+    const isAnalyticsRequest = analyticsDomains.some(domain => url.includes(domain)) ||
+                               url.includes('analytics') || 
+                               url.includes('tracking') ||
+                               url.includes('gtag') ||
+                               url.includes('google-analytics') ||
+                               url.includes('facebook.com/tr') ||
+                               url.includes('doubleclick.net');
+    
+    if (isAnalyticsRequest) {
       // Abortar la request de analytics
       await route.abort('blockedbyclient');
       return;
