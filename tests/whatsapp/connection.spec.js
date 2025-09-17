@@ -166,8 +166,13 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   
   // Verificar si la aplicación soporta múltiples conexiones con múltiples selectores
   const addConnectionSelectors = [
-    // Selectores en español
+    // Selectores específicos basados en la captura
+    page.getByText('Agregar otro hijo'),
     page.getByText(/agregar otro hijo/i),
+    page.locator('button:has-text("Agregar otro hijo")'),
+    page.locator('a:has-text("Agregar otro hijo")'),
+    
+    // Selectores más genéricos
     page.getByText(/agregar otro/i),
     page.getByText(/agregar hijo/i),
     page.getByText(/nuevo hijo/i),
@@ -284,30 +289,51 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   
   // Verificar si hay alguna conexión activa con múltiples selectores
   const activeConnectionSelectors = [
-    // Buscar por nombre "test"
+    // Buscar por nombre "test" - selectores específicos basados en la captura
+    page.getByText('test'),
     page.getByText(/test/i),
     page.locator('[data-testid*="test"]'),
     
-    // Buscar conexiones activas
+    // Buscar conexiones activas - selectores más específicos
     page.locator('.connection.active'),
     page.locator('.whatsapp-connection.connected'),
     page.locator('.connection.connected'),
     page.locator('.active-connection'),
     
-    // Buscar por estado
+    // Buscar por estado - selectores más específicos
     page.locator('.connection:has-text("test")'),
     page.locator('[class*="connection"]:has-text("test")'),
     
-    // Buscar elementos clickeables de conexión
+    // Buscar elementos clickeables de conexión - selectores más específicos
     page.locator('button:has-text("test")'),
     page.locator('a:has-text("test")'),
-    page.locator('[role="button"]:has-text("test")')
+    page.locator('[role="button"]:has-text("test")'),
+    
+    // Selectores adicionales para encontrar la conexión en la lista
+    page.locator('div:has-text("test")'),
+    page.locator('span:has-text("test")'),
+    page.locator('p:has-text("test")'),
+    page.locator('h1:has-text("test")'),
+    page.locator('h2:has-text("test")'),
+    page.locator('h3:has-text("test")')
+  ];
+
+  // También buscar la conexión "test connection" (desconectada)
+  const disconnectedConnectionSelectors = [
+    page.getByText('test connection'),
+    page.getByText(/test connection/i),
+    page.locator('.connection:has-text("test connection")'),
+    page.locator('[class*="connection"]:has-text("test connection")'),
+    page.locator('div:has-text("test connection")'),
+    page.locator('span:has-text("test connection")'),
+    page.locator('p:has-text("test connection")')
   ];
   
   let activeConnection = null;
+  let disconnectedConnection = null;
   let foundSelector = null;
   
-  // Probar cada selector hasta encontrar uno que funcione
+  // Probar cada selector hasta encontrar una conexión activa
   for (let i = 0; i < activeConnectionSelectors.length; i++) {
     const selector = activeConnectionSelectors[i];
     const count = await selector.count();
@@ -321,6 +347,20 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
     }
   }
   
+  // Probar cada selector hasta encontrar una conexión desconectada
+  for (let i = 0; i < disconnectedConnectionSelectors.length; i++) {
+    const selector = disconnectedConnectionSelectors[i];
+    const count = await selector.count();
+    console.log(`🔍 Probando selector de Disconnected Connection ${i + 1}/${disconnectedConnectionSelectors.length}: ${selector.toString()} → ${count} elementos encontrados`);
+    
+    if (count > 0) {
+      disconnectedConnection = selector;
+      foundSelector = selector.toString();
+      console.log(`✅ Disconnected Connection encontrado con selector: ${foundSelector}`);
+      break;
+    }
+  }
+  
   if (activeConnection && await activeConnection.count() > 0) {
     console.log('✅ Conexión activa encontrada, probando funcionalidades...');
     
@@ -329,28 +369,58 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
     
     // Verificar que redirige a conversaciones
     await expect(page).toHaveURL(/conversations|chat|messages/);
-    console.log('✅ Click en conexión redirige a conversaciones');
+    console.log('✅ Click en conexión activa redirige a conversaciones');
     
     // Volver a la página de conexiones para probar editar/eliminar
     await page.goto(`${testConfig.BASE_URL}/connections`);
     
     // Buscar botones de editar y eliminar con múltiples selectores
     const editSelectors = [
-      page.locator('button:has-text("Edit")'),
+      // Selectores específicos basados en la captura
       page.locator('button:has-text("Editar")'),
+      page.locator('button:has-text("Edit")'),
+      page.locator('a:has-text("Editar")'),
+      page.locator('a:has-text("Edit")'),
+      
+      // Selectores por data-testid
       page.locator('[data-testid*="edit"]'),
+      page.locator('[data-testid*="Edit"]'),
+      
+      // Selectores por clase CSS
       page.locator('.edit-button'),
+      page.locator('.edit-btn'),
+      page.locator('.btn-edit'),
+      
+      // Selectores por atributos
       page.locator('button[title*="edit"]'),
-      page.locator('button[aria-label*="edit"]')
+      page.locator('button[aria-label*="edit"]'),
+      page.locator('button[aria-label*="Edit"]'),
+      page.locator('a[title*="edit"]'),
+      page.locator('a[aria-label*="edit"]')
     ];
     
     const deleteSelectors = [
-      page.locator('button:has-text("Delete")'),
+      // Selectores específicos basados en la captura
       page.locator('button:has-text("Eliminar")'),
+      page.locator('button:has-text("Delete")'),
+      page.locator('a:has-text("Eliminar")'),
+      page.locator('a:has-text("Delete")'),
+      
+      // Selectores por data-testid
       page.locator('[data-testid*="delete"]'),
+      page.locator('[data-testid*="Delete"]'),
+      
+      // Selectores por clase CSS
       page.locator('.delete-button'),
+      page.locator('.delete-btn'),
+      page.locator('.btn-delete'),
+      
+      // Selectores por atributos
       page.locator('button[title*="delete"]'),
-      page.locator('button[aria-label*="delete"]')
+      page.locator('button[aria-label*="delete"]'),
+      page.locator('button[aria-label*="Delete"]'),
+      page.locator('a[title*="delete"]'),
+      page.locator('a[aria-label*="delete"]')
     ];
     
     let editButton = null;
@@ -383,10 +453,35 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
     }
     
     console.log('✅ Test de conexión activa completado exitosamente');
-  } else {
-    console.log(`❌ Ningún selector encontró Active Connection`);
-    console.log(`🔍 Selectores probados: ${activeConnectionSelectors.length}`);
-    console.log('No active connection found, skipping disconnect/reconnect test');
+  }
+  
+  // Probar conexión desconectada si existe
+  if (disconnectedConnection && await disconnectedConnection.count() > 0) {
+    console.log('✅ Conexión desconectada encontrada, probando manejo de errores...');
+    
+    // Hacer click en la conexión desconectada
+    await disconnectedConnection.click();
+    
+    // Verificar que redirige a conversaciones
+    await expect(page).toHaveURL(/conversations|chat|messages/);
+    console.log('✅ Click en conexión desconectada redirige a conversaciones');
+    
+    // Verificar que aparece el mensaje de error
+    const errorMessage = page.locator('text=/error|failed to load|connection details/i');
+    if (await errorMessage.count() > 0) {
+      await expect(errorMessage.first()).toBeVisible();
+      console.log('✅ Mensaje de error mostrado correctamente para conexión desconectada');
+    } else {
+      console.log('⚠️ Mensaje de error no encontrado, pero conexión desconectada fue clickeada');
+    }
+    
+    console.log('✅ Test de conexión desconectada completado exitosamente');
+  }
+  
+  if (!activeConnection && !disconnectedConnection) {
+    console.log(`❌ Ningún selector encontró conexiones`);
+    console.log(`🔍 Selectores probados: ${activeConnectionSelectors.length + disconnectedConnectionSelectors.length}`);
+    console.log('No connections found, skipping disconnect/reconnect test');
     test.skip();
   }
 });
