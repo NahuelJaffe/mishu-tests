@@ -334,18 +334,24 @@ test('TC-15: Multiple connections management', async ({ page }) => {
       console.log('⚠️ Campo de nombre no encontrado, continuando...');
     }
     
-    // Verificar Age Rating (buscar en inglés y español)
+    // Verificar Age Rating (buscar en inglés y español) - ser más específico para evitar strict mode
     const ageRatingSelectors = [
-      page.getByText(/12\+/i),
-      page.getByText(/age/i),
+      page.getByRole('combobox', { name: 'Age Rating' }),
+      page.locator('select[name*="age"]'),
+      page.locator('select[aria-label*="age"]'),
+      page.locator('select[title*="age"]'),
+      page.locator('select option[value="12+"]'),
+      page.locator('span:has-text("12+"):not(div)'), // Excluir divs que son badges
+      page.getByText(/age rating/i),
       page.getByText(/edad/i),
       page.getByText(/rating/i)
     ];
     
     let ageRating = null;
     for (const selector of ageRatingSelectors) {
-      if (await selector.count() > 0) {
-        ageRating = selector;
+      const count = await selector.count();
+      if (count > 0) {
+        ageRating = selector.first(); // Usar .first() para evitar strict mode
         break;
       }
     }
@@ -367,8 +373,9 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     
     let specialNeedsCheckbox = null;
     for (const selector of specialNeedsSelectors) {
-      if (await selector.count() > 0) {
-        specialNeedsCheckbox = selector;
+      const count = await selector.count();
+      if (count > 0) {
+        specialNeedsCheckbox = selector.first(); // Usar .first() para evitar strict mode
         break;
       }
     }
@@ -401,15 +408,17 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     let createButton = null;
     
     for (const selector of cancelButtonSelectors) {
-      if (await selector.count() > 0) {
-        cancelButton = selector;
+      const count = await selector.count();
+      if (count > 0) {
+        cancelButton = selector.first(); // Usar .first() para evitar strict mode
         break;
       }
     }
     
     for (const selector of createButtonSelectors) {
-      if (await selector.count() > 0) {
-        createButton = selector;
+      const count = await selector.count();
+      if (count > 0) {
+        createButton = selector.first(); // Usar .first() para evitar strict mode
         break;
       }
     }
