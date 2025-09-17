@@ -172,6 +172,8 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   await page.waitForTimeout(3000);
   console.log('🔍 DEBUG: Espera adicional completada');
   
+  // FORCE UPDATE: Asegurar que GitHub Actions use la versión más reciente
+  
   // DEBUG: Obtener el contenido HTML de la página para análisis
   const pageContent = await page.content();
   console.log('🔍 DEBUG: Contenido de la página (primeros 500 caracteres):', pageContent.substring(0, 500));
@@ -318,6 +320,8 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   // Esperar un poco más para que los elementos dinámicos se carguen
   await page.waitForTimeout(3000);
   console.log('🔍 DEBUG TC-16: Espera adicional completada');
+  
+  // FORCE UPDATE: Asegurar que GitHub Actions use la versión más reciente
   
   // DEBUG: Buscar cualquier texto que contenga "test"
   const allText = await page.textContent('body');
