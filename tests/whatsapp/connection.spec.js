@@ -164,9 +164,13 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   // Navegar a la sección de gestión de conexiones
   await page.goto(`${testConfig.BASE_URL}/connections`);
   
-  // DEBUG: Esperar a que la página cargue completamente
-  await page.waitForLoadState('networkidle');
+  // DEBUG: Esperar a que la página cargue completamente (usar domcontentloaded en lugar de networkidle)
+  await page.waitForLoadState('domcontentloaded');
   console.log('🔍 DEBUG: Página de connections cargada completamente');
+  
+  // Esperar un poco más para que los elementos dinámicos se carguen
+  await page.waitForTimeout(3000);
+  console.log('🔍 DEBUG: Espera adicional completada');
   
   // DEBUG: Obtener el contenido HTML de la página para análisis
   const pageContent = await page.content();
@@ -307,9 +311,13 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   // Navegar a la sección de conexiones
   await page.goto(`${testConfig.BASE_URL}/connections`);
   
-  // DEBUG: Esperar a que la página cargue completamente
-  await page.waitForLoadState('networkidle');
+  // DEBUG: Esperar a que la página cargue completamente (usar domcontentloaded en lugar de networkidle)
+  await page.waitForLoadState('domcontentloaded');
   console.log('🔍 DEBUG TC-16: Página de connections cargada completamente');
+  
+  // Esperar un poco más para que los elementos dinámicos se carguen
+  await page.waitForTimeout(3000);
+  console.log('🔍 DEBUG TC-16: Espera adicional completada');
   
   // DEBUG: Buscar cualquier texto que contenga "test"
   const allText = await page.textContent('body');
