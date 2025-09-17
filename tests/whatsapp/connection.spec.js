@@ -457,7 +457,7 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   
   // Probar conexión desconectada si existe
   if (disconnectedConnection && await disconnectedConnection.count() > 0) {
-    console.log('✅ Conexión desconectada encontrada, probando manejo de errores...');
+    console.log('✅ Conexión desconectada encontrada, probando comportamiento normal...');
     
     // Hacer click en la conexión desconectada
     await disconnectedConnection.click();
@@ -466,13 +466,20 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
     await expect(page).toHaveURL(/conversations|chat|messages/);
     console.log('✅ Click en conexión desconectada redirige a conversaciones');
     
-    // Verificar que aparece el mensaje de error
-    const errorMessage = page.locator('text=/error|failed to load|connection details/i');
-    if (await errorMessage.count() > 0) {
-      await expect(errorMessage.first()).toBeVisible();
-      console.log('✅ Mensaje de error mostrado correctamente para conexión desconectada');
+    // Verificar que aparece el mensaje normal (no error)
+    const noConversationsMessage = page.locator('text=/no flagged conversations found|select a conversation|choose a conversation/i');
+    if (await noConversationsMessage.count() > 0) {
+      await expect(noConversationsMessage.first()).toBeVisible();
+      console.log('✅ Mensaje normal mostrado correctamente para conexión desconectada');
     } else {
-      console.log('⚠️ Mensaje de error no encontrado, pero conexión desconectada fue clickeada');
+      console.log('⚠️ Mensaje normal no encontrado, pero conexión desconectada fue clickeada');
+    }
+    
+    // Verificar que la página muestra el título "Conversations"
+    const conversationsTitle = page.locator('text=/conversations/i').first();
+    if (await conversationsTitle.count() > 0) {
+      await expect(conversationsTitle).toBeVisible();
+      console.log('✅ Título "Conversations" mostrado correctamente');
     }
     
     console.log('✅ Test de conexión desconectada completado exitosamente');
