@@ -82,32 +82,39 @@ jobs:
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
           echo "📋 Scope: $SCOPE"
           
-          case $SCOPE in
-            "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
-              ;;
-            "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
-              ;;
-            "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
-              ;;
-          esac
-          
           echo "🌐 Browser: Chromium"
           
-          # Ejecutar tests con configuración robusta
-          if [ -n "$GREP_FILTER" ]; then
-            npx playwright test $TESTS $GREP_FILTER --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/whatsapp/:"
+          ls -la tests/whatsapp/
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/whatsapp/connection.spec.js" ]; then
+            echo "✅ Archivo connection.spec.js encontrado"
           else
-            npx playwright test $TESTS --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            echo "❌ Archivo connection.spec.js NO encontrado"
+            exit 1
           fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/whatsapp/connection.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-13 y TC-14"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-13, TC-14, TC-15"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14|TC-15" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando todos los tests de conexión"
+              npx playwright test tests/whatsapp/connection.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -152,32 +159,39 @@ jobs:
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
           echo "📋 Scope: $SCOPE"
           
-          case $SCOPE in
-            "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
-              ;;
-            "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
-              ;;
-            "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
-              ;;
-          esac
-          
           echo "🌐 Browser: Firefox"
           
-          # Ejecutar tests con configuración robusta
-          if [ -n "$GREP_FILTER" ]; then
-            npx playwright test $TESTS $GREP_FILTER --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/whatsapp/:"
+          ls -la tests/whatsapp/
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/whatsapp/connection.spec.js" ]; then
+            echo "✅ Archivo connection.spec.js encontrado"
           else
-            npx playwright test $TESTS --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            echo "❌ Archivo connection.spec.js NO encontrado"
+            exit 1
           fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/whatsapp/connection.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-13 y TC-14"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-13, TC-14, TC-15"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14|TC-15" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando todos los tests de conexión"
+              npx playwright test tests/whatsapp/connection.spec.js --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -222,32 +236,39 @@ jobs:
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
           echo "📋 Scope: $SCOPE"
           
-          case $SCOPE in
-            "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
-              ;;
-            "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
-              ;;
-            "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
-              ;;
-          esac
-          
           echo "🌐 Browser: WebKit"
           
-          # Ejecutar tests con configuración robusta
-          if [ -n "$GREP_FILTER" ]; then
-            npx playwright test $TESTS $GREP_FILTER --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/whatsapp/:"
+          ls -la tests/whatsapp/
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/whatsapp/connection.spec.js" ]; then
+            echo "✅ Archivo connection.spec.js encontrado"
           else
-            npx playwright test $TESTS --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            echo "❌ Archivo connection.spec.js NO encontrado"
+            exit 1
           fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/whatsapp/connection.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-13 y TC-14"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-13, TC-14, TC-15"
+              npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14|TC-15" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando todos los tests de conexión"
+              npx playwright test tests/whatsapp/connection.spec.js --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
