@@ -130,44 +130,52 @@ test('TC-03: Password recovery flow', async ({ page }) => {
   
   await page.goto(`${testConfig.BASE_URL}/login`);
   
-  // Buscar y hacer clic en el enlace de recuperación de contraseña con múltiples selectores
-  const forgotPasswordSelectors = [
-    // Selectores por texto
-    page.getByText(/forgot|reset|recover/i),
-    page.getByText(/forgot/i),
-    page.getByText(/reset/i),
-    page.getByText(/recover/i),
-    page.getByText(/password/i),
-    
-    // Selectores por href
-    page.locator('a[href*="forgot"]'),
-    page.locator('a[href*="reset"]'),
-    page.locator('a[href*="recover"]'),
-    page.locator('a[href*="password"]'),
-    
-    // Selectores por botones
-    page.locator('button:has-text("Forgot")'),
-    page.locator('button:has-text("Reset")'),
-    page.locator('button:has-text("Recover")'),
-    page.locator('button:has-text("Password")'),
-    
-    // Selectores por data-testid
-    page.locator('[data-testid*="forgot"]'),
-    page.locator('[data-testid*="reset"]'),
-    page.locator('[data-testid*="password"]'),
-    page.locator('[data-testid*="recover"]'),
-    
-    // Selectores por clase CSS
-    page.locator('.forgot-password'),
-    page.locator('.reset-password'),
-    page.locator('.recover-password'),
-    page.locator('.password-link'),
-    
-    // Selectores por ID
-    page.locator('#forgot-password'),
-    page.locator('#reset-password'),
-    page.locator('#recover-password')
-  ];
+      // Buscar y hacer clic en el enlace de recuperación de contraseña con múltiples selectores
+      const forgotPasswordSelectors = [
+        // Selectores más específicos primero (evitar conflictos)
+        page.getByText(/forgot your password/i),
+        page.getByText(/forgot password/i),
+        page.getByText(/reset password/i),
+        page.getByText(/recover password/i),
+        
+        // Selectores por href (más específicos)
+        page.locator('a[href*="forgot"]'),
+        page.locator('a[href*="reset"]'),
+        page.locator('a[href*="recover"]'),
+        page.locator('a[href*="password"]'),
+        
+        // Selectores por texto más genéricos
+        page.getByText(/forgot|reset|recover/i),
+        page.getByText(/forgot/i),
+        page.getByText(/reset/i),
+        page.getByText(/recover/i),
+        
+        // Selectores por botones
+        page.locator('button:has-text("Forgot")'),
+        page.locator('button:has-text("Reset")'),
+        page.locator('button:has-text("Recover")'),
+        page.locator('button:has-text("Password")'),
+        
+        // Selectores por data-testid
+        page.locator('[data-testid*="forgot"]'),
+        page.locator('[data-testid*="reset"]'),
+        page.locator('[data-testid*="password"]'),
+        page.locator('[data-testid*="recover"]'),
+        
+        // Selectores por clase CSS
+        page.locator('.forgot-password'),
+        page.locator('.reset-password'),
+        page.locator('.recover-password'),
+        page.locator('.password-link'),
+        
+        // Selectores por ID
+        page.locator('#forgot-password'),
+        page.locator('#reset-password'),
+        page.locator('#recover-password'),
+        
+        // Selector genérico de password (último para evitar conflictos)
+        page.getByText(/password/i)
+      ];
   
   let forgotPasswordLink = null;
   let foundSelector = null;
