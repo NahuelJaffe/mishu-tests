@@ -1,0 +1,243 @@
+name: Connection Tests - All Browsers
+
+on:
+  push:
+    branches: [ main, connection-tests ]
+  pull_request:
+    branches: [ main, connection-tests ]
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of connection tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+          - core
+          - extended
+          - all
+      browser:
+        description: 'Browser to test (all runs all browsers)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - chromium
+          - firefox
+          - webkit
+
+jobs:
+  connection-summary:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [chromium-connection-tests, firefox-connection-tests, webkit-connection-tests]
+    steps:
+      - name: Generate Connection Tests Summary
+        run: |
+          echo "## 🔗 Connection Tests Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+          echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Core:** Basic connection tests (TC-13, TC-14)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Extended:** Core + Multiple connections tests" >> $GITHUB_STEP_SUMMARY
+          echo "- **All:** Extended + Disconnect/reconnect tests" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Objetivo: Validar funcionalidad de conexión WhatsApp en todos los navegadores" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`tests/whatsapp/connection.spec.js\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Job summary generated at run-time" >> $GITHUB_STEP_SUMMARY
+
+  chromium-connection-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying Chromium installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Connection Tests - Chromium
+        run: |
+          echo "🔗 Ejecutando tests de conexión en Chromium"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          case $SCOPE in
+            "core")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14'"
+              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              ;;
+            "extended")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14|TC-15'"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              ;;
+            "all")
+              TESTS="tests/whatsapp/connection.spec.js"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              ;;
+          esac
+          
+          echo "🌐 Browser: Chromium"
+          
+          # Ejecutar tests con configuración robusta
+          npx playwright test $TESTS --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Connection Test Results - Chromium
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: connection-test-results-chromium
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  firefox-connection-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying Firefox installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Connection Tests - Firefox
+        run: |
+          echo "🔗 Ejecutando tests de conexión en Firefox"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          case $SCOPE in
+            "core")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14'"
+              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              ;;
+            "extended")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14|TC-15'"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              ;;
+            "all")
+              TESTS="tests/whatsapp/connection.spec.js"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              ;;
+          esac
+          
+          echo "🌐 Browser: Firefox"
+          
+          # Ejecutar tests con configuración robusta
+          npx playwright test $TESTS --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Connection Test Results - Firefox
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: connection-test-results-firefox
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  webkit-connection-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying WebKit installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Connection Tests - WebKit
+        run: |
+          echo "🔗 Ejecutando tests de conexión en WebKit"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          case $SCOPE in
+            "core")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14'"
+              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              ;;
+            "extended")
+              TESTS="tests/whatsapp/connection.spec.js --grep 'TC-13|TC-14|TC-15'"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              ;;
+            "all")
+              TESTS="tests/whatsapp/connection.spec.js"
+              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              ;;
+          esac
+          
+          echo "🌐 Browser: WebKit"
+          
+          # Ejecutar tests con configuración robusta
+          npx playwright test $TESTS --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Connection Test Results - WebKit
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: connection-test-results-webkit
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
