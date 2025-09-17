@@ -1,14 +1,14 @@
-name: Connection Tests - All Browsers
+name: Dashboard Tests - All Browsers
 
 on:
   push:
-    branches: [ main, connection-tests ]
+    branches: [ main, dashboard-tests ]
   pull_request:
-    branches: [ main, connection-tests ]
+    branches: [ main, dashboard-tests ]
   workflow_dispatch:
     inputs:
       test_scope:
-        description: 'Scope of connection tests to run'
+        description: 'Scope of dashboard tests to run'
         required: true
         default: 'core'
         type: choice
@@ -28,32 +28,32 @@ on:
           - webkit
 
 jobs:
-  connection-summary:
+  dashboard-summary:
     runs-on: ubuntu-latest
     if: always()
-    needs: [chromium-connection-tests, firefox-connection-tests, webkit-connection-tests]
+    needs: [chromium-dashboard-tests, firefox-dashboard-tests, webkit-dashboard-tests]
     steps:
-      - name: Generate Connection Tests Summary
+      - name: Generate Dashboard Tests Summary
         run: |
-          echo "## 🔗 Connection Tests Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Dashboard Tests Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
           echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
           echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
-          echo "- **Core:** Basic connection tests (TC-13, TC-14)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Extended:** Core + Multiple connections tests" >> $GITHUB_STEP_SUMMARY
-          echo "- **All:** Extended + Disconnect/reconnect tests" >> $GITHUB_STEP_SUMMARY
+          echo "- **Core:** Basic dashboard tests (TC-10, TC-11)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Extended:** Core + Quick actions tests" >> $GITHUB_STEP_SUMMARY
+          echo "- **All:** All dashboard functionality tests" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🎯 Objetivo: Validar funcionalidad de conexión WhatsApp en todos los navegadores" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Objetivo: Validar funcionalidad del dashboard en todos los navegadores" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
-          echo "- \`tests/whatsapp/connection.spec.js\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`tests/whatsapp/dashboard.spec.js\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Job summary generated at run-time" >> $GITHUB_STEP_SUMMARY
 
-  chromium-connection-tests:
+  chromium-dashboard-tests:
     timeout-minutes: 25
     runs-on: ubuntu-latest
     steps:
@@ -74,9 +74,9 @@ jobs:
           echo "Verifying Chromium installation..."
           npx playwright install --dry-run
       
-      - name: Run Connection Tests - Chromium
+      - name: Run Dashboard Tests - Chromium
         run: |
-          echo "🔗 Ejecutando tests de conexión en Chromium"
+          echo "📊 Ejecutando tests de dashboard en Chromium"
           
           # Determinar qué tests ejecutar basado en el scope
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
@@ -84,42 +84,39 @@ jobs:
           
           case $SCOPE in
             "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11'"
+              echo "🧪 Tests a ejecutar: TC-10 (Empty state), TC-11 (Navigation menu)"
               ;;
             "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11|TC-12'"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (Quick actions)"
               ;;
             "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              TESTS="tests/whatsapp/dashboard.spec.js"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (All dashboard tests)"
               ;;
           esac
           
           echo "🌐 Browser: Chromium"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          npx playwright test $TESTS --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
       
-      - name: Upload Connection Test Results - Chromium
+      - name: Upload Dashboard Test Results - Chromium
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: connection-test-results-chromium
+          name: dashboard-test-results-chromium
           path: |
             playwright-report/
             test-results/
           retention-days: 7
 
-  firefox-connection-tests:
+  firefox-dashboard-tests:
     timeout-minutes: 25
     runs-on: ubuntu-latest
     steps:
@@ -140,9 +137,9 @@ jobs:
           echo "Verifying Firefox installation..."
           npx playwright install --dry-run
       
-      - name: Run Connection Tests - Firefox
+      - name: Run Dashboard Tests - Firefox
         run: |
-          echo "🔗 Ejecutando tests de conexión en Firefox"
+          echo "📊 Ejecutando tests de dashboard en Firefox"
           
           # Determinar qué tests ejecutar basado en el scope
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
@@ -150,42 +147,39 @@ jobs:
           
           case $SCOPE in
             "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11'"
+              echo "🧪 Tests a ejecutar: TC-10 (Empty state), TC-11 (Navigation menu)"
               ;;
             "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11|TC-12'"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (Quick actions)"
               ;;
             "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              TESTS="tests/whatsapp/dashboard.spec.js"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (All dashboard tests)"
               ;;
           esac
           
           echo "🌐 Browser: Firefox"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          npx playwright test $TESTS --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
       
-      - name: Upload Connection Test Results - Firefox
+      - name: Upload Dashboard Test Results - Firefox
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: connection-test-results-firefox
+          name: dashboard-test-results-firefox
           path: |
             playwright-report/
             test-results/
           retention-days: 7
 
-  webkit-connection-tests:
+  webkit-dashboard-tests:
     timeout-minutes: 25
     runs-on: ubuntu-latest
     steps:
@@ -206,9 +200,9 @@ jobs:
           echo "Verifying WebKit installation..."
           npx playwright install --dry-run
       
-      - name: Run Connection Tests - WebKit
+      - name: Run Dashboard Tests - WebKit
         run: |
-          echo "🔗 Ejecutando tests de conexión en WebKit"
+          echo "📊 Ejecutando tests de dashboard en WebKit"
           
           # Determinar qué tests ejecutar basado en el scope
           SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
@@ -216,36 +210,33 @@ jobs:
           
           case $SCOPE in
             "core")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14'"
-              echo "🧪 Tests a ejecutar: TC-13 (QR code scanning), TC-14 (Connection status)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11'"
+              echo "🧪 Tests a ejecutar: TC-10 (Empty state), TC-11 (Navigation menu)"
               ;;
             "extended")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER="--grep 'TC-13|TC-14|TC-15'"
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15 (Multiple connections)"
+              TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11|TC-12'"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (Quick actions)"
               ;;
             "all")
-              TESTS="tests/whatsapp/connection.spec.js"
-              GREP_FILTER=""
-              echo "🧪 Tests a ejecutar: TC-13, TC-14, TC-15, TC-16 (All connection tests)"
+              TESTS="tests/whatsapp/dashboard.spec.js"
+              echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-12 (All dashboard tests)"
               ;;
           esac
           
           echo "🌐 Browser: WebKit"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          npx playwright test $TESTS --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
       
-      - name: Upload Connection Test Results - WebKit
+      - name: Upload Dashboard Test Results - WebKit
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: connection-test-results-webkit
+          name: dashboard-test-results-webkit
           path: |
             playwright-report/
             test-results/
