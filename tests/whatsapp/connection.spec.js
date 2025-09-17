@@ -164,6 +164,26 @@ test('TC-15: Multiple connections management', async ({ page }) => {
   // Navegar a la sección de gestión de conexiones
   await page.goto(`${testConfig.BASE_URL}/connections`);
   
+  // DEBUG: Esperar a que la página cargue completamente
+  await page.waitForLoadState('networkidle');
+  console.log('🔍 DEBUG: Página de connections cargada completamente');
+  
+  // DEBUG: Obtener el contenido HTML de la página para análisis
+  const pageContent = await page.content();
+  console.log('🔍 DEBUG: Contenido de la página (primeros 500 caracteres):', pageContent.substring(0, 500));
+  
+  // DEBUG: Buscar cualquier texto que contenga "agregar" o "add"
+  const allText = await page.textContent('body');
+  console.log('🔍 DEBUG: Texto completo de la página (primeros 1000 caracteres):', allText.substring(0, 1000));
+  
+  // DEBUG: Buscar elementos que contengan "agregar" o "add"
+  const addElements = await page.locator('*:has-text("agregar"), *:has-text("add"), *:has-text("Agregar"), *:has-text("Add")').all();
+  console.log(`🔍 DEBUG: Elementos que contienen "agregar" o "add": ${addElements.length}`);
+  for (let i = 0; i < Math.min(addElements.length, 5); i++) {
+    const text = await addElements[i].textContent();
+    console.log(`🔍 DEBUG: Elemento ${i + 1}: "${text}"`);
+  }
+  
   // Verificar si la aplicación soporta múltiples conexiones con múltiples selectores
   const addConnectionSelectors = [
     // Selectores específicos basados en la captura
@@ -286,6 +306,30 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
   
   // Navegar a la sección de conexiones
   await page.goto(`${testConfig.BASE_URL}/connections`);
+  
+  // DEBUG: Esperar a que la página cargue completamente
+  await page.waitForLoadState('networkidle');
+  console.log('🔍 DEBUG TC-16: Página de connections cargada completamente');
+  
+  // DEBUG: Buscar cualquier texto que contenga "test"
+  const allText = await page.textContent('body');
+  console.log('🔍 DEBUG TC-16: Texto completo de la página (primeros 1000 caracteres):', allText.substring(0, 1000));
+  
+  // DEBUG: Buscar elementos que contengan "test"
+  const testElements = await page.locator('*:has-text("test"), *:has-text("Test"), *:has-text("TEST")').all();
+  console.log(`🔍 DEBUG TC-16: Elementos que contienen "test": ${testElements.length}`);
+  for (let i = 0; i < Math.min(testElements.length, 10); i++) {
+    const text = await testElements[i].textContent();
+    console.log(`🔍 DEBUG TC-16: Elemento ${i + 1}: "${text}"`);
+  }
+  
+  // DEBUG: Buscar todos los botones y enlaces disponibles
+  const allButtons = await page.locator('button, a').all();
+  console.log(`🔍 DEBUG TC-16: Total de botones y enlaces encontrados: ${allButtons.length}`);
+  for (let i = 0; i < Math.min(allButtons.length, 10); i++) {
+    const text = await allButtons[i].textContent();
+    console.log(`🔍 DEBUG TC-16: Botón/Enlace ${i + 1}: "${text}"`);
+  }
   
   // Verificar si hay alguna conexión activa con múltiples selectores
   const activeConnectionSelectors = [
