@@ -103,7 +103,11 @@ jobs:
           echo "🌐 Browser: Chromium"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          if [ -n "$GREP_FILTER" ]; then
+            npx playwright test $TESTS $GREP_FILTER --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          else
+            npx playwright test $TESTS --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          fi
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -169,7 +173,11 @@ jobs:
           echo "🌐 Browser: Firefox"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          if [ -n "$GREP_FILTER" ]; then
+            npx playwright test $TESTS $GREP_FILTER --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          else
+            npx playwright test $TESTS --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          fi
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
@@ -235,7 +243,11 @@ jobs:
           echo "🌐 Browser: WebKit"
           
           # Ejecutar tests con configuración robusta
-          npx playwright test $TESTS $GREP_FILTER --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          if [ -n "$GREP_FILTER" ]; then
+            npx playwright test $TESTS $GREP_FILTER --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          else
+            npx playwright test $TESTS --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+          fi
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
