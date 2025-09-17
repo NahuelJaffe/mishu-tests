@@ -190,40 +190,44 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     console.log(`🔍 DEBUG: Elemento ${i + 1}: "${text}"`);
   }
   
-  // Verificar si la aplicación soporta múltiples conexiones con múltiples selectores
-  const addConnectionSelectors = [
-    // Selectores específicos basados en la captura
-    page.getByText('Agregar otro hijo'),
-    page.getByText(/agregar otro hijo/i),
-    page.locator('button:has-text("Agregar otro hijo")'),
-    page.locator('a:has-text("Agregar otro hijo")'),
-    
-    // Selectores más genéricos
-    page.getByText(/agregar otro/i),
-    page.getByText(/agregar hijo/i),
-    page.getByText(/nuevo hijo/i),
-    page.getByText(/otro hijo/i),
-    
-    // Selectores en inglés
-    page.getByText(/add connection/i),
-    page.getByText(/add whatsapp/i),
-    page.getByText(/new connection/i),
-    
-    // Selectores por botones
-    page.locator('button:has-text("Agregar")'),
-    page.locator('button:has-text("Nuevo")'),
-    page.locator('button:has-text("Add")'),
-    
-    // Selectores por data-testid
-    page.locator('[data-testid*="add"]'),
-    page.locator('[data-testid*="new"]'),
-    page.locator('[data-testid*="connection"]'),
-    
-    // Selectores por clase CSS
-    page.locator('.add-connection'),
-    page.locator('.new-connection'),
-    page.locator('.add-button')
-  ];
+      // Verificar si la aplicación soporta múltiples conexiones con múltiples selectores
+      const addConnectionSelectors = [
+        // Selectores específicos basados en el debugging real
+        page.getByText('Add Another Child'),
+        page.getByText(/add another child/i),
+        page.locator('button:has-text("Add Another Child")'),
+        page.locator('a:has-text("Add Another Child")'),
+        
+        // Selectores más genéricos en inglés
+        page.getByText(/add another/i),
+        page.getByText(/add child/i),
+        page.getByText(/another child/i),
+        page.getByText(/new child/i),
+        
+        // Selectores en español (por si acaso)
+        page.getByText('Agregar otro hijo'),
+        page.getByText(/agregar otro hijo/i),
+        page.getByText(/agregar otro/i),
+        page.getByText(/agregar hijo/i),
+        
+        // Selectores por botones
+        page.locator('button:has-text("Add")'),
+        page.locator('button:has-text("Another")'),
+        page.locator('button:has-text("Child")'),
+        page.locator('button:has-text("Agregar")'),
+        
+        // Selectores por data-testid
+        page.locator('[data-testid*="add"]'),
+        page.locator('[data-testid*="new"]'),
+        page.locator('[data-testid*="connection"]'),
+        page.locator('[data-testid*="child"]'),
+        
+        // Selectores por clase CSS
+        page.locator('.add-connection'),
+        page.locator('.new-connection'),
+        page.locator('.add-button'),
+        page.locator('.add-child')
+      ];
   
   let addConnectionButton = null;
   let foundSelector = null;
@@ -343,47 +347,59 @@ test('TC-16: Disconnect/reconnect flow', async ({ page }) => {
     console.log(`🔍 DEBUG TC-16: Botón/Enlace ${i + 1}: "${text}"`);
   }
   
-  // Verificar si hay alguna conexión activa con múltiples selectores
-  const activeConnectionSelectors = [
-    // Buscar por nombre "test" - selectores específicos basados en la captura
-    page.getByText('test'),
-    page.getByText(/test/i),
-    page.locator('[data-testid*="test"]'),
-    
-    // Buscar conexiones activas - selectores más específicos
-    page.locator('.connection.active'),
-    page.locator('.whatsapp-connection.connected'),
-    page.locator('.connection.connected'),
-    page.locator('.active-connection'),
-    
-    // Buscar por estado - selectores más específicos
-    page.locator('.connection:has-text("test")'),
-    page.locator('[class*="connection"]:has-text("test")'),
-    
-    // Buscar elementos clickeables de conexión - selectores más específicos
-    page.locator('button:has-text("test")'),
-    page.locator('a:has-text("test")'),
-    page.locator('[role="button"]:has-text("test")'),
-    
-    // Selectores adicionales para encontrar la conexión en la lista
-    page.locator('div:has-text("test")'),
-    page.locator('span:has-text("test")'),
-    page.locator('p:has-text("test")'),
-    page.locator('h1:has-text("test")'),
-    page.locator('h2:has-text("test")'),
-    page.locator('h3:has-text("test")')
-  ];
+      // Verificar si hay alguna conexión activa con múltiples selectores
+      const activeConnectionSelectors = [
+        // Buscar por nombre "test" - selectores específicos basados en el debugging real
+        page.getByText('Test'), // Conexión conectada (con mayúscula)
+        page.getByText('test'),
+        page.getByText(/test/i),
+        page.locator('[data-testid*="test"]'),
+        
+        // Buscar conexiones activas - selectores más específicos
+        page.locator('.connection.active'),
+        page.locator('.whatsapp-connection.connected'),
+        page.locator('.connection.connected'),
+        page.locator('.active-connection'),
+        
+        // Buscar por estado - selectores más específicos
+        page.locator('.connection:has-text("Test")'),
+        page.locator('.connection:has-text("test")'),
+        page.locator('[class*="connection"]:has-text("test")'),
+        
+        // Buscar elementos clickeables de conexión - selectores más específicos
+        page.locator('button:has-text("Test")'),
+        page.locator('button:has-text("test")'),
+        page.locator('a:has-text("Test")'),
+        page.locator('a:has-text("test")'),
+        page.locator('[role="button"]:has-text("test")'),
+        
+        // Selectores adicionales para encontrar la conexión en la lista
+        page.locator('div:has-text("Test")'),
+        page.locator('div:has-text("test")'),
+        page.locator('span:has-text("Test")'),
+        page.locator('span:has-text("test")'),
+        page.locator('p:has-text("Test")'),
+        page.locator('p:has-text("test")'),
+        page.locator('h1:has-text("Test")'),
+        page.locator('h2:has-text("Test")'),
+        page.locator('h3:has-text("Test")')
+      ];
 
-  // También buscar la conexión "test connection" (desconectada)
-  const disconnectedConnectionSelectors = [
-    page.getByText('test connection'),
-    page.getByText(/test connection/i),
-    page.locator('.connection:has-text("test connection")'),
-    page.locator('[class*="connection"]:has-text("test connection")'),
-    page.locator('div:has-text("test connection")'),
-    page.locator('span:has-text("test connection")'),
-    page.locator('p:has-text("test connection")')
-  ];
+      // También buscar la conexión "test connection" (desconectada)
+      const disconnectedConnectionSelectors = [
+        page.getByText('Test connection'), // Basado en el debugging real
+        page.getByText('test connection'),
+        page.getByText(/test connection/i),
+        page.locator('.connection:has-text("Test connection")'),
+        page.locator('.connection:has-text("test connection")'),
+        page.locator('[class*="connection"]:has-text("test connection")'),
+        page.locator('div:has-text("Test connection")'),
+        page.locator('div:has-text("test connection")'),
+        page.locator('span:has-text("Test connection")'),
+        page.locator('span:has-text("test connection")'),
+        page.locator('p:has-text("Test connection")'),
+        page.locator('p:has-text("test connection")')
+      ];
   
   let activeConnection = null;
   let disconnectedConnection = null;
