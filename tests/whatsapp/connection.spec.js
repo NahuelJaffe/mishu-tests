@@ -297,12 +297,16 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     // DEBUG: Buscar inputs, selects, textareas que puedan haber aparecido
     const inputs = await page.locator('input, select, textarea').all();
     console.log(`🔍 DEBUG: Inputs/selects/textareas encontrados: ${inputs.length}`);
-    for (let i = 0; i < Math.min(inputs.length, 5); i++) {
+    for (let i = 0; i < Math.min(inputs.length, 10); i++) {
       const tagName = await inputs[i].evaluate(el => el.tagName);
       const type = await inputs[i].evaluate(el => el.type || 'N/A');
       const placeholder = await inputs[i].evaluate(el => el.placeholder || 'N/A');
       const name = await inputs[i].evaluate(el => el.name || 'N/A');
-      console.log(`🔍 DEBUG: Input ${i + 1} (${tagName}): type="${type}", placeholder="${placeholder}", name="${name}"`);
+      const id = await inputs[i].evaluate(el => el.id || 'N/A');
+      const className = await inputs[i].evaluate(el => el.className || 'N/A');
+      const dataTestId = await inputs[i].evaluate(el => el.getAttribute('data-testid') || 'N/A');
+      const visible = await inputs[i].isVisible();
+      console.log(`🔍 DEBUG: Input ${i + 1} (${tagName}): type="${type}", placeholder="${placeholder}", name="${name}", id="${id}", class="${className}", data-testid="${dataTestId}", visible="${visible}"`);
     }
     
     // DEBUG: Buscar botones que puedan haber aparecido
@@ -400,15 +404,68 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     // DEBUG: Verificar campo de nombre (buscar en inglés y español)
     console.log('🔍 DEBUG: Buscando campo de nombre...');
     const nameFieldSelectors = [
+      // Selectores específicos por placeholder
       page.locator('input[placeholder*="name"]'),
-      page.locator('input[name*="name"]'),
       page.locator('input[placeholder*="nombre"]'),
-      page.locator('input[name*="nombre"]'),
-      page.locator('input[type="text"]'),
       page.locator('input[placeholder*="child"]'),
       page.locator('input[placeholder*="hijo"]'),
       page.locator('input[placeholder*="enter"]'),
-      page.locator('input[placeholder*="ingresa"]')
+      page.locator('input[placeholder*="ingresa"]'),
+      page.locator('input[placeholder*="text"]'),
+      page.locator('input[placeholder*="texto"]'),
+      page.locator('input[placeholder*="input"]'),
+      page.locator('input[placeholder*="type"]'),
+      
+      // Selectores específicos por name
+      page.locator('input[name*="name"]'),
+      page.locator('input[name*="nombre"]'),
+      page.locator('input[name*="child"]'),
+      page.locator('input[name*="hijo"]'),
+      page.locator('input[name*="text"]'),
+      page.locator('input[name*="input"]'),
+      page.locator('input[name*="field"]'),
+      page.locator('input[name*="campo"]'),
+      
+      // Selectores por type
+      page.locator('input[type="text"]'),
+      page.locator('input[type="email"]'),
+      page.locator('input[type="search"]'),
+      
+      // Selectores por ID
+      page.locator('input[id*="name"]'),
+      page.locator('input[id*="nombre"]'),
+      page.locator('input[id*="child"]'),
+      page.locator('input[id*="hijo"]'),
+      page.locator('input[id*="text"]'),
+      page.locator('input[id*="input"]'),
+      page.locator('input[id*="field"]'),
+      
+      // Selectores por data attributes
+      page.locator('input[data-testid*="name"]'),
+      page.locator('input[data-testid*="nombre"]'),
+      page.locator('input[data-testid*="child"]'),
+      page.locator('input[data-testid*="hijo"]'),
+      page.locator('input[data-testid*="text"]'),
+      page.locator('input[data-testid*="input"]'),
+      page.locator('input[data-testid*="field"]'),
+      
+      // Selectores por class
+      page.locator('input[class*="name"]'),
+      page.locator('input[class*="nombre"]'),
+      page.locator('input[class*="child"]'),
+      page.locator('input[class*="hijo"]'),
+      page.locator('input[class*="text"]'),
+      page.locator('input[class*="input"]'),
+      page.locator('input[class*="field"]'),
+      
+      // Selectores genéricos
+      page.locator('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])'),
+      page.locator('input[type="text"]:visible'),
+      page.locator('input:visible:not([readonly])'),
+      
+      // Selectores por label asociado
+      page.locator('input').filter({ hasText: /name|nombre|child|hijo/i }),
+      page.locator('input').filter({ has: page.locator('label:has-text("name"), label:has-text("nombre"), label:has-text("child"), label:has-text("hijo")') })
     ];
     
     let nameField = null;
