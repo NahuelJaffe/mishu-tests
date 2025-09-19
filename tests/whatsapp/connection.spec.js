@@ -256,90 +256,18 @@ test('TC-15: Multiple connections management', async ({ page }) => {
       await expect(connectionsList).toBeVisible();
     }
     
-    // DEBUG: Intentar añadir una nueva conexión con debugging extensivo
-    console.log('🔍 DEBUG: Haciendo click en Add Connection button...');
+    // Intentar añadir una nueva conexión
     try {
       await addConnectionButton.click({ force: true });
-      console.log('✅ DEBUG: Click realizado en Add Connection button con force');
     } catch (error) {
-      console.log(`⚠️ DEBUG: Error con force click: ${error.message}`);
       // Intentar click normal como fallback
-      try {
-        await addConnectionButton.click();
-        console.log('✅ DEBUG: Click realizado en Add Connection button (fallback)');
-      } catch (fallbackError) {
-        console.log(`❌ DEBUG: Error con click normal: ${fallbackError.message}`);
-      }
+      await addConnectionButton.click();
     }
     
-    // DEBUG: Esperar un poco para que el modal aparezca
+    // Esperar a que el modal aparezca
     await page.waitForTimeout(2000);
-    console.log('🔍 DEBUG: Espera de 2 segundos completada');
     
-    // DEBUG: Verificar si hay algún modal o overlay visible
-    const modals = await page.locator('[role="dialog"], .modal, .overlay, [data-testid*="modal"], [class*="modal"]').count();
-    console.log(`🔍 DEBUG: Modales encontrados: ${modals}`);
-    
-    // DEBUG: Verificar si hay algún elemento que apareció después del click
-    const currentUrl = page.url();
-    console.log(`🔍 DEBUG: URL después del click: ${currentUrl}`);
-    
-    // DEBUG: Buscar cualquier elemento que contenga "add", "child", "hijo", "conexión", "connection"
-    const addElements = await page.locator('*:has-text("add"), *:has-text("child"), *:has-text("hijo"), *:has-text("conexión"), *:has-text("connection")').all();
-    console.log(`🔍 DEBUG: Elementos con palabras clave encontrados: ${addElements.length}`);
-    for (let i = 0; i < Math.min(addElements.length, 10); i++) {
-      const text = await addElements[i].textContent();
-      const tagName = await addElements[i].evaluate(el => el.tagName);
-      const className = await addElements[i].evaluate(el => el.className);
-      console.log(`🔍 DEBUG: Elemento ${i + 1} (${tagName}): "${text}" - clase: "${className}"`);
-    }
-    
-    // DEBUG: Buscar inputs, selects, textareas que puedan haber aparecido
-    const inputs = await page.locator('input, select, textarea').all();
-    console.log(`🔍 DEBUG: Inputs/selects/textareas encontrados: ${inputs.length}`);
-    for (let i = 0; i < Math.min(inputs.length, 10); i++) {
-      const tagName = await inputs[i].evaluate(el => el.tagName);
-      const type = await inputs[i].evaluate(el => el.type || 'N/A');
-      const placeholder = await inputs[i].evaluate(el => el.placeholder || 'N/A');
-      const name = await inputs[i].evaluate(el => el.name || 'N/A');
-      const id = await inputs[i].evaluate(el => el.id || 'N/A');
-      const className = await inputs[i].evaluate(el => el.className || 'N/A');
-      const dataTestId = await inputs[i].evaluate(el => el.getAttribute('data-testid') || 'N/A');
-      const visible = await inputs[i].isVisible();
-      console.log(`🔍 DEBUG: Input ${i + 1} (${tagName}): type="${type}", placeholder="${placeholder}", name="${name}", id="${id}", class="${className}", data-testid="${dataTestId}", visible="${visible}"`);
-    }
-    
-    // DEBUG: Buscar botones que puedan haber aparecido
-    const buttons = await page.locator('button, [role="button"], input[type="button"], input[type="submit"]').all();
-    console.log(`🔍 DEBUG: Botones encontrados: ${buttons.length}`);
-    for (let i = 0; i < Math.min(buttons.length, 10); i++) {
-      const text = await buttons[i].textContent();
-      const tagName = await buttons[i].evaluate(el => el.tagName);
-      console.log(`🔍 DEBUG: Botón ${i + 1} (${tagName}): "${text}"`);
-    }
-    
-    // DEBUG: Verificar si hay algún cambio en el DOM
-    const bodyContent = await page.textContent('body');
-    console.log(`🔍 DEBUG: Contenido del body después del click (primeros 500 caracteres): ${bodyContent.substring(0, 500)}`);
-    
-    // DEBUG: Buscar elementos que puedan ser parte de un modal o formulario
-    const formElements = await page.locator('form, [role="form"], [class*="form"], [class*="dialog"], [class*="popup"]').count();
-    console.log(`🔍 DEBUG: Elementos de formulario/dialog encontrados: ${formElements}`);
-    
-    // DEBUG: Verificar si hay algún elemento visible que no estaba antes
-    const visibleElements = await page.locator('*:visible').count();
-    console.log(`🔍 DEBUG: Elementos visibles totales: ${visibleElements}`);
-    
-    // DEBUG: Buscar específicamente por elementos que contengan "name", "nombre", "age", "edad"
-    const nameElements = await page.locator('*:has-text("name"), *:has-text("nombre"), *:has-text("age"), *:has-text("edad")').all();
-    console.log(`🔍 DEBUG: Elementos con "name/nombre/age/edad" encontrados: ${nameElements.length}`);
-    for (let i = 0; i < Math.min(nameElements.length, 5); i++) {
-      const text = await nameElements[i].textContent();
-      console.log(`🔍 DEBUG: Elemento name/age ${i + 1}: "${text}"`);
-    }
-    
-        // DEBUG: Verificar que aparece el modal de agregar hijo (buscar en inglés)
-        console.log('🔍 DEBUG: Buscando modal title...');
+        // Verificar que aparece el modal de agregar hijo (buscar en inglés)
         const modalTitleSelectors = [
           page.getByText(/add another child/i),
           page.getByText(/add child/i),
@@ -350,28 +278,17 @@ test('TC-15: Multiple connections management', async ({ page }) => {
         
         let modalTitle = null;
         for (const selector of modalTitleSelectors) {
-          const count = await selector.count();
-          console.log(`🔍 DEBUG: Modal title selector "${selector.toString()}" → ${count} elementos`);
-          if (count > 0) {
+          if (await selector.count() > 0) {
             modalTitle = selector.first();
             break;
           }
         }
         
         if (modalTitle) {
-          console.log('✅ Modal title encontrado, verificando visibilidad...');
-          try {
-            await expect(modalTitle).toBeVisible({ timeout: 5000 });
-            console.log('✅ Modal title visible');
-          } catch (error) {
-            console.log(`⚠️ Modal title no visible: ${error.message}`);
-          }
-        } else {
-          console.log('⚠️ Modal title no encontrado, continuando con debugging...');
+          await expect(modalTitle).toBeVisible({ timeout: 5000 });
         }
         
-        // DEBUG: Verificar elementos del modal (buscar en inglés)
-        console.log('🔍 DEBUG: Buscando modal description...');
+        // Verificar elementos del modal (buscar en inglés)
         const modalDescriptionSelectors = [
           page.getByText(/add a new whatsapp connection to monitor/i),
           page.getByText(/connect another child/i),
@@ -381,113 +298,39 @@ test('TC-15: Multiple connections management', async ({ page }) => {
         
         let modalDescription = null;
         for (const selector of modalDescriptionSelectors) {
-          const count = await selector.count();
-          console.log(`🔍 DEBUG: Modal description selector "${selector.toString()}" → ${count} elementos`);
-          if (count > 0) {
+          if (await selector.count() > 0) {
             modalDescription = selector.first();
             break;
           }
         }
         
         if (modalDescription) {
-          console.log('✅ Modal description encontrada, verificando visibilidad...');
-          try {
-            await expect(modalDescription).toBeVisible();
-            console.log('✅ Modal description visible');
-          } catch (error) {
-            console.log(`⚠️ Modal description no visible: ${error.message}`);
-          }
-        } else {
-          console.log('⚠️ Modal description no encontrada, continuando...');
+          await expect(modalDescription).toBeVisible();
         }
     
-    // DEBUG: Verificar campo de nombre (buscar en inglés y español)
-    console.log('🔍 DEBUG: Buscando campo de nombre...');
+    // Verificar campo de nombre (buscar en inglés y español)
     const nameFieldSelectors = [
-      // Selectores específicos por placeholder
       page.locator('input[placeholder*="name"]'),
       page.locator('input[placeholder*="nombre"]'),
       page.locator('input[placeholder*="child"]'),
       page.locator('input[placeholder*="hijo"]'),
-      page.locator('input[placeholder*="enter"]'),
-      page.locator('input[placeholder*="ingresa"]'),
-      page.locator('input[placeholder*="text"]'),
-      page.locator('input[placeholder*="texto"]'),
-      page.locator('input[placeholder*="input"]'),
-      page.locator('input[placeholder*="type"]'),
-      
-      // Selectores específicos por name
       page.locator('input[name*="name"]'),
       page.locator('input[name*="nombre"]'),
-      page.locator('input[name*="child"]'),
-      page.locator('input[name*="hijo"]'),
-      page.locator('input[name*="text"]'),
-      page.locator('input[name*="input"]'),
-      page.locator('input[name*="field"]'),
-      page.locator('input[name*="campo"]'),
-      
-      // Selectores por type
       page.locator('input[type="text"]'),
-      page.locator('input[type="email"]'),
-      page.locator('input[type="search"]'),
-      
-      // Selectores por ID
-      page.locator('input[id*="name"]'),
-      page.locator('input[id*="nombre"]'),
-      page.locator('input[id*="child"]'),
-      page.locator('input[id*="hijo"]'),
-      page.locator('input[id*="text"]'),
-      page.locator('input[id*="input"]'),
-      page.locator('input[id*="field"]'),
-      
-      // Selectores por data attributes
-      page.locator('input[data-testid*="name"]'),
-      page.locator('input[data-testid*="nombre"]'),
-      page.locator('input[data-testid*="child"]'),
-      page.locator('input[data-testid*="hijo"]'),
-      page.locator('input[data-testid*="text"]'),
-      page.locator('input[data-testid*="input"]'),
-      page.locator('input[data-testid*="field"]'),
-      
-      // Selectores por class
-      page.locator('input[class*="name"]'),
-      page.locator('input[class*="nombre"]'),
-      page.locator('input[class*="child"]'),
-      page.locator('input[class*="hijo"]'),
-      page.locator('input[class*="text"]'),
-      page.locator('input[class*="input"]'),
-      page.locator('input[class*="field"]'),
-      
-      // Selectores genéricos
-      page.locator('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])'),
       page.locator('input[type="text"]:visible'),
-      page.locator('input:visible:not([readonly])'),
-      
-      // Selectores por label asociado
-      page.locator('input').filter({ hasText: /name|nombre|child|hijo/i }),
-      page.locator('input').filter({ has: page.locator('label:has-text("name"), label:has-text("nombre"), label:has-text("child"), label:has-text("hijo")') })
+      page.locator('input:visible:not([readonly])')
     ];
     
     let nameField = null;
     for (const selector of nameFieldSelectors) {
-      const count = await selector.count();
-      console.log(`🔍 DEBUG: Name field selector "${selector.toString()}" → ${count} elementos`);
-      if (count > 0) {
+      if (await selector.count() > 0) {
         nameField = selector.first();
         break;
       }
     }
     
     if (nameField) {
-      console.log('✅ Campo de nombre encontrado, verificando visibilidad...');
-      try {
-        await expect(nameField).toBeVisible();
-        console.log('✅ Campo de nombre visible');
-      } catch (error) {
-        console.log(`⚠️ Campo de nombre no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Campo de nombre no encontrado, continuando...');
+      await expect(nameField).toBeVisible();
     }
     
     // Verificar Age Rating (buscar en inglés y español) - ser más específico para evitar strict mode
@@ -513,15 +356,7 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (ageRating) {
-      console.log('✅ Age Rating encontrado, verificando visibilidad...');
-      try {
-        await expect(ageRating).toBeVisible();
-        console.log('✅ Age Rating visible');
-      } catch (error) {
-        console.log(`⚠️ Age Rating no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Age Rating no encontrado, continuando...');
+      await expect(ageRating).toBeVisible();
     }
     
     // Verificar checkbox de necesidades especiales (buscar en inglés y español)
@@ -542,15 +377,7 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (specialNeedsCheckbox) {
-      console.log('✅ Checkbox de necesidades especiales encontrado, verificando visibilidad...');
-      try {
-        await expect(specialNeedsCheckbox).toBeVisible();
-        console.log('✅ Checkbox de necesidades especiales visible');
-      } catch (error) {
-        console.log(`⚠️ Checkbox de necesidades especiales no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Checkbox de necesidades especiales no encontrado, continuando...');
+      await expect(specialNeedsCheckbox).toBeVisible();
     }
     
     // Verificar botones del modal (buscar en inglés y español)
@@ -590,98 +417,44 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (cancelButton) {
-      console.log('✅ Botón Cancel encontrado, verificando visibilidad...');
-      try {
-        await expect(cancelButton).toBeVisible();
-        console.log('✅ Botón Cancel visible');
-      } catch (error) {
-        console.log(`⚠️ Botón Cancel no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Botón Cancel no encontrado, continuando...');
+      await expect(cancelButton).toBeVisible();
     }
     
     if (createButton) {
-      console.log('✅ Botón Create encontrado, verificando visibilidad...');
-      try {
-        await expect(createButton).toBeVisible();
-        console.log('✅ Botón Create visible');
-      } catch (error) {
-        console.log(`⚠️ Botón Create no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Botón Create no encontrado, continuando...');
+      await expect(createButton).toBeVisible();
     }
     
     // Llenar el campo de nombre si existe
     if (nameField) {
       await nameField.fill('Test Child');
-      console.log('✅ Campo de nombre llenado');
     }
     
-    // DEBUG: Verificar si hay overlay que intercepta clicks
+    // Manejar overlay que puede interceptar clicks
     const overlay = page.locator('.fixed.inset-0.z-50, [data-state="open"]');
-    const overlayCount = await overlay.count();
-    console.log(`🔍 DEBUG: Overlays encontrados: ${overlayCount}`);
-    
-    if (overlayCount > 0) {
-      console.log('🔍 DEBUG: Esperando a que el overlay se estabilice...');
+    if (await overlay.count() > 0) {
       await page.waitForTimeout(1000);
-      
-      // Intentar hacer el overlay invisible temporalmente
       try {
         await overlay.evaluate(el => el.style.display = 'none');
-        console.log('🔍 DEBUG: Overlay ocultado temporalmente');
       } catch (error) {
-        console.log(`⚠️ DEBUG: No se pudo ocultar overlay: ${error.message}`);
+        // Continuar si no se puede ocultar
       }
     }
     
-    // Hacer click en Create para proceder si existe - usar force para evitar interceptación
+    // Hacer click en Create para proceder si existe
     if (createButton) {
-      console.log('🔍 DEBUG: Haciendo click en Create button con force...');
       try {
         await createButton.click({ force: true });
-        console.log('✅ Botón Create clickeado con force');
       } catch (error) {
-        console.log(`⚠️ DEBUG: Error con force click: ${error.message}`);
-        // Intentar click normal como fallback
-        try {
-          await createButton.click();
-          console.log('✅ Botón Create clickeado (fallback)');
-        } catch (fallbackError) {
-          console.log(`❌ DEBUG: Error con click normal: ${fallbackError.message}`);
-        }
+        await createButton.click();
       }
     }
     
-    // Verificar que nos lleva a la página de conexión con código QR (flexible)
+    // Verificar que nos lleva a la página de conexión con código QR
     const finalUrl = page.url();
-    console.log(`🔍 URL actual después del click: ${finalUrl}`);
     
-    // Verificar URL (más flexible)
-    const urlPatterns = [
-      /connect/i,
-      /add-whatsapp/i,
-      /whatsapp/i,
-      /qr/i,
-      /scan/i,
-      /link/i
-    ];
-    
-    let urlMatches = false;
-    for (const pattern of urlPatterns) {
-      if (pattern.test(currentUrl)) {
-        urlMatches = true;
-        break;
-      }
-    }
-    
-    if (urlMatches) {
-      console.log('✅ URL de conexión detectada');
-    } else {
-      console.log(`⚠️ URL no coincide con patrones esperados: ${currentUrl}`);
-    }
+    // Verificar URL
+    const urlPatterns = [/connect/i, /add-whatsapp/i, /whatsapp/i, /qr/i, /scan/i, /link/i];
+    const urlMatches = urlPatterns.some(pattern => pattern.test(finalUrl));
     
     // Verificar código QR (más flexible)
     const qrCodeSelectors = [
@@ -705,31 +478,9 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (qrCode) {
-      console.log('✅ Código QR encontrado, verificando visibilidad...');
-      try {
-    await expect(qrCode).toBeVisible();
-        console.log('✅ Código QR visible');
-      } catch (error) {
-        console.log(`⚠️ Código QR no visible: ${error.message}`);
-      }
-    } else {
-      console.log('⚠️ Código QR no encontrado, pero test continúa');
+      await expect(qrCode).toBeVisible();
     }
-    
-    // DEBUG: Resumen final del test
-    console.log('🔍 DEBUG: Resumen del test TC-15:');
-    console.log(`🔍 DEBUG: - Modal title encontrado: ${modalTitle ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Modal description encontrada: ${modalDescription ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Campo de nombre encontrado: ${nameField ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Age Rating encontrado: ${ageRating ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Checkbox necesidades especiales encontrado: ${specialNeedsCheckbox ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Botón Cancel encontrado: ${cancelButton ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Botón Create encontrado: ${createButton ? 'SÍ' : 'NO'}`);
-    console.log(`🔍 DEBUG: - Código QR encontrado: ${qrCode ? 'SÍ' : 'NO'}`);
-    console.log('🔍 DEBUG: Test TC-15 completado con debugging extensivo');
   } else {
-    console.log(`❌ Ningún selector encontró Add Connection`);
-    console.log(`🔍 Selectores probados: ${addConnectionSelectors.length}`);
     console.log('Multiple connections feature not found, skipping test');
     test.skip();
   }
