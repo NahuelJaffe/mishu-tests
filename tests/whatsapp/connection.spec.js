@@ -558,8 +558,8 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     // Verificar que nos lleva a la página de conexión con código QR (flexible)
-    const currentUrl = page.url();
-    console.log(`🔍 URL actual después del click: ${currentUrl}`);
+    const finalUrl = page.url();
+    console.log(`🔍 URL actual después del click: ${finalUrl}`);
     
     // Verificar URL (más flexible)
     const urlPatterns = [
