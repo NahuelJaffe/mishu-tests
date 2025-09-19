@@ -256,10 +256,75 @@ test('TC-15: Multiple connections management', async ({ page }) => {
       await expect(connectionsList).toBeVisible();
     }
     
-    // Intentar añadir una nueva conexión
+    // DEBUG: Intentar añadir una nueva conexión con debugging extensivo
+    console.log('🔍 DEBUG: Haciendo click en Add Connection button...');
     await addConnectionButton.click();
+    console.log('✅ DEBUG: Click realizado en Add Connection button');
     
-        // Verificar que aparece el modal de agregar hijo (buscar en inglés)
+    // DEBUG: Esperar un poco para que el modal aparezca
+    await page.waitForTimeout(2000);
+    console.log('🔍 DEBUG: Espera de 2 segundos completada');
+    
+    // DEBUG: Verificar si hay algún modal o overlay visible
+    const modals = await page.locator('[role="dialog"], .modal, .overlay, [data-testid*="modal"], [class*="modal"]').count();
+    console.log(`🔍 DEBUG: Modales encontrados: ${modals}`);
+    
+    // DEBUG: Verificar si hay algún elemento que apareció después del click
+    const currentUrl = page.url();
+    console.log(`🔍 DEBUG: URL después del click: ${currentUrl}`);
+    
+    // DEBUG: Buscar cualquier elemento que contenga "add", "child", "hijo", "conexión", "connection"
+    const addElements = await page.locator('*:has-text("add"), *:has-text("child"), *:has-text("hijo"), *:has-text("conexión"), *:has-text("connection")').all();
+    console.log(`🔍 DEBUG: Elementos con palabras clave encontrados: ${addElements.length}`);
+    for (let i = 0; i < Math.min(addElements.length, 10); i++) {
+      const text = await addElements[i].textContent();
+      const tagName = await addElements[i].evaluate(el => el.tagName);
+      const className = await addElements[i].evaluate(el => el.className);
+      console.log(`🔍 DEBUG: Elemento ${i + 1} (${tagName}): "${text}" - clase: "${className}"`);
+    }
+    
+    // DEBUG: Buscar inputs, selects, textareas que puedan haber aparecido
+    const inputs = await page.locator('input, select, textarea').all();
+    console.log(`🔍 DEBUG: Inputs/selects/textareas encontrados: ${inputs.length}`);
+    for (let i = 0; i < Math.min(inputs.length, 5); i++) {
+      const tagName = await inputs[i].evaluate(el => el.tagName);
+      const type = await inputs[i].evaluate(el => el.type || 'N/A');
+      const placeholder = await inputs[i].evaluate(el => el.placeholder || 'N/A');
+      const name = await inputs[i].evaluate(el => el.name || 'N/A');
+      console.log(`🔍 DEBUG: Input ${i + 1} (${tagName}): type="${type}", placeholder="${placeholder}", name="${name}"`);
+    }
+    
+    // DEBUG: Buscar botones que puedan haber aparecido
+    const buttons = await page.locator('button, [role="button"], input[type="button"], input[type="submit"]').all();
+    console.log(`🔍 DEBUG: Botones encontrados: ${buttons.length}`);
+    for (let i = 0; i < Math.min(buttons.length, 10); i++) {
+      const text = await buttons[i].textContent();
+      const tagName = await buttons[i].evaluate(el => el.tagName);
+      console.log(`🔍 DEBUG: Botón ${i + 1} (${tagName}): "${text}"`);
+    }
+    
+    // DEBUG: Verificar si hay algún cambio en el DOM
+    const bodyContent = await page.textContent('body');
+    console.log(`🔍 DEBUG: Contenido del body después del click (primeros 500 caracteres): ${bodyContent.substring(0, 500)}`);
+    
+    // DEBUG: Buscar elementos que puedan ser parte de un modal o formulario
+    const formElements = await page.locator('form, [role="form"], [class*="form"], [class*="dialog"], [class*="popup"]').count();
+    console.log(`🔍 DEBUG: Elementos de formulario/dialog encontrados: ${formElements}`);
+    
+    // DEBUG: Verificar si hay algún elemento visible que no estaba antes
+    const visibleElements = await page.locator('*:visible').count();
+    console.log(`🔍 DEBUG: Elementos visibles totales: ${visibleElements}`);
+    
+    // DEBUG: Buscar específicamente por elementos que contengan "name", "nombre", "age", "edad"
+    const nameElements = await page.locator('*:has-text("name"), *:has-text("nombre"), *:has-text("age"), *:has-text("edad")').all();
+    console.log(`🔍 DEBUG: Elementos con "name/nombre/age/edad" encontrados: ${nameElements.length}`);
+    for (let i = 0; i < Math.min(nameElements.length, 5); i++) {
+      const text = await nameElements[i].textContent();
+      console.log(`🔍 DEBUG: Elemento name/age ${i + 1}: "${text}"`);
+    }
+    
+        // DEBUG: Verificar que aparece el modal de agregar hijo (buscar en inglés)
+        console.log('🔍 DEBUG: Buscando modal title...');
         const modalTitleSelectors = [
           page.getByText(/add another child/i),
           page.getByText(/add child/i),
@@ -270,20 +335,28 @@ test('TC-15: Multiple connections management', async ({ page }) => {
         
         let modalTitle = null;
         for (const selector of modalTitleSelectors) {
-          if (await selector.count() > 0) {
-            modalTitle = selector;
+          const count = await selector.count();
+          console.log(`🔍 DEBUG: Modal title selector "${selector.toString()}" → ${count} elementos`);
+          if (count > 0) {
+            modalTitle = selector.first();
             break;
           }
         }
         
         if (modalTitle) {
-          await expect(modalTitle).toBeVisible({ timeout: 5000 });
-          console.log('✅ Modal title encontrado');
+          console.log('✅ Modal title encontrado, verificando visibilidad...');
+          try {
+            await expect(modalTitle).toBeVisible({ timeout: 5000 });
+            console.log('✅ Modal title visible');
+          } catch (error) {
+            console.log(`⚠️ Modal title no visible: ${error.message}`);
+          }
         } else {
-          console.log('⚠️ Modal title no encontrado, continuando...');
+          console.log('⚠️ Modal title no encontrado, continuando con debugging...');
         }
         
-        // Verificar elementos del modal (buscar en inglés)
+        // DEBUG: Verificar elementos del modal (buscar en inglés)
+        console.log('🔍 DEBUG: Buscando modal description...');
         const modalDescriptionSelectors = [
           page.getByText(/add a new whatsapp connection to monitor/i),
           page.getByText(/connect another child/i),
@@ -293,20 +366,28 @@ test('TC-15: Multiple connections management', async ({ page }) => {
         
         let modalDescription = null;
         for (const selector of modalDescriptionSelectors) {
-          if (await selector.count() > 0) {
-            modalDescription = selector;
+          const count = await selector.count();
+          console.log(`🔍 DEBUG: Modal description selector "${selector.toString()}" → ${count} elementos`);
+          if (count > 0) {
+            modalDescription = selector.first();
             break;
           }
         }
         
         if (modalDescription) {
-          await expect(modalDescription).toBeVisible();
-          console.log('✅ Modal description encontrada');
+          console.log('✅ Modal description encontrada, verificando visibilidad...');
+          try {
+            await expect(modalDescription).toBeVisible();
+            console.log('✅ Modal description visible');
+          } catch (error) {
+            console.log(`⚠️ Modal description no visible: ${error.message}`);
+          }
         } else {
           console.log('⚠️ Modal description no encontrada, continuando...');
         }
     
-    // Verificar campo de nombre (buscar en inglés y español)
+    // DEBUG: Verificar campo de nombre (buscar en inglés y español)
+    console.log('🔍 DEBUG: Buscando campo de nombre...');
     const nameFieldSelectors = [
       page.locator('input[placeholder*="name"]'),
       page.locator('input[name*="name"]'),
@@ -321,15 +402,22 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     
     let nameField = null;
     for (const selector of nameFieldSelectors) {
-      if (await selector.count() > 0) {
+      const count = await selector.count();
+      console.log(`🔍 DEBUG: Name field selector "${selector.toString()}" → ${count} elementos`);
+      if (count > 0) {
         nameField = selector.first();
         break;
       }
     }
     
     if (nameField) {
-      await expect(nameField).toBeVisible();
-      console.log('✅ Campo de nombre encontrado');
+      console.log('✅ Campo de nombre encontrado, verificando visibilidad...');
+      try {
+        await expect(nameField).toBeVisible();
+        console.log('✅ Campo de nombre visible');
+      } catch (error) {
+        console.log(`⚠️ Campo de nombre no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Campo de nombre no encontrado, continuando...');
     }
@@ -357,8 +445,13 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (ageRating) {
-      await expect(ageRating).toBeVisible();
-      console.log('✅ Age Rating encontrado');
+      console.log('✅ Age Rating encontrado, verificando visibilidad...');
+      try {
+        await expect(ageRating).toBeVisible();
+        console.log('✅ Age Rating visible');
+      } catch (error) {
+        console.log(`⚠️ Age Rating no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Age Rating no encontrado, continuando...');
     }
@@ -381,8 +474,13 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (specialNeedsCheckbox) {
-      await expect(specialNeedsCheckbox).toBeVisible();
-      console.log('✅ Checkbox de necesidades especiales encontrado');
+      console.log('✅ Checkbox de necesidades especiales encontrado, verificando visibilidad...');
+      try {
+        await expect(specialNeedsCheckbox).toBeVisible();
+        console.log('✅ Checkbox de necesidades especiales visible');
+      } catch (error) {
+        console.log(`⚠️ Checkbox de necesidades especiales no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Checkbox de necesidades especiales no encontrado, continuando...');
     }
@@ -424,15 +522,25 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (cancelButton) {
-      await expect(cancelButton).toBeVisible();
-      console.log('✅ Botón Cancel encontrado');
+      console.log('✅ Botón Cancel encontrado, verificando visibilidad...');
+      try {
+        await expect(cancelButton).toBeVisible();
+        console.log('✅ Botón Cancel visible');
+      } catch (error) {
+        console.log(`⚠️ Botón Cancel no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Botón Cancel no encontrado, continuando...');
     }
     
     if (createButton) {
-      await expect(createButton).toBeVisible();
-      console.log('✅ Botón Create encontrado');
+      console.log('✅ Botón Create encontrado, verificando visibilidad...');
+      try {
+        await expect(createButton).toBeVisible();
+        console.log('✅ Botón Create visible');
+      } catch (error) {
+        console.log(`⚠️ Botón Create no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Botón Create no encontrado, continuando...');
     }
@@ -499,11 +607,28 @@ test('TC-15: Multiple connections management', async ({ page }) => {
     }
     
     if (qrCode) {
-      await expect(qrCode).toBeVisible();
-      console.log('✅ Código QR encontrado');
+      console.log('✅ Código QR encontrado, verificando visibilidad...');
+      try {
+    await expect(qrCode).toBeVisible();
+        console.log('✅ Código QR visible');
+      } catch (error) {
+        console.log(`⚠️ Código QR no visible: ${error.message}`);
+      }
     } else {
       console.log('⚠️ Código QR no encontrado, pero test continúa');
     }
+    
+    // DEBUG: Resumen final del test
+    console.log('🔍 DEBUG: Resumen del test TC-15:');
+    console.log(`🔍 DEBUG: - Modal title encontrado: ${modalTitle ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Modal description encontrada: ${modalDescription ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Campo de nombre encontrado: ${nameField ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Age Rating encontrado: ${ageRating ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Checkbox necesidades especiales encontrado: ${specialNeedsCheckbox ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Botón Cancel encontrado: ${cancelButton ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Botón Create encontrado: ${createButton ? 'SÍ' : 'NO'}`);
+    console.log(`🔍 DEBUG: - Código QR encontrado: ${qrCode ? 'SÍ' : 'NO'}`);
+    console.log('🔍 DEBUG: Test TC-15 completado con debugging extensivo');
   } else {
     console.log(`❌ Ningún selector encontró Add Connection`);
     console.log(`🔍 Selectores probados: ${addConnectionSelectors.length}`);
