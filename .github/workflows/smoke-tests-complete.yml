@@ -42,9 +42,12 @@ jobs:
           echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
-          echo "- **Core:** TC-001 a TC-011 (Login y autenticación)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Extended:** TC-001 a TC-014 (Core + funcionalidades básicas)" >> $GITHUB_STEP_SUMMARY
-          echo "- **All:** TC-001 a TC-016 (Todos los smoke tests del Excel)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Core:** TC-001 a TC-011 (Login y autenticación, excluyendo TC-006 MANUAL)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Extended:** TC-001 a TC-014 (Core + funcionalidades básicas, excluyendo TC-006 MANUAL)" >> $GITHUB_STEP_SUMMARY
+          echo "- **All:** TC-001 a TC-016 (Todos los smoke tests, excluyendo TC-006 MANUAL)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ⚠️ Nota Importante:" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-006** está marcado como **MANUAL** en el Excel STD_KPIs y no se automatiza" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🎯 Objetivo: Validar funcionalidad básica según Excel STD_KPIs" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -118,19 +121,19 @@ jobs:
           echo "📋 Tests disponibles:"
           npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
           
-          # Ejecutar tests según scope
+          # Ejecutar tests según scope (excluyendo TC-006 que es MANUAL)
           case $SCOPE in
             "core")
-              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-1]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "extended")
-              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-4]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "all")
-              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-6]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
           esac
         env:
@@ -195,19 +198,19 @@ jobs:
           echo "📋 Tests disponibles:"
           npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
           
-          # Ejecutar tests según scope
+          # Ejecutar tests según scope (excluyendo TC-006 que es MANUAL)
           case $SCOPE in
             "core")
-              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-1]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "extended")
-              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-4]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "all")
-              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-6]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
           esac
         env:
@@ -272,19 +275,19 @@ jobs:
           echo "📋 Tests disponibles:"
           npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
           
-          # Ejecutar tests según scope
+          # Ejecutar tests según scope (excluyendo TC-006 que es MANUAL)
           case $SCOPE in
             "core")
-              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-1]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "extended")
-              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-4]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
             "all")
-              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
-              npx playwright test tests/smoke-tests-complete.spec.js --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests, excluyendo TC-006 MANUAL)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-5]|TC-00[7-9]|TC-01[0-6]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
               ;;
           esac
         env:

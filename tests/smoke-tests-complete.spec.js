@@ -225,28 +225,16 @@ test.describe('Smoke Tests Complete - Excel STD_KPIs', () => {
 
   /**
    * TC-006: Login page loads correctly
+   * NOTA: Este test está marcado como MANUAL en el Excel STD_KPIs
+   * No se incluye en la automatización, debe ejecutarse manualmente
    * Precondición: Usuario deslogueado en /login con credenciales válidas
    * Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
    * Resultado: Redirige a /connections y la sesión queda iniciada
    */
-  test('TC-006: Login page loads correctly', async ({ page }) => {
-    await setupAnalyticsForSmoke(page);
-    
-    const baseURL = testConfig.BASE_URL;
-    await page.goto(`${baseURL}/login`);
-    
-    // Verificar que la página carga correctamente
-    await page.waitForLoadState('domcontentloaded');
-    
-    // Verificar que tiene título
-    const title = await page.title();
-    expect(title).toBeTruthy();
-    expect(title.length).toBeGreaterThan(0);
-    
-    // Verificar que estamos en la página correcta
-    await expect(page).toHaveURL(/login/);
-    
-    console.log('✅ Página de login carga correctamente');
+  test.skip('TC-006: Login page loads correctly (MANUAL - No automatizar)', async ({ page }) => {
+    // Este test está marcado como MANUAL en el Excel STD_KPIs
+    // Debe ejecutarse manualmente, no en automatización
+    console.log('⚠️ TC-006 marcado como MANUAL en Excel STD_KPIs - ejecutar manualmente');
   });
 
   /**

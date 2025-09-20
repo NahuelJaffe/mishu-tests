@@ -1,0 +1,115 @@
+ANÁLISIS DE AUTOMATIZACIÓN - SMOKE TESTS EXCEL STD_KPIs
+========================================================
+
+📊 CLASIFICACIÓN POR TIPO DE AUTOMATIZACIÓN
+===========================================
+
+✅ AUTOMATIZABLES (10 tests):
+=============================
+- TC-001: "Remember me" functionality → **Automatizable**
+- TC-003: Login endpoint validation → **Automatizable**
+- TC-004: Login form accepts input → **Automatizable**
+- TC-005: Login form elements are present → **Automatizable**
+- TC-009: Logout endpoint → **Automatizable**
+- TC-010: Logout functionality → **Automatizable**
+- TC-012: Smoke – Connections list → **Automatizable**
+- TC-013: Smoke – Login → **Automatizable**
+- TC-014: Smoke – Mensajes en conversación → **Automatizable**
+- TC-015: Smoke – Navegación principal → **Automatizable**
+- TC-016: Smoke – Settings → **Automatizable**
+
+🔄 MIXTOS (3 tests):
+====================
+- TC-002: Invalid login credentials → **Mixto**
+- TC-007: Login with invalid credentials → **Mixto**
+- TC-008: Login with valid credentials → **Mixto**
+- TC-011: Real login with credentials → **Mixto**
+
+❌ MANUALES (1 test):
+====================
+- TC-006: Login page loads correctly → **Manual**
+
+================================================================
+
+🎯 RECOMENDACIÓN DE IMPLEMENTACIÓN
+==================================
+
+📋 TESTS QUE DEBEN INCLUIRSE EN AUTOMATIZACIÓN:
+===============================================
+✅ **AUTOMATIZABLES** (10 tests): Incluir en workflows automáticos
+🔄 **MIXTOS** (3 tests): Incluir pero con configuración especial
+❌ **MANUALES** (1 test): NO incluir en automatización
+
+📊 TESTS PARA INCLUIR EN WORKFLOWS:
+===================================
+**TOTAL: 13 tests** (10 automatizables + 3 mixtos)
+
+**EXCLUIR:**
+- TC-006: Login page loads correctly (Manual)
+
+**INCLUIR:**
+- TC-001: "Remember me" functionality (Automatizable)
+- TC-002: Invalid login credentials (Mixto)
+- TC-003: Login endpoint validation (Automatizable)
+- TC-004: Login form accepts input (Automatizable)
+- TC-005: Login form elements are present (Automatizable)
+- TC-007: Login with invalid credentials (Mixto)
+- TC-008: Login with valid credentials (Mixto)
+- TC-009: Logout endpoint (Automatizable)
+- TC-010: Logout functionality (Automatizable)
+- TC-011: Real login with credentials (Mixto)
+- TC-012: Smoke – Connections list (Automatizable)
+- TC-013: Smoke – Login (Automatizable)
+- TC-014: Smoke – Mensajes en conversación (Automatizable)
+- TC-015: Smoke – Navegación principal (Automatizable)
+- TC-016: Smoke – Settings (Automatizable)
+
+================================================================
+
+🔧 AJUSTES NECESARIOS EN LA IMPLEMENTACIÓN
+==========================================
+
+1. **REMOVER** TC-006 del archivo de tests automatizados
+2. **MARCAR** los tests mixtos con comentarios especiales
+3. **ACTUALIZAR** el workflow para excluir tests manuales
+4. **DOCUMENTAR** que TC-006 debe ejecutarse manualmente
+
+================================================================
+
+📋 WORKFLOW ACTUALIZADO RECOMENDADO
+==================================
+
+**CORE SCOPE** (TC-001 a TC-011, excluyendo TC-006):
+- TC-001: "Remember me" functionality ✅
+- TC-002: Invalid login credentials 🔄
+- TC-003: Login endpoint validation ✅
+- TC-004: Login form accepts input ✅
+- TC-005: Login form elements are present ✅
+- TC-007: Login with invalid credentials 🔄
+- TC-008: Login with valid credentials 🔄
+- TC-009: Logout endpoint ✅
+- TC-010: Logout functionality ✅
+- TC-011: Real login with credentials 🔄
+
+**EXTENDED SCOPE** (TC-001 a TC-014, excluyendo TC-006):
+- Core + TC-012, TC-013, TC-014 ✅
+
+**ALL SCOPE** (TC-001 a TC-016, excluyendo TC-006):
+- Extended + TC-015, TC-016 ✅
+
+**EXCLUIR SIEMPRE:**
+- TC-006: Login page loads correctly ❌ (Manual)
+
+================================================================
+
+📊 RESUMEN FINAL
+================
+
+✅ **INCLUIR EN AUTOMATIZACIÓN**: 13 tests (10 automatizables + 3 mixtos)
+❌ **EXCLUIR DE AUTOMATIZACIÓN**: 1 test (TC-006 manual)
+📋 **TOTAL SMOKE TESTS**: 16 tests
+🎯 **COBERTURA AUTOMATIZADA**: 81.25% (13/16)
+
+================================================================
+ANÁLISIS COMPLETADO - AJUSTES REQUERIDOS PARA RESPETAR COLUMNA DE AUTOMATIZACIÓN
+================================================================
