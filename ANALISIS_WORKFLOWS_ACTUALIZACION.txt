@@ -1,0 +1,257 @@
+ANÁLISIS DE ACTUALIZACIÓN DE WORKFLOWS - TEST SCENARIOS EXITOSOS
+================================================================
+
+📊 SITUACIÓN ACTUAL DE LOS WORKFLOWS
+====================================
+
+🔗 WORKFLOW: connection-tests.yml
+=================================
+📋 TEST CASES ACTUALES:
+- TC-13: QR code scanning ✅
+- TC-14: Connection status updates ✅  
+- TC-15: Multiple connections management ✅
+- TC-16: Disconnect/reconnect flow ✅
+
+📋 TEST CASES DISPONIBLES EN EXCEL STD_KPIs (TC-022 a TC-032):
+- TC-022: Connection status updates ✅ (YA IMPLEMENTADO)
+- TC-023: Create new WhatsApp connection ❌ (FALTA)
+- TC-024: Delete WhatsApp connection ❌ (FALTA)
+- TC-025: Get QR code for connection ❌ (FALTA)
+- TC-026: Get WhatsApp connections ❌ (FALTA)
+- TC-027: Get messages for connection ❌ (FALTA)
+- TC-028: Invalid QR code handling ❌ (FALTA)
+- TC-029: Multiple connections management ✅ (YA IMPLEMENTADO)
+- TC-030: QR code scanning ✅ (YA IMPLEMENTADO)
+- TC-031: Disconnect/reconnect flow ✅ (YA IMPLEMENTADO)
+- TC-032: Get user profile ❌ (FALTA)
+
+📊 BRANCH: dashboard-tests.yml
+==============================
+📋 TEST CASES ACTUALES:
+- TC-10: Empty state display ✅
+- TC-11: Navigation menu functionality ✅
+- TC-12: Quick actions accessibility ✅
+
+📋 TEST CASES DISPONIBLES EN EXCEL STD_KPIs (SMOKE TESTS):
+- TC-012: Smoke – Connections list ❌ (FALTA - podría ir en dashboard)
+- TC-013: Smoke – Login ✅ (YA IMPLEMENTADO en auth)
+- TC-014: Smoke – Mensajes en conversación ❌ (FALTA)
+- TC-015: Smoke – Navegación principal ✅ (YA IMPLEMENTADO)
+- TC-016: Smoke – Settings ✅ (YA IMPLEMENTADO)
+
+🔐 WORKFLOW: auth-tests-only.yml
+===============================
+📋 TEST CASES ACTUALES:
+- TC-01: Login with valid credentials ✅
+- TC-02: Login with invalid credentials ✅
+- TC-03: Password recovery flow ✅
+- TC-04: "Remember me" functionality ✅
+
+📋 TEST CASES DISPONIBLES EN EXCEL STD_KPIs (TC-001 a TC-021):
+- TC-001: "Remember me" functionality ✅ (YA IMPLEMENTADO)
+- TC-002: Invalid login credentials ✅ (YA IMPLEMENTADO)
+- TC-003: Login endpoint validation ❌ (FALTA)
+- TC-004: Login form accepts input ❌ (FALTA)
+- TC-005: Login form elements are present ❌ (FALTA)
+- TC-006: Login page loads correctly ❌ (FALTA)
+- TC-007: Login with invalid credentials ✅ (YA IMPLEMENTADO)
+- TC-008: Login with valid credentials ✅ (YA IMPLEMENTADO)
+- TC-009: Logout endpoint ❌ (FALTA)
+- TC-010: Logout functionality ❌ (FALTA)
+- TC-011: Real login with credentials ❌ (FALTA)
+- TC-012: Smoke – Connections list ❌ (FALTA)
+- TC-013: Smoke – Login ✅ (YA IMPLEMENTADO)
+- TC-014: Smoke – Mensajes en conversación ❌ (FALTA)
+- TC-015: Smoke – Navegación principal ✅ (YA IMPLEMENTADO)
+- TC-016: Smoke – Settings ✅ (YA IMPLEMENTADO)
+- TC-017: Sign Up functionality ❌ (FALTA)
+- TC-018: Forgot Password functionality ✅ (YA IMPLEMENTADO)
+- TC-019: Network recovery ❌ (FALTA)
+- TC-020: Password recovery flow ✅ (YA IMPLEMENTADO)
+- TC-021: Password recovery flow - ACTUALIZADO ❌ (FALTA)
+
+================================================================
+
+🎯 RECOMENDACIONES DE ACTUALIZACIÓN
+===================================
+
+🔗 WORKFLOW: connection-tests.yml - ACTUALIZACIONES RECOMENDADAS
+================================================================
+
+✅ TEST CASES QUE SE PUEDEN AGREGAR INMEDIATAMENTE:
+1. **TC-023: Create new WhatsApp connection**
+   - Agregar al scope "extended" y "all"
+   - Implementar test para crear nueva conexión
+
+2. **TC-024: Delete WhatsApp connection**
+   - Agregar al scope "extended" y "all"
+   - Implementar test para eliminar conexión
+
+3. **TC-025: Get QR code for connection**
+   - Agregar al scope "core" (es funcionalidad básica)
+   - Mejorar el test existente TC-13
+
+4. **TC-026: Get WhatsApp connections**
+   - Agregar al scope "core"
+   - Implementar test para listar conexiones
+
+5. **TC-027: Get messages for connection**
+   - Agregar al scope "extended"
+   - Implementar test para obtener mensajes
+
+6. **TC-028: Invalid QR code handling**
+   - Agregar al scope "extended"
+   - Implementar test para manejo de errores
+
+📊 WORKFLOW: dashboard-tests.yml - ACTUALIZACIONES RECOMENDADAS
+===============================================================
+
+✅ TEST CASES QUE SE PUEDEN AGREGAR INMEDIATAMENTE:
+1. **TC-012: Smoke – Connections list**
+   - Agregar al scope "core"
+   - Verificar que se muestre la lista de conexiones
+
+2. **TC-014: Smoke – Mensajes en conversación**
+   - Agregar al scope "extended"
+   - Verificar visualización de mensajes
+
+🔐 WORKFLOW: auth-tests-only.yml - ACTUALIZACIONES RECOMENDADAS
+===============================================================
+
+✅ TEST CASES QUE SE PUEDEN AGREGAR INMEDIATAMENTE:
+1. **TC-003: Login endpoint validation**
+   - Agregar al scope "core"
+   - Validar endpoint de login
+
+2. **TC-004: Login form accepts input**
+   - Agregar al scope "core"
+   - Validar que el formulario acepte entrada
+
+3. **TC-005: Login form elements are present**
+   - Agregar al scope "core"
+   - Validar elementos del formulario
+
+4. **TC-006: Login page loads correctly**
+   - Agregar al scope "core"
+   - Validar carga de página
+
+5. **TC-009: Logout endpoint**
+   - Agregar al scope "extended"
+   - Validar endpoint de logout
+
+6. **TC-010: Logout functionality**
+   - Agregar al scope "extended"
+   - Validar funcionalidad de logout
+
+7. **TC-011: Real login with credentials**
+   - Agregar al scope "extended"
+   - Test de login real (ya existe pero puede mejorarse)
+
+8. **TC-017: Sign Up functionality**
+   - Agregar al scope "all"
+   - Implementar test de registro
+
+================================================================
+
+📋 ACTUALIZACIONES ESPECÍFICAS POR WORKFLOW
+===========================================
+
+🔗 CONNECTION-TESTS.YML - CAMBIOS RECOMENDADOS:
+==============================================
+
+```yaml
+# Agregar estos test cases a los scopes:
+
+case $SCOPE in
+  "core")
+    echo "🧪 Ejecutando TC-13, TC-14, TC-025, TC-026"
+    npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14|TC-025|TC-026" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+    ;;
+  "extended")
+    echo "🧪 Ejecutando TC-13, TC-14, TC-015, TC-025, TC-026, TC-027, TC-028"
+    npx playwright test tests/whatsapp/connection.spec.js --grep "TC-13|TC-14|TC-015|TC-025|TC-026|TC-027|TC-028" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+    ;;
+  "all")
+    echo "🧪 Ejecutando todos los tests de conexión"
+    npx playwright test tests/whatsapp/connection.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+    ;;
+esac
+```
+
+📊 DASHBOARD-TESTS.YML - CAMBIOS RECOMENDADOS:
+=============================================
+
+```yaml
+# Agregar estos test cases a los scopes:
+
+case $SCOPE in
+  "core")
+    TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11|TC-012'"
+    echo "🧪 Tests a ejecutar: TC-10 (Empty state), TC-11 (Navigation menu), TC-012 (Connections list)"
+    ;;
+  "extended")
+    TESTS="tests/whatsapp/dashboard.spec.js --grep 'TC-10|TC-11|TC-012|TC-014'"
+    echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-012, TC-014 (Messages in conversation)"
+    ;;
+  "all")
+    TESTS="tests/whatsapp/dashboard.spec.js"
+    echo "🧪 Tests a ejecutar: TC-10, TC-11, TC-012, TC-014 (All dashboard tests)"
+    ;;
+esac
+```
+
+🔐 AUTH-TESTS-ONLY.YML - CAMBIOS RECOMENDADOS:
+=============================================
+
+```yaml
+# Agregar estos test cases a los scopes:
+
+if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+  TESTS="tests/whatsapp/auth.spec.js --grep 'TC-01|TC-02|TC-003|TC-004|TC-005|TC-006'"
+  echo "📋 Scope: Core authentication tests (TC-01, TC-02, TC-003, TC-004, TC-005, TC-006)"
+elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+  TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js --grep 'TC-01|TC-02|TC-003|TC-004|TC-005|TC-006|TC-009|TC-010|TC-011'"
+  echo "📋 Scope: Extended authentication tests (TC-01, TC-02, TC-003, TC-004, TC-005, TC-006, TC-009, TC-010, TC-011)"
+else
+  TESTS="tests/whatsapp/auth.spec.js tests/whatsapp/real-login-test.spec.js tests/auth/login-valid.spec.js --grep 'TC-01|TC-02|TC-003|TC-004|TC-005|TC-006|TC-009|TC-010|TC-011|TC-017'"
+  echo "📋 Scope: All authentication tests (incluye TC-017 Sign Up)"
+fi
+```
+
+================================================================
+
+🎯 RESUMEN DE ACTUALIZACIONES RECOMENDADAS
+==========================================
+
+📊 CONNECTION-TESTS.YML:
+- ✅ Agregar 6 nuevos test cases (TC-023 a TC-028)
+- ✅ Expandir scope "core" con TC-025, TC-026
+- ✅ Expandir scope "extended" con TC-027, TC-028
+- ✅ Mantener scope "all" para todos los tests
+
+📊 DASHBOARD-TESTS.YML:
+- ✅ Agregar 2 nuevos test cases (TC-012, TC-014)
+- ✅ Expandir scope "core" con TC-012
+- ✅ Expandir scope "extended" con TC-014
+- ✅ Mantener scope "all" para todos los tests
+
+📊 AUTH-TESTS-ONLY.YML:
+- ✅ Agregar 8 nuevos test cases (TC-003 a TC-011, TC-017)
+- ✅ Expandir scope "core" con TC-003 a TC-006
+- ✅ Expandir scope "extended" con TC-009 a TC-011
+- ✅ Expandir scope "all" con TC-017 (Sign Up)
+
+================================================================
+
+🚀 PRÓXIMOS PASOS INMEDIATOS
+============================
+
+1. **Implementar los test cases faltantes** en los archivos .spec.js
+2. **Actualizar los workflows** con los nuevos test cases
+3. **Probar los scopes actualizados** en cada branch
+4. **Documentar los cambios** en cada workflow
+5. **Ejecutar tests** para verificar que todo funciona
+
+================================================================
+ANÁLISIS COMPLETADO - WORKFLOWS LISTOS PARA ACTUALIZACIÓN
+================================================================

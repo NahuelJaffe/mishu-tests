@@ -1,0 +1,303 @@
+name: Smoke Tests Complete - Excel STD_KPIs
+
+on:
+  push:
+    branches: [ main, smoke-tests-complete ]
+  pull_request:
+    branches: [ main, smoke-tests-complete ]
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of smoke tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+          - core
+          - extended
+          - all
+      browser:
+        description: 'Browser to test (all runs all browsers)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - chromium
+          - firefox
+          - webkit
+
+jobs:
+  smoke-summary:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [chromium-smoke-tests, firefox-smoke-tests, webkit-smoke-tests]
+    steps:
+      - name: Generate Smoke Tests Complete Summary
+        run: |
+          echo "## 🔥 Smoke Tests Complete Summary - Excel STD_KPIs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+          echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Core:** TC-001 a TC-011 (Login y autenticación)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Extended:** TC-001 a TC-014 (Core + funcionalidades básicas)" >> $GITHUB_STEP_SUMMARY
+          echo "- **All:** TC-001 a TC-016 (Todos los smoke tests del Excel)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Objetivo: Validar funcionalidad básica según Excel STD_KPIs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`tests/smoke-tests-complete.spec.js\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 Test Cases del Excel STD_KPIs:" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-001:** Remember me functionality" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-002:** Invalid login credentials" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-003:** Login endpoint validation" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-004:** Login form accepts input" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-005:** Login form elements are present" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-006:** Login page loads correctly" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-007:** Login with invalid credentials" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-008:** Login with valid credentials" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-009:** Logout endpoint" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-010:** Logout functionality" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-011:** Real login with credentials" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-012:** Smoke – Connections list" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-013:** Smoke – Login" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-014:** Smoke – Mensajes en conversación" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-015:** Smoke – Navegación principal" >> $GITHUB_STEP_SUMMARY
+          echo "- **TC-016:** Smoke – Settings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Job summary generated at run-time" >> $GITHUB_STEP_SUMMARY
+
+  chromium-smoke-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying Chromium installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Smoke Tests Complete - Chromium
+        run: |
+          echo "🔥 Ejecutando Smoke Tests Complete en Chromium"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          echo "🌐 Browser: Chromium"
+          
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/:"
+          ls -la tests/ | grep smoke
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/smoke-tests-complete.spec.js" ]; then
+            echo "✅ Archivo smoke-tests-complete.spec.js encontrado"
+          else
+            echo "❌ Archivo smoke-tests-complete.spec.js NO encontrado"
+            exit 1
+          fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Smoke Test Results - Chromium
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results-chromium
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  firefox-smoke-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying Firefox installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Smoke Tests Complete - Firefox
+        run: |
+          echo "🔥 Ejecutando Smoke Tests Complete en Firefox"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          echo "🌐 Browser: Firefox"
+          
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/:"
+          ls -la tests/ | grep smoke
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/smoke-tests-complete.spec.js" ]; then
+            echo "✅ Archivo smoke-tests-complete.spec.js encontrado"
+          else
+            echo "❌ Archivo smoke-tests-complete.spec.js NO encontrado"
+            exit 1
+          fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Smoke Test Results - Firefox
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results-firefox
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  webkit-smoke-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: |
+          echo "Installing all Playwright browsers..."
+          npx playwright install --with-deps
+          echo "Verifying WebKit installation..."
+          npx playwright install --dry-run
+      
+      - name: Run Smoke Tests Complete - WebKit
+        run: |
+          echo "🔥 Ejecutando Smoke Tests Complete en WebKit"
+          
+          # Determinar qué tests ejecutar basado en el scope
+          SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+          echo "📋 Scope: $SCOPE"
+          
+          echo "🌐 Browser: WebKit"
+          
+          # Debug: Listar archivos disponibles
+          echo "📁 Archivos en tests/:"
+          ls -la tests/ | grep smoke
+          
+          # Debug: Verificar que el archivo existe
+          if [ -f "tests/smoke-tests-complete.spec.js" ]; then
+            echo "✅ Archivo smoke-tests-complete.spec.js encontrado"
+          else
+            echo "❌ Archivo smoke-tests-complete.spec.js NO encontrado"
+            exit 1
+          fi
+          
+          # Debug: Listar tests disponibles
+          echo "📋 Tests disponibles:"
+          npx playwright test tests/smoke-tests-complete.spec.js --list || echo "Error listando tests"
+          
+          # Ejecutar tests según scope
+          case $SCOPE in
+            "core")
+              echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "extended")
+              echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+            "all")
+              echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
+              npx playwright test tests/smoke-tests-complete.spec.js --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+              ;;
+          esac
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload Smoke Test Results - WebKit
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results-webkit
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

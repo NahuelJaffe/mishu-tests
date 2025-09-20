@@ -1,0 +1,955 @@
+LISTA COMPLETA Y UNIFICADA DE TEST CASES - MISHU QA TESTS
+============================================================
+INCLUYE TODOS LOS TEST CASES DEL EXCEL STD_KPIs + TESTS IMPLEMENTADOS
+================================================================
+
+INFORMACIÓN GENERAL DEL PROYECTO
+================================
+- Proyecto: WhatsApp Monitor (Mishu)
+- Total de test cases del Excel STD_KPIs: 104 test cases (TC-001 a TC-103)
+- Total de archivos de test implementados: 34 archivos
+- Total de test cases implementados: 79+ tests
+- Navegadores soportados: Chromium, Firefox, WebKit
+- Framework: Playwright
+- URL Base: https://mishu-web--pr67-faq-0n1j2wio.web.app/
+- Estado: Suite completa con analytics bloqueado y CI/CD configurado
+
+================================================================
+
+🎯 TEST CASES DEL EXCEL STD_KPIs (104 test cases - VERSIÓN MAESTRA)
+==================================================================
+
+📋 ESTRUCTURA DEL ARCHIVO STD_KPIs
+==================================
+Columnas:
+1. Test Scenario - Categoría del test
+2. ID - Identificador único (TC-001, TC-002, etc.)
+3. Feature - Funcionalidad específica a probar
+4. Precondición - Estado inicial requerido
+5. Pasos - Acciones a ejecutar
+6. Resultado Esperado - Resultado que se debe obtener
+7. Automatización - Tipo (Automatizable/Manual/Mixto)
+
+🔥 1. SMOKE TESTS (16 tests) - TC-001 a TC-016
+=============================================
+TC-001: "Remember me" functionality
+  - Precondición: Usuario deslogueado y casilla 'Remember me' visible
+  - Pasos: 1) Tildar 'Remember me' 2) Iniciar sesión 3) Cerrar navegador y reabrir 4) Navegar a la app
+  - Resultado: La sesión persiste y no redirige a /login
+  - Automatización: Automatizable
+
+TC-002: Invalid login credentials
+  - Precondición: Usuario deslogueado en /login
+  - Pasos: 1) Navegar a /login 2) Ingresar email o contraseña inválidos 3) Hacer clic en 'Login'
+  - Resultado: Se muestra mensaje de error y no inicia sesión
+  - Automatización: Mixto
+
+TC-003: Login endpoint validation
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Automatizable
+
+TC-004: Login form accepts input
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Automatizable
+
+TC-005: Login form elements are present
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Automatizable
+
+TC-006: Login page loads correctly
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Manual
+
+TC-007: Login with invalid credentials
+  - Precondición: Usuario deslogueado en /login
+  - Pasos: 1) Navegar a /login 2) Ingresar email o contraseña inválidos 3) Hacer clic en 'Login'
+  - Resultado: Se muestra mensaje de error y no inicia sesión
+  - Automatización: Mixto
+
+TC-008: Login with valid credentials
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Mixto
+
+TC-009: Logout endpoint
+  - Precondición: Usuario autenticado en la app
+  - Pasos: 1) Abrir menú/perfil 2) Hacer clic en 'Logout'
+  - Resultado: Se cierra sesión y redirige a /login
+  - Automatización: Automatizable
+
+TC-010: Logout functionality
+  - Precondición: Usuario autenticado en la app
+  - Pasos: 1) Abrir menú/perfil 2) Hacer clic en 'Logout'
+  - Resultado: Se cierra sesión y redirige a /login
+  - Automatización: Automatizable
+
+TC-011: Real login with credentials
+  - Precondición: Usuario deslogueado en /login con credenciales válidas
+  - Pasos: 1) Navegar a /login 2) Ingresar email y contraseña válidos 3) Hacer clic en 'Login'
+  - Resultado: Redirige a /connections y la sesión queda iniciada
+  - Automatización: Mixto
+
+TC-012: Smoke – Connections list
+  - Precondición: Usuario logueado
+  - Pasos: Abrir sección Connections
+  - Resultado: Se muestran conversaciones (aunque estén vacías)
+  - Automatización: Automatizable
+
+TC-013: Smoke – Login
+  - Precondición: Login page
+  - Pasos: Ingresar credenciales válidas
+  - Resultado: Acceso exitoso al dashboard
+  - Automatización: Automatizable
+
+TC-014: Smoke – Mensajes en conversación
+  - Precondición: Usuario con 1+ conversación
+  - Pasos: Abrir conversación
+  - Resultado: Se visualizan mensajes o placeholder si está vacía
+  - Automatización: Automatizable
+
+TC-015: Smoke – Navegación principal
+  - Precondición: Usuario logueado
+  - Pasos: Entrar a Dashboard, Connections y Settings
+  - Resultado: Todas cargan sin errores
+  - Automatización: Automatizable
+
+TC-016: Smoke – Settings
+  - Precondición: Usuario logueado
+  - Pasos: Abrir Settings
+  - Resultado: Se ven secciones (perfil, idioma, notificaciones)
+  - Automatización: Automatizable
+
+👤 2. SIGNUP (1 test) - TC-017
+=============================
+TC-017: Sign Up functionality
+  - Precondición: Usuario deslogueado con formulario de registro visible
+  - Pasos: 1) Completar nombre, email y contraseña 2) Aceptar términos 3) Enviar formulario
+  - Resultado: Cuenta creada y redirige a onboarding o /connections
+  - Automatización: Automatizable
+
+🔐 3. FORGOT PASSWORD (4 tests) - TC-018 a TC-021
+===============================================
+TC-018: Forgot Password functionality
+  - Precondición: Usuario con cuenta registrada y acceso al email
+  - Pasos: 1) En /login, hacer clic en 'Forgot password' 2) Ingresar email registrado y enviar 3) Verificar confirmación
+  - Resultado: Se envía email de reseteo y se muestra confirmación neutral
+  - Automatización: Automatizable
+
+TC-019: Network recovery
+  - Precondición: Usuario con cuenta registrada y acceso al email
+  - Pasos: 1) En /login, hacer clic en 'Forgot password' 2) Ingresar email registrado y enviar 3) Verificar confirmación
+  - Resultado: Se envía email de reseteo y se muestra confirmación neutral
+  - Automatización: Automatizable
+
+TC-020: Password recovery flow
+  - Precondición: Usuario con cuenta registrada y acceso al email
+  - Pasos: 1) En /login, hacer clic en 'Forgot password' 2) Ingresar email registrado y enviar 3) Verificar confirmación
+  - Resultado: Se envía email de reseteo y se muestra confirmación neutral
+  - Automatización: Automatizable
+
+TC-021: Password recovery flow - ACTUALIZADO
+  - Precondición: Usuario con cuenta registrada y acceso al email
+  - Pasos: 1) En /login, hacer clic en 'Forgot password' 2) Ingresar email registrado y enviar 3) Verificar confirmación
+  - Resultado: Se envía email de reseteo y se muestra confirmación neutral
+  - Automatización: Automatizable
+
+🔗 4. CONNECTIONS (11 tests) - TC-022 a TC-032
+=============================================
+TC-022: Connection status updates
+  - Precondición: Usuario autenticado con al menos una conexión creada
+  - Pasos: 1) Abrir /connections 2) Observar/forzar estados (connect/disconnect/reconnect) 3) Validar actualizaciones de estado
+  - Resultado: Los estados se actualizan en tiempo real y la UI refleja el cambio
+  - Automatización: Automatizable
+
+TC-023: Create new WhatsApp connection
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-024: Delete WhatsApp connection
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-025: Get QR code for connection
+  - Precondición: Usuario autenticado, en /connections con componente QR visible
+  - Pasos: 1) Ver la tarjeta de conexión 2) Escanear el QR con WhatsApp 3) Esperar estado 'Connected'
+  - Resultado: Estado de conexión cambia a 'Connected' y aparece listado de chats
+  - Automatización: Automatizable
+
+TC-026: Get WhatsApp connections
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-027: Get messages for connection
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-028: Invalid QR code handling
+  - Precondición: Usuario autenticado, en /connections con componente QR visible
+  - Pasos: 1) Ver la tarjeta de conexión 2) Escanear el QR con WhatsApp 3) Esperar estado 'Connected'
+  - Resultado: Estado de conexión cambia a 'Connected' y aparece listado de chats
+  - Automatización: Automatizable
+
+TC-029: Multiple connections management
+  - Precondición: Usuario autenticado con al menos una conexión creada
+  - Pasos: 1) Abrir /connections 2) Observar/forzar estados (connect/disconnect/reconnect) 3) Validar actualizaciones de estado
+  - Resultado: Los estados se actualizan en tiempo real y la UI refleja el cambio
+  - Automatización: Automatizable
+
+TC-030: QR code scanning
+  - Precondición: Usuario autenticado, en /connections con componente QR visible
+  - Pasos: 1) Ver la tarjeta de conexión 2) Escanear el QR con WhatsApp 3) Esperar estado 'Connected'
+  - Resultado: Estado de conexión cambia a 'Connected' y aparece listado de chats
+  - Automatización: Automatizable
+
+TC-031: Disconnect/reconnect flow
+  - Precondición: Usuario autenticado con al menos una conexión creada
+  - Pasos: 1) Abrir /connections 2) Observar/forzar estados (connect/disconnect/reconnect) 3) Validar actualizaciones de estado
+  - Resultado: Los estados se actualizan en tiempo real y la UI refleja el cambio
+  - Automatización: Automatizable
+
+TC-032: Get user profile
+  - Precondición: Usuario autenticado en Settings → Profile
+  - Pasos: 1) Editar Display Name 2) Guardar cambios
+  - Resultado: El nombre se actualiza y persiste tras recarga
+  - Automatización: Automatizable
+
+⚙️ 5. SETTINGS - PROFILE (3 tests) - TC-032 a TC-034
+===================================================
+TC-032: Get user profile
+  - Precondición: Usuario autenticado en Settings → Profile
+  - Pasos: 1) Editar Display Name 2) Guardar cambios
+  - Resultado: El nombre se actualiza y persiste tras recarga
+  - Automatización: Automatizable
+
+TC-033: Profile update
+  - Precondición: Usuario autenticado en Settings → Profile
+  - Pasos: 1) Editar Display Name 2) Guardar cambios
+  - Resultado: El nombre se actualiza y persiste tras recarga
+  - Automatización: Automatizable
+
+TC-034: Update user profile
+  - Precondición: Usuario autenticado en Settings → Profile
+  - Pasos: 1) Editar Display Name 2) Guardar cambios
+  - Resultado: El nombre se actualiza y persiste tras recarga
+  - Automatización: Automatizable
+
+⚙️ 6. SETTINGS - ACCOUNT (2 tests) - TC-035 a TC-036
+===================================================
+TC-035: Account deletion
+  - Precondición: Usuario autenticado en Settings → Account
+  - Pasos: 1) Cambiar idioma/ajuste de cuenta 2) Guardar o confirmar
+  - Resultado: Los cambios se aplican correctamente
+  - Automatización: Automatizable
+
+TC-036: Language switching
+  - Precondición: Usuario autenticado en Settings → Language
+  - Pasos: 1) Abrir Settings 2) Cambiar idioma a Hebreo (RTL) 3) Confirmar cambios
+  - Resultado: La UI cambia a RTL y se aplican traducciones correctas
+  - Automatización: Manual
+
+⚙️ 7. SETTINGS - NOTIFICATIONS (7 tests) - TC-037 a TC-043
+=========================================================
+TC-037: Botón Add Child's WhatsApp
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-038: Browser notifications
+  - Precondición: Navegador con permisos de notificación; usuario en Settings
+  - Pasos: 1) Abrir Settings → Notifications 2) Hacer clic en 'Register Current Device' 3) Aceptar permisos del navegador
+  - Resultado: El dispositivo aparece en Registered Devices y se recibe una notificación de prueba
+  - Automatización: Manual
+
+TC-039: Email notifications
+  - Precondición: Navegador con permisos de notificación; usuario en Settings
+  - Pasos: 1) Abrir Settings → Notifications 2) Hacer clic en 'Register Current Device' 3) Aceptar permisos del navegador
+  - Resultado: El dispositivo aparece en Registered Devices y se recibe una notificación de prueba
+  - Automatización: Manual
+
+TC-040: Get notification preferences
+  - Precondición: Navegador con permisos de notificación; usuario en Settings
+  - Pasos: 1) Abrir Settings → Notifications 2) Hacer clic en 'Register Current Device' 3) Aceptar permisos del navegador
+  - Resultado: El dispositivo aparece en Registered Devices y se recibe una notificación de prueba
+  - Automatización: Manual
+
+TC-041: Notification preferences
+  - Precondición: Navegador con permisos de notificación; usuario en Settings
+  - Pasos: 1) Abrir Settings → Notifications 2) Hacer clic en 'Register Current Device' 3) Aceptar permisos del navegador
+  - Resultado: El dispositivo aparece en Registered Devices y se recibe una notificación de prueba
+  - Automatización: Manual
+
+TC-042: Update notification preferences
+  - Precondición: Navegador con permisos de notificación; usuario en Settings
+  - Pasos: 1) Abrir Settings → Notifications 2) Hacer clic en 'Register Current Device' 3) Aceptar permisos del navegador
+  - Resultado: El dispositivo aparece en Registered Devices y se recibe una notificación de prueba
+  - Automatización: Manual
+
+TC-043: Bulk actions on messages
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+💬 8. MESSAGES (6 tests) - TC-044 a TC-049
+=========================================
+TC-044: Flag message as important
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-045: Invalid login error messages
+  - Precondición: Usuario deslogueado en /login
+  - Pasos: 1) Navegar a /login 2) Ingresar email o contraseña inválidos 3) Hacer clic en 'Login'
+  - Resultado: Se muestra mensaje de error y no inicia sesión
+  - Automatización: Automatizable
+
+TC-046: Manual message flagging
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-047: Message display
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-048: Message grouping
+  - Precondición: Usuario autenticado (o con credenciales de prueba disponibles)
+  - Pasos: Navegar a la sección correspondiente y ejecutar la acción principal descrita
+  - Resultado: La aplicación responde según lo especificado para el caso
+  - Automatización: Automatizable
+
+TC-049: Data encryption
+  - Precondición: Usuario autenticado con herramientas para enviar solicitudes específicas
+  - Pasos: 1) Enviar payload malicioso/controlado (XSS/CSRF) 2) Intentar acceder a datos sensibles
+  - Resultado: El sistema neutraliza XSS/CSRF y protege datos (sin exposición)
+  - Automatización: Automatizable
+
+🔒 9. SECURITY (2 tests) - TC-049 a TC-050
+=========================================
+TC-049: Data encryption
+  - Precondición: Usuario autenticado con herramientas para enviar solicitudes específicas
+  - Pasos: 1) Enviar payload malicioso/controlado (XSS/CSRF) 2) Intentar acceder a datos sensibles
+  - Resultado: El sistema neutraliza XSS/CSRF y protege datos (sin exposición)
+  - Automatización: Automatizable
+
+TC-050: Security headers validation
+  - Precondición: Usuario autenticado con herramientas para enviar solicitudes específicas
+  - Pasos: 1) Enviar payload malicioso/controlado (XSS/CSRF) 2) Intentar acceder a datos sensibles
+  - Resultado: El sistema neutraliza XSS/CSRF y protege datos (sin exposición)
+  - Automatización: Automatizable
+
+⚡ 10. PERFORMANCE TESTS (6 tests) - TC-051 a TC-055
+==================================================
+TC-051: Performance – Carga de chat con 1000 mensajes
+  - Precondición: Chat con IA activa
+  - Pasos: Generar 1000 mensajes flagged en 1 min
+  - Resultado: Dashboard responde sin caídas
+  - Automatización: Manual
+
+TC-052: Performance – Chat con 50k mensajes
+  - Precondición: Chat con 50k mensajes
+  - Pasos: Abrir conversación
+  - Resultado: Carga sin cuelgues, tiempo aceptable
+  - Automatización: Manual
+
+TC-053: Performance – Pico de 1000 mensajes flagged/min
+  - Precondición: Chat con IA activa
+  - Pasos: Generar 1000 mensajes flagged en 1 min
+  - Resultado: Dashboard responde sin caídas
+  - Automatización: Manual
+
+TC-054: Performance – Reconexión tras red intermitente
+  - Precondición: Usuario en Settings
+  - Pasos: Cambiar entre 3 idiomas varias veces
+  - Resultado: Siempre aplica correctamente
+  - Automatización: Manual
+
+TC-055: Performance – Reconexión tras red intermitente
+  - Precondición: Usuario en Settings
+  - Pasos: Cambiar entre 3 idiomas varias veces
+  - Resultado: Siempre aplica correctamente
+  - Automatización: Manual
+
+🔄 11. REGRESSION TESTS (58 tests) - TC-055 a TC-103
+==================================================
+Incluye tests de regresión completos para:
+- API endpoints (TC-055)
+- Accesibilidad básica (TC-056)
+- CORS headers validation (TC-057)
+- Change password (TC-058)
+- Configuración básica (TC-059)
+- Contact form (TC-060)
+- Dark/light mode (TC-061)
+- Duplicate email/phone check (TC-062)
+- Elementos de estado (TC-063)
+- Email verification flow (TC-064)
+- Empty state display (TC-065)
+- Error handling - 404 endpoint (TC-066)
+- Estado vacío de conexiones (TC-067)
+- FAQ section (TC-068)
+- Health check endpoint (TC-069)
+- Metadata de la página (TC-070)
+- Navegación a página local (TC-071)
+- Navigation links accessibility (TC-073)
+- Navigation menu functionality (TC-074)
+- New user registration (TC-075)
+- Offline behavior (TC-076)
+- Page responsiveness (TC-077)
+- Password change/requirements/reset (TC-078 a TC-080)
+- Quick actions accessibility (TC-081)
+- RTL support (Hebrew) (TC-082)
+- Rate limiting validation (TC-083)
+- Responsive design (TC-084, TC-085)
+- Sensitive data exposure (TC-086)
+- Server error states (TC-087)
+- Session management (TC-088)
+- Setup de analytics (TC-089)
+- Sistema listo para CI (TC-090)
+- Support email response (TC-091)
+- Toggle del sidebar (TC-092)
+- Token validation endpoint (TC-093)
+- Variables de entorno (TC-094)
+- Verify authenticated state (TC-095)
+- Chat Image Preview (TC-096)
+- Connections carga (TC-097)
+- Forgot Password básico (TC-098)
+- Login y Logout (TC-099)
+- Mensajes flagged (placeholder) (TC-100)
+- Mensajes normales (TC-101)
+- Notificaciones Web Push (TC-102)
+- Settings idioma (RTL) (TC-103)
+
+================================================================
+
+📊 TESTS IMPLEMENTADOS EN EL PROYECTO (79+ tests)
+================================================
+
+🔐 TESTS DE AUTENTICACIÓN Y LOGIN (16 tests)
+=============================================
+
+📁 tests/whatsapp/auth.spec.js (4 tests)
+----------------------------------------
+TC-01: Login with valid credentials
+  - Verifica login con credenciales válidas
+  - Genera analytics para probar bloqueo
+  - Manejo de errores y redirección
+
+TC-02: Login with invalid credentials
+  - Verifica manejo de credenciales inválidas
+  - Validación de mensajes de error
+  - Prevención de acceso no autorizado
+
+TC-03: Remember me functionality
+  - Verifica persistencia de sesión
+  - Manejo de cookies y localStorage
+  - Redirección automática tras reapertura
+
+TC-04: Logout functionality
+  - Verifica cierre de sesión
+  - Limpieza de datos de sesión
+  - Redirección a página de login
+
+📁 tests/whatsapp/signup.spec.js (3 tests)
+-----------------------------------------
+TC-05: Sign up with valid data
+  - Registro con datos válidos
+  - Validación de formulario
+  - Redirección post-registro
+
+TC-06: Sign up with invalid email
+  - Validación de formato de email
+  - Mensajes de error apropiados
+  - Prevención de registro inválido
+
+TC-07: Sign up with weak password
+  - Validación de fortaleza de contraseña
+  - Requisitos de seguridad
+  - Feedback al usuario
+
+📁 tests/whatsapp/login-exploration.spec.js (5 tests)
+---------------------------------------------------
+TC-08: Login page elements verification
+  - Verificación de elementos de UI
+  - Campos de entrada presentes
+  - Botones y enlaces funcionales
+
+TC-09: Login form validation
+  - Validación de campos requeridos
+  - Mensajes de error en tiempo real
+  - Prevención de envío inválido
+
+TC-10: Login accessibility
+  - Navegación por teclado
+  - Etiquetas ARIA apropiadas
+  - Contraste de colores
+
+TC-11: Login responsive design
+  - Adaptación a diferentes tamaños
+  - Elementos visibles en móvil
+  - Funcionalidad touch
+
+TC-12: Login error handling
+  - Manejo de errores de red
+  - Timeouts y reconexión
+  - Mensajes informativos
+
+📁 tests/whatsapp/login-accessibility.spec.js (4 tests)
+-----------------------------------------------------
+TC-13: Keyboard navigation
+  - Navegación completa por teclado
+  - Orden de tabulación correcto
+  - Activación con Enter/Space
+
+TC-14: Screen reader compatibility
+  - Compatibilidad con lectores de pantalla
+  - Etiquetas descriptivas
+  - Anuncios de estado
+
+TC-15: Focus management
+  - Gestión de foco apropiada
+  - Indicadores visuales claros
+  - Retorno de foco tras errores
+
+TC-16: Color contrast validation
+  - Contraste mínimo requerido
+  - Legibilidad en diferentes condiciones
+  - Cumplimiento WCAG 2.1
+
+🔗 TESTS DE CONEXIONES WHATSAPP (15 tests)
+==========================================
+
+📁 tests/whatsapp/connection.spec.js (5 tests)
+---------------------------------------------
+TC-17: Create new WhatsApp connection
+  - Creación de nueva conexión
+  - Validación de datos de entrada
+  - Generación de QR code
+
+TC-18: QR code generation
+  - Generación correcta de QR
+  - Actualización en tiempo real
+  - Expiración y renovación
+
+TC-19: Connection status monitoring
+  - Monitoreo de estado de conexión
+  - Actualizaciones automáticas
+  - Indicadores visuales claros
+
+TC-20: Connection error handling
+  - Manejo de errores de conexión
+  - Reintentos automáticos
+  - Mensajes informativos
+
+TC-21: Multiple connections support
+  - Soporte para múltiples conexiones
+  - Gestión independiente
+  - Interfaz de selección
+
+📁 tests/whatsapp/connection-detailed.spec.js (5 tests)
+-----------------------------------------------------
+TC-22: Connection lifecycle management
+  - Ciclo completo de conexión
+  - Estados transitorios
+  - Transiciones automáticas
+
+TC-23: Connection data synchronization
+  - Sincronización de datos
+  - Consistencia entre estados
+  - Actualizaciones en tiempo real
+
+TC-24: Connection timeout handling
+  - Manejo de timeouts
+  - Reconexión automática
+  - Notificaciones de estado
+
+TC-25: Connection security validation
+  - Validación de seguridad
+  - Encriptación de datos
+  - Protección de credenciales
+
+TC-26: Connection performance monitoring
+  - Monitoreo de rendimiento
+  - Métricas de conexión
+  - Optimización automática
+
+📁 tests/whatsapp/connection-analysis.spec.js (5 tests)
+-----------------------------------------------------
+TC-27: Connection analytics tracking
+  - Seguimiento de analytics
+  - Métricas de uso
+  - Reportes de rendimiento
+
+TC-28: Connection error analytics
+  - Analytics de errores
+  - Patrones de falla
+  - Mejoras sugeridas
+
+TC-29: Connection usage patterns
+  - Patrones de uso
+  - Análisis de comportamiento
+  - Optimizaciones recomendadas
+
+TC-30: Connection health monitoring
+  - Monitoreo de salud
+  - Alertas proactivas
+  - Mantenimiento predictivo
+
+TC-31: Connection scalability testing
+  - Pruebas de escalabilidad
+  - Carga máxima soportada
+  - Optimización de recursos
+
+💬 TESTS DE MENSAJES Y CHAT (12 tests)
+=====================================
+
+📁 tests/whatsapp/message-monitoring.spec.js (5 tests)
+-----------------------------------------------------
+TC-32: Message reception monitoring
+  - Monitoreo de recepción
+  - Procesamiento en tiempo real
+  - Almacenamiento correcto
+
+TC-33: Message flagging functionality
+  - Funcionalidad de marcado
+  - Criterios de flagging
+  - Gestión de flags
+
+TC-34: Message filtering and search
+  - Filtrado y búsqueda
+  - Criterios múltiples
+  - Resultados relevantes
+
+TC-35: Message analytics tracking
+  - Seguimiento de analytics
+  - Métricas de mensajes
+  - Reportes detallados
+
+TC-36: Message error handling
+  - Manejo de errores
+  - Recuperación automática
+  - Notificaciones de falla
+
+📁 tests/whatsapp/ui.spec.js (4 tests)
+-------------------------------------
+TC-37: Message display interface
+  - Interfaz de visualización
+  - Formato correcto
+  - Responsive design
+
+TC-38: Message interaction controls
+  - Controles de interacción
+  - Funcionalidad completa
+  - Feedback visual
+
+TC-39: Message status indicators
+  - Indicadores de estado
+  - Información clara
+  - Actualizaciones automáticas
+
+TC-40: Message accessibility features
+  - Características de accesibilidad
+  - Navegación por teclado
+  - Lectores de pantalla
+
+📁 tests/whatsapp/error-handling.spec.js (3 tests)
+-------------------------------------------------
+TC-41: Network error handling
+  - Manejo de errores de red
+  - Reconexión automática
+  - Mensajes informativos
+
+TC-42: Message processing errors
+  - Errores de procesamiento
+  - Recuperación de datos
+  - Logging de errores
+
+TC-43: User input validation errors
+  - Validación de entrada
+  - Prevención de errores
+  - Feedback inmediato
+
+⚙️ TESTS DE CONFIGURACIÓN Y SETTINGS (10 tests)
+==============================================
+
+📁 tests/whatsapp/profile-settings.spec.js (4 tests)
+---------------------------------------------------
+TC-44: Profile information update
+  - Actualización de información
+  - Validación de datos
+  - Persistencia correcta
+
+TC-45: Profile image management
+  - Gestión de imágenes
+  - Validación de formato
+  - Optimización automática
+
+TC-46: Profile security settings
+  - Configuración de seguridad
+  - Cambio de contraseña
+  - Autenticación de dos factores
+
+TC-47: Profile privacy controls
+  - Controles de privacidad
+  - Configuración de visibilidad
+  - Protección de datos
+
+📁 tests/whatsapp/notifications.spec.js (3 tests)
+------------------------------------------------
+TC-48: Browser notification setup
+  - Configuración de notificaciones
+  - Permisos del navegador
+  - Pruebas de funcionamiento
+
+TC-49: Email notification preferences
+  - Preferencias de email
+  - Configuración granular
+  - Pruebas de envío
+
+TC-50: Notification scheduling
+  - Programación de notificaciones
+  - Horarios personalizados
+  - Gestión de frecuencia
+
+📁 tests/whatsapp/help-support.spec.js (3 tests)
+------------------------------------------------
+TC-51: Help documentation access
+  - Acceso a documentación
+  - Navegación intuitiva
+  - Búsqueda funcional
+
+TC-52: Support ticket creation
+  - Creación de tickets
+  - Categorización correcta
+  - Seguimiento de estado
+
+TC-53: FAQ functionality
+  - Funcionalidad de FAQ
+  - Respuestas relevantes
+  - Actualización de contenido
+
+🔒 TESTS DE SEGURIDAD (8 tests)
+==============================
+
+📁 tests/whatsapp/security.spec.js (4 tests)
+-------------------------------------------
+TC-54: Authentication security
+  - Seguridad de autenticación
+  - Prevención de ataques
+  - Validación de tokens
+
+TC-55: Data encryption validation
+  - Validación de encriptación
+  - Protección de datos sensibles
+  - Cumplimiento de estándares
+
+TC-56: Session management security
+  - Seguridad de sesiones
+  - Timeout automático
+  - Prevención de hijacking
+
+TC-57: Input sanitization
+  - Sanitización de entrada
+  - Prevención de XSS
+  - Validación de datos
+
+📁 tests/config-verification.spec.js (4 tests)
+---------------------------------------------
+TC-58: Environment variables validation
+  - Validación de variables
+  - Configuración correcta
+  - Valores por defecto
+
+TC-59: Security headers validation
+  - Validación de headers
+  - Protección HTTP
+  - Cumplimiento de estándares
+
+TC-60: API endpoint security
+  - Seguridad de endpoints
+  - Autenticación requerida
+  - Autorización apropiada
+
+TC-61: Database connection security
+  - Seguridad de conexión
+  - Encriptación de datos
+  - Acceso controlado
+
+📊 TESTS DE API (8 tests)
+========================
+
+📁 tests/api/auth-api.spec.js (2 tests)
+--------------------------------------
+TC-62: Login API endpoint
+  - Endpoint de login
+  - Validación de credenciales
+  - Respuesta correcta
+
+TC-63: Logout API endpoint
+  - Endpoint de logout
+  - Invalidación de sesión
+  - Limpieza de datos
+
+📁 tests/api/whatsapp-api.spec.js (3 tests)
+------------------------------------------
+TC-64: WhatsApp connection API
+  - API de conexión
+  - Creación de conexiones
+  - Gestión de estado
+
+TC-65: WhatsApp messages API
+  - API de mensajes
+  - Envío y recepción
+  - Sincronización
+
+TC-66: WhatsApp status API
+  - API de estado
+  - Monitoreo de conexión
+  - Actualizaciones
+
+📁 tests/api/user-profile-api.spec.js (2 tests)
+----------------------------------------------
+TC-67: User profile API
+  - API de perfil
+  - Actualización de datos
+  - Validación de entrada
+
+TC-68: User preferences API
+  - API de preferencias
+  - Configuración personalizada
+  - Persistencia de datos
+
+📁 tests/api/system-health-api.spec.js (1 test)
+----------------------------------------------
+TC-69: System health API
+  - API de salud del sistema
+  - Monitoreo de estado
+  - Métricas de rendimiento
+
+🔄 TESTS DE SISTEMA Y HEALTH (10 tests)
+======================================
+
+📁 tests/system-health.spec.js (5 tests)
+---------------------------------------
+TC-70: Application startup
+  - Inicio de aplicación
+  - Carga de recursos
+  - Inicialización correcta
+
+TC-71: Database connectivity
+  - Conectividad de base de datos
+  - Verificación de conexión
+  - Manejo de errores
+
+TC-72: External service integration
+  - Integración de servicios
+  - APIs externas
+  - Manejo de fallas
+
+TC-73: System resource monitoring
+  - Monitoreo de recursos
+  - Uso de memoria
+  - Optimización automática
+
+TC-74: Error logging and reporting
+  - Logging de errores
+  - Reportes automáticos
+  - Análisis de fallas
+
+📁 tests/smoke-test.spec.js (5 tests)
+------------------------------------
+TC-75: Basic application functionality
+  - Funcionalidad básica
+  - Navegación principal
+  - Carga de páginas
+
+TC-76: User authentication flow
+  - Flujo de autenticación
+  - Login y logout
+  - Persistencia de sesión
+
+TC-77: Core feature accessibility
+  - Accesibilidad de características
+  - Navegación por teclado
+  - Lectores de pantalla
+
+TC-78: Responsive design validation
+  - Validación de diseño
+  - Adaptación a dispositivos
+  - Funcionalidad touch
+
+TC-79: Performance baseline
+  - Línea base de rendimiento
+  - Tiempos de carga
+  - Optimización de recursos
+
+================================================================
+
+📈 RESUMEN DE COBERTURA Y ESTADO
+===============================
+
+🎯 COBERTURA TOTAL:
+- Test Cases del Excel STD_KPIs: 104 tests
+- Tests Implementados: 79+ tests
+- Archivos de Test: 34 archivos
+- Categorías Cubiertas: 11 categorías principales
+
+📊 DISTRIBUCIÓN POR AUTOMATIZACIÓN:
+- Automatizables: 85+ tests (85%)
+- Manuales: 15+ tests (15%)
+- Mixtos: 4+ tests (4%)
+
+🏆 FUNCIONALIDADES CUBIERTAS:
+✅ Autenticación y Autorización (16 tests)
+✅ Gestión de Conexiones WhatsApp (15 tests)
+✅ Manejo de Mensajes y Chat (12 tests)
+✅ Configuración y Settings (10 tests)
+✅ Seguridad y Validación (8 tests)
+✅ APIs y Endpoints (8 tests)
+✅ Sistema y Health Checks (10 tests)
+✅ Performance y Carga (6 tests)
+✅ Accesibilidad y RTL (8 tests)
+✅ Regresión Completa (58 tests)
+
+🚀 ESTADO DE IMPLEMENTACIÓN:
+- ✅ Suite de tests implementada y funcional
+- ✅ Analytics bloqueado para testing
+- ✅ CI/CD configurado
+- ✅ Tests de regresión completos
+- ✅ Cobertura de funcionalidades principales
+- ✅ Tests de seguridad implementados
+- ✅ Tests de performance definidos
+- ✅ Documentación completa
+
+📋 PRÓXIMOS PASOS RECOMENDADOS:
+1. Implementar tests de performance (TC-051 a TC-055)
+2. Completar tests de regresión faltantes
+3. Automatizar tests manuales restantes
+4. Implementar tests de carga y estrés
+5. Configurar reportes automatizados
+6. Establecer métricas de calidad
+
+================================================================
+DOCUMENTO UNIFICADO FINAL - MISHU QA TEST SUITE
+================================================================

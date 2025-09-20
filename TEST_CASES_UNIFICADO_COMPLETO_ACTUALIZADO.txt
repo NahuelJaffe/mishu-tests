@@ -1,0 +1,842 @@
+LISTA COMPLETA Y UNIFICADA DE TEST CASES - MISHU QA TESTS
+============================================================
+INCLUYE TODOS LOS TEST CASES DEL EXCEL MASTER + TESTS IMPLEMENTADOS
+================================================================
+
+INFORMACIÓN GENERAL DEL PROYECTO
+================================
+- Proyecto: WhatsApp Monitor (Mishu)
+- Total de archivos de test implementados: 34 archivos
+- Total de test cases del Excel Master: 64+ test cases
+- Total de test cases implementados: 79+ tests
+- Navegadores soportados: Chromium, Firefox, WebKit
+- Framework: Playwright
+- URL Base: https://mishu-web--pr67-faq-0n1j2wio.web.app/
+- Estado: Suite completa con analytics bloqueado y CI/CD configurado
+
+================================================================
+
+🎯 NUEVOS TEST CASES DEL EXCEL MASTER (64+ test cases)
+======================================================
+
+💨 SMOKE TESTS (5 tests)
+========================
+
+SMK-01: Smoke – Login
+  - Precondición: Login page
+  - Pasos: Ingresar credenciales válidas
+  - Resultado Esperado: Acceso exitoso al dashboard
+  - Automatización: Automatizable
+
+SMK-02: Smoke – Navegación principal
+  - Precondición: Usuario logueado
+  - Pasos: Entrar a Dashboard, Connections y Settings
+  - Resultado Esperado: Todas cargan sin errores
+  - Automatización: Automatizable
+
+SMK-03: Smoke – Connections list
+  - Precondición: Usuario logueado
+  - Pasos: Abrir sección Connections
+  - Resultado Esperado: Se muestran conversaciones (aunque estén vacías)
+  - Automatización: Automatizable
+
+SMK-04: Smoke – Mensajes en conversación
+  - Precondición: Usuario con 1+ conversación
+  - Pasos: Abrir conversación
+  - Resultado Esperado: Se visualizan mensajes o placeholder si está vacía
+  - Automatización: Automatizable
+
+SMK-05: Smoke – Settings
+  - Precondición: Usuario logueado
+  - Pasos: Abrir Settings
+  - Resultado Esperado: Se ven secciones (perfil, idioma, notificaciones)
+  - Automatización: Automatizable
+
+================================================================
+
+🔄 REGRESSION TESTS (8 tests)
+=============================
+
+REG-01: Regression – Login y Logout
+  - Precondición: Login page
+  - Pasos: Ingresar credenciales válidas → Logout
+  - Resultado Esperado: Login correcto y logout exitoso
+  - Automatización: Automatizable
+
+REG-02: Regression – Forgot Password básico
+  - Precondición: Login page
+  - Pasos: Recuperar contraseña con email válido
+  - Resultado Esperado: Email de reset enviado
+  - Automatización: Automatizable
+
+REG-03: Regression – Connections carga
+  - Precondición: Usuario logueado
+  - Pasos: Abrir Connections
+  - Resultado Esperado: Lista carga correctamente
+  - Automatización: Automatizable
+
+REG-04: Regression – Mensajes normales
+  - Precondición: Conversación activa
+  - Pasos: Enviar mensaje normal
+  - Resultado Esperado: Mensaje se muestra en la conversación
+  - Automatización: Automatizable
+
+REG-05: Regression – Mensajes flagged (placeholder)
+  - Precondición: Chat con flagged
+  - Pasos: Abrir conversación con flagged
+  - Resultado Esperado: Se ve placeholder 'Click to view text content'
+  - Automatización: Automatizable
+
+REG-06: Regression – Chat Image Preview
+  - Precondición: Chat con imagen
+  - Pasos: Click en imagen del chat
+  - Resultado Esperado: Modal muestra imagen ampliada
+  - Automatización: Automatizable
+
+REG-07: Regression – Settings idioma (RTL)
+  - Precondición: Usuario logueado
+  - Pasos: Cambiar idioma a Hebreo
+  - Resultado Esperado: UI cambia correctamente a RTL
+  - Automatización: Automatizable
+
+REG-08: Regression – Notificaciones Web Push
+  - Precondición: Usuario logueado
+  - Pasos: Activar Web Push
+  - Resultado Esperado: Dispositivo queda registrado
+  - Automatización: Automatizable
+
+================================================================
+
+⚡ PERFORMANCE TESTS (4 tests)
+==============================
+
+PERF-01: Performance – Conversación con 50k mensajes
+  - Precondición: Chat con 50k mensajes
+  - Pasos: Abrir conversación
+  - Resultado Esperado: Carga sin cuelgues, tiempo aceptable
+  - Automatización: Manual
+
+PERF-02: Performance – 100 usuarios concurrentes
+  - Precondición: Ambiente de staging
+  - Pasos: Simular 100 usuarios en paralelo
+  - Resultado Esperado: El sistema responde establemente
+  - Automatización: Manual
+
+PERF-03: Performance – Pico de 1000 mensajes flagged/min
+  - Precondición: Chat con IA activa
+  - Pasos: Generar 1000 mensajes flagged en 1 min
+  - Resultado Esperado: Dashboard responde sin caídas
+  - Automatización: Manual
+
+PERF-04: Performance – Reconexión tras red intermitente
+  - Precondición: Query en ejecución
+  - Pasos: Cortar y restaurar internet
+  - Resultado Esperado: Se recupera sin errores fatales
+  - Automatización: Manual
+
+================================================================
+
+🔐 AUTENTICACIÓN – FORGOT PASSWORD (12 tests)
+=============================================
+
+TC-FP01: Forgot Password – email inválido
+  - Precondición: Login page
+  - Pasos: Ingresar 'abc123' en email
+  - Resultado Esperado: Mensaje 'Formato inválido'
+  - Automatización: Automatizable
+
+TC-FP02: Forgot Password – email no registrado
+  - Precondición: Login page
+  - Pasos: Ingresar email no existente
+  - Resultado Esperado: Mensaje neutral de confirmación
+  - Automatización: Automatizable
+
+TC-FP03: Forgot Password – campo vacío
+  - Precondición: Login page
+  - Pasos: Enviar sin email
+  - Resultado Esperado: Mensaje 'Email obligatorio'
+  - Automatización: Automatizable
+
+TC-FP04: Forgot Password – rate limit
+  - Precondición: Login page
+  - Pasos: Solicitar varias veces seguidas
+  - Resultado Esperado: Bloqueo temporal o retraso
+  - Automatización: Automatizable con esfuerzo
+
+TC-FP05: Forgot Password – múltiples links
+  - Precondición: Login page
+  - Pasos: Solicitar 2 veces y abrir 1er link
+  - Resultado Esperado: 1er link inválido, solo funciona el último
+  - Automatización: Manual
+
+TC-FP06: Forgot Password – expiración de link
+  - Precondición: Login page
+  - Pasos: Usar link después de 24h
+  - Resultado Esperado: Link expirado
+  - Automatización: Manual
+
+TC-FP07: Forgot Password – link reutilizado
+  - Precondición: Login page
+  - Pasos: Usar link válido dos veces
+  - Resultado Esperado: Segunda vez inválido
+  - Automatización: Manual
+
+TC-FP08: Password Reset – contraseña débil
+  - Precondición: Formulario reset
+  - Pasos: Ingresar '12345'
+  - Resultado Esperado: Error de seguridad
+  - Automatización: Automatizable
+
+TC-FP09: Password Reset – nueva contraseña
+  - Precondición: Formulario reset
+  - Pasos: Ingresar nueva válida
+  - Resultado Esperado: Login exitoso con nueva
+  - Automatización: Automatizable
+
+TC-FP10: Password Reset – contraseña antigua
+  - Precondición: Formulario reset
+  - Pasos: Intentar login con la antigua
+  - Resultado Esperado: Acceso rechazado
+  - Automatización: Automatizable
+
+TC-FP11: Password Reset – logout de sesiones activas
+  - Precondición: Sesión en varios dispositivos
+  - Pasos: Resetear contraseña
+  - Resultado Esperado: Todas las sesiones previas expiran
+  - Automatización: Manual
+
+================================================================
+
+🔐 AUTENTICACIÓN GENERAL (4 tests)
+==================================
+
+TC-AUTH01: Login con sesión activa
+  - Precondición: Usuario logueado
+  - Pasos: Abrir /login
+  - Resultado Esperado: Redirige a dashboard
+  - Automatización: Automatizable
+
+TC-AUTH02: Intentos fallidos consecutivos
+  - Precondición: Login page
+  - Pasos: 5 intentos fallidos
+  - Resultado Esperado: Bloqueo temporal o captcha
+  - Automatización: Automatizable con esfuerzo
+
+TC-AUTH03: Token/cookie expirado
+  - Precondición: Sesión expirada
+  - Pasos: Usar token viejo
+  - Resultado Esperado: Redirige a login
+  - Automatización: Automatizable
+
+TC-AUTH04: Protección CSRF en requests críticas
+  - Precondición: Sesión activa
+  - Pasos: Enviar request crítica sin token
+  - Resultado Esperado: Request rechazada
+  - Automatización: Automatizable con esfuerzo
+
+================================================================
+
+💬 MENSAJES (4 tests)
+====================
+
+TC-MSG01: Archivos adjuntos inválidos
+  - Precondición: Chat abierto
+  - Pasos: Subir .exe
+  - Resultado Esperado: Rechazo del archivo
+  - Automatización: Automatizable
+
+TC-MSG02: XSS/HTML
+  - Precondición: Chat abierto
+  - Pasos: Enviar '<script>'
+  - Resultado Esperado: Sanitización (se ve como texto)
+  - Automatización: Automatizable con esfuerzo
+
+TC-MSG03: Texto muy largo (10k chars)
+  - Precondición: Chat abierto
+  - Pasos: Enviar 10.000 caracteres
+  - Resultado Esperado: UI lo maneja correctamente
+  - Automatización: Automatizable con esfuerzo
+
+TC-MSG04: Idiomas/RTL/Emojis
+  - Precondición: Chat abierto
+  - Pasos: Enviar hebreo/árabe/emojis
+  - Resultado Esperado: Render correcto
+  - Automatización: Automatizable con esfuerzo
+
+================================================================
+
+🖼️ CHAT IMAGE PREVIEW (3 tests)
+===============================
+
+TC-PREV01: Preview – Imagen eliminada
+  - Precondición: Chat con imagen
+  - Pasos: Click en preview de imagen borrada
+  - Resultado Esperado: Placeholder o error claro
+  - Automatización: Automatizable
+
+TC-PREV02: Preview – Móvil (320px)
+  - Precondición: App en 320px
+  - Pasos: Abrir modal
+  - Resultado Esperado: Layout adaptado, sin romper diseño
+  - Automatización: Automatizable
+
+TC-PREV03: Preview – Accesibilidad
+  - Precondición: Modal abierto
+  - Pasos: Navegar con teclado
+  - Resultado Esperado: Funciona correctamente con teclado
+  - Automatización: Automatizable
+
+================================================================
+
+⚡ PERFORMANCE ADICIONALES (2 tests)
+===================================
+
+TC-PERF01: Miles de mensajes reportados
+  - Precondición: Chat con miles de mensajes
+  - Pasos: Abrir sección
+  - Resultado Esperado: App responde sin colgarse
+  - Automatización: Manual
+
+TC-PERF02: Red intermitente durante query
+  - Precondición: Query en ejecución
+  - Pasos: Cortar y restaurar red
+  - Resultado Esperado: Se recupera sin error fatal
+  - Automatización: Manual
+
+================================================================
+
+🚩 CONNECTIONS – FLAGGED MESSAGES (7 tests)
+===========================================
+
+TC-FLG01: Flagged – placeholder inicial
+  - Precondición: Conversación con flagged
+  - Pasos: Abrir conversación
+  - Resultado Esperado: Se ve 'Click to view text content'
+  - Automatización: Automatizable
+
+TC-FLG02: Flagged – mostrar contenido + explicación
+  - Precondición: Mensaje con placeholder
+  - Pasos: Click en 'Click to view text content'
+  - Resultado Esperado: Se revela mensaje + explicación IA
+  - Automatización: Automatizable
+
+TC-FLG03: Flagged – ocultar mensaje revelado
+  - Precondición: Mensaje revelado
+  - Pasos: Click en 'Hide'
+  - Resultado Esperado: Vuelve a estado placeholder
+  - Automatización: Automatizable
+
+TC-FLG04: Flagged – feedback Helpful/Not Helpful
+  - Precondición: Mensaje revelado
+  - Pasos: Click en Helpful o Not Helpful
+  - Resultado Esperado: Feedback registrado
+  - Automatización: Automatizable
+
+TC-FLG05: Flagged – múltiples en una conversación
+  - Precondición: Chat con 2+ flagged
+  - Pasos: Expandir solo uno
+  - Resultado Esperado: Independientes entre sí
+  - Automatización: Automatizable
+
+TC-FLG06: Flagged – accesibilidad teclado
+  - Precondición: Mensaje flagged
+  - Pasos: Usar Tab + Enter para expandir
+  - Resultado Esperado: Accesible sin mouse
+  - Automatización: Automatizable
+
+TC-FLG07: Flagged – mensaje eliminado en origen
+  - Precondición: Mensaje borrado en WhatsApp
+  - Pasos: Abrir conversación
+  - Resultado Esperado: Placeholder 'mensaje eliminado', UI estable
+  - Automatización: Automatizable
+
+================================================================
+
+⚙️ SETTINGS – APP INSTALLATION (4 tests)
+========================================
+
+TC-SET01: Instalar Mishu (Chrome)
+  - Precondición: Usuario en Settings
+  - Pasos: Click en 'Install' en Chrome
+  - Resultado Esperado: Se instala PWA correctamente
+  - Automatización: Manual
+
+TC-SET02: Instalar Mishu (Safari iOS)
+  - Precondición: Usuario en Settings
+  - Pasos: Click en 'Install' en Safari iOS
+  - Resultado Esperado: App aparece en pantalla inicial
+  - Automatización: Manual
+
+TC-SET03: Notificaciones push tras instalar
+  - Precondición: App instalada
+  - Pasos: Cerrar navegador y enviar notificación
+  - Resultado Esperado: Llega notificación con navegador cerrado
+  - Automatización: Manual
+
+TC-SET04: Acceso offline con caché
+  - Precondición: App instalada
+  - Pasos: Abrir sin internet
+  - Resultado Esperado: Carga básica offline con datos cacheados
+  - Automatización: Manual
+
+================================================================
+
+⚙️ SETTINGS – PROFILE SETTINGS (3 tests)
+========================================
+
+TC-SET05: Editar Display Name válido
+  - Precondición: Usuario en Settings
+  - Pasos: Cambiar Display Name y guardar
+  - Resultado Esperado: Se actualiza nombre
+  - Automatización: Automatizable
+
+TC-SET06: Display Name vacío
+  - Precondición: Usuario en Settings
+  - Pasos: Borrar Display Name y guardar
+  - Resultado Esperado: Error de validación: 'Nombre obligatorio'
+  - Automatización: Automatizable
+
+TC-SET07: Email no editable
+  - Precondición: Usuario en Settings
+  - Pasos: Intentar editar email
+  - Resultado Esperado: Campo bloqueado, no cambia
+  - Automatización: Automatizable
+
+================================================================
+
+🔔 SETTINGS – NOTIFICATION SETTINGS (4 tests)
+=============================================
+
+TC-SET08: Activar notificaciones WhatsApp
+  - Precondición: Usuario en Settings
+  - Pasos: Activar toggle WhatsApp Notifications
+  - Resultado Esperado: Se habilitan notificaciones con número verificado
+  - Automatización: Manual
+
+TC-SET09: Validación número inválido
+  - Precondición: Usuario en Settings
+  - Pasos: Ingresar número con formato inválido
+  - Resultado Esperado: Error 'Formato inválido'
+  - Automatización: Automatizable
+
+TC-SET10: Registrar dispositivo Web Push
+  - Precondición: Usuario en Settings
+  - Pasos: Click 'Register Current Device'
+  - Resultado Esperado: Aparece en Registered Devices
+  - Automatización: Manual
+
+TC-SET11: Eliminar dispositivo registrado
+  - Precondición: Usuario en Settings
+  - Pasos: Click en ícono de eliminar
+  - Resultado Esperado: El dispositivo se elimina y no recibe notificaciones
+  - Automatización: Manual
+
+TC-SET12: Refresh devices
+  - Precondición: Usuario en Settings
+  - Pasos: Click en 'Refresh Devices'
+  - Resultado Esperado: Lista de dispositivos se actualiza
+  - Automatización: Automatizable
+
+================================================================
+
+🌐 SETTINGS – ACCOUNT SETTINGS (3 tests)
+========================================
+
+TC-SET13: Cambiar idioma a Español
+  - Precondición: Usuario en Settings
+  - Pasos: Seleccionar Español en Language
+  - Resultado Esperado: UI se traduce a Español
+  - Automatización: Automatizable
+
+TC-SET14: Cambiar idioma a Hebreo (RTL)
+  - Precondición: Usuario en Settings
+  - Pasos: Seleccionar Hebreo
+  - Resultado Esperado: UI cambia con soporte RTL
+  - Automatización: Automatizable
+
+TC-SET15: Cambiar idioma repetidas veces
+  - Precondición: Usuario en Settings
+  - Pasos: Cambiar entre 3 idiomas varias veces
+  - Resultado Esperado: Siempre aplica correctamente
+  - Automatización: Automatizable
+
+================================================================
+
+🔧 TESTS IMPLEMENTADOS EN CÓDIGO (79+ tests)
+============================================
+
+🔐 TESTS DE AUTENTICACIÓN Y LOGIN (16 tests)
+=============================================
+
+📁 tests/whatsapp/auth.spec.js (4 tests)
+----------------------------------------
+TC-01: Login with valid credentials
+TC-02: Login with invalid credentials  
+TC-03: Password recovery flow
+TC-04: "Remember me" functionality
+
+📁 tests/auth/login-valid.spec.js (4 tests)
+-------------------------------------------
+TC-01: Login page loads correctly
+TC-02: Invalid login error messages
+TC-03: Forgot Password functionality
+TC-04: Sign Up functionality
+
+📁 tests/whatsapp/login-accessibility.spec.js (5 tests)
+------------------------------------------------------
+TC-01: Login page loads correctly
+TC-02: Login form elements are present
+TC-03: Login form accepts input
+TC-04: Navigation links are accessible
+TC-05: Page is responsive
+
+📁 tests/whatsapp/real-login-test.spec.js (2 tests)
+--------------------------------------------------
+TC-01: Real login with credentials
+TC-02: Verify authenticated state
+
+📁 tests/whatsapp/login-exploration.spec.js (1 test)
+---------------------------------------------------
+TC-03: Password recovery flow - ACTUALIZADO
+
+================================================================
+
+📝 TESTS DE REGISTRO Y SIGNUP (4 tests)
+=======================================
+
+📁 tests/whatsapp/signup.spec.js (4 tests)
+------------------------------------------
+TC-06: New user registration
+TC-07: Duplicate email/phone check
+TC-08: Password requirements validation
+TC-09: Email verification flow
+
+================================================================
+
+🏠 TESTS DE DASHBOARD (3 tests)
+==============================
+
+📁 tests/whatsapp/dashboard.spec.js (3 tests)
+---------------------------------------------
+TC-10: Empty state display
+TC-11: Navigation menu functionality
+TC-12: Quick actions accessibility
+
+================================================================
+
+🔗 TESTS DE GESTIÓN DE CONEXIONES (12 tests)
+============================================
+
+📁 tests/whatsapp/connection.spec.js (4 tests)
+----------------------------------------------
+TC-13: QR code scanning
+TC-14: Connection status updates
+TC-15: Multiple connections management
+TC-16: Disconnect/reconnect flow
+
+📁 tests/whatsapp/connection-detailed.spec.js (8 tests)
+------------------------------------------------------
+TC-13: Botón Add Child's WhatsApp
+TC-14: Estado vacío de conexiones
+TC-15: Navegación de la página
+TC-16: Toggle del sidebar
+TC-17: Metadata de la página
+TC-18: Responsividad básica
+TC-19: Accesibilidad básica
+TC-20: Elementos de estado
+
+================================================================
+
+📱 TESTS DE MONITOREO DE MENSAJES (4 tests)
+===========================================
+
+📁 tests/whatsapp/message-monitoring.spec.js (4 tests)
+-----------------------------------------------------
+TC-17: Message display
+TC-18: Message grouping
+TC-19: Manual message flagging
+TC-20: Bulk actions on messages
+
+================================================================
+
+🎨 TESTS DE INTERFAZ DE USUARIO (4 tests)
+=========================================
+
+📁 tests/whatsapp/ui.spec.js (4 tests)
+---------------------------------------
+TC-21: Responsive design
+TC-22: Language switching
+TC-23: RTL support (Hebrew)
+TC-24: Dark/light mode
+
+================================================================
+
+⚙️ TESTS DE PERFIL Y CONFIGURACIÓN (4 tests)
+============================================
+
+📁 tests/whatsapp/profile-settings.spec.js (4 tests)
+----------------------------------------------------
+TC-25: Profile update
+TC-26: Password change
+TC-27: Notification preferences
+TC-28: Account deletion
+
+================================================================
+
+🔒 TESTS DE SEGURIDAD (4 tests)
+==============================
+
+📁 tests/whatsapp/security.spec.js (4 tests)
+--------------------------------------------
+TC-33: Session management
+TC-34: Data encryption
+TC-35: Sensitive data exposure
+TC-36: Logout functionality
+
+================================================================
+
+🔔 TESTS DE NOTIFICACIONES (3 tests)
+====================================
+
+📁 tests/whatsapp/notifications.spec.js (3 tests)
+-------------------------------------------------
+TC-37: Browser notifications
+TC-38: Email notifications
+TC-39: Notification preferences
+
+================================================================
+
+❌ TESTS DE MANEJO DE ERRORES (4 tests)
+=======================================
+
+📁 tests/whatsapp/error-handling.spec.js (4 tests)
+--------------------------------------------------
+TC-29: Offline behavior
+TC-30: Network recovery
+TC-31: Invalid QR code handling
+TC-32: Server error states
+
+================================================================
+
+🆘 TESTS DE AYUDA Y SOPORTE (3 tests)
+=====================================
+
+📁 tests/whatsapp/help-support.spec.js (3 tests)
+------------------------------------------------
+TC-40: FAQ section
+TC-41: Contact form
+TC-42: Support email response
+
+================================================================
+
+🌐 TESTS DE API (22 tests)
+==========================
+
+📁 tests/api/auth-api.spec.js (5 tests)
+---------------------------------------
+API-01: Login endpoint validation
+API-02: Invalid login credentials
+API-03: Token validation endpoint
+API-04: Password reset request
+API-05: Logout endpoint
+
+📁 tests/api/whatsapp-api.spec.js (6 tests)
+-------------------------------------------
+API-06: Get WhatsApp connections
+API-07: Create new WhatsApp connection
+API-08: Get QR code for connection
+API-09: Get messages for connection
+API-10: Flag message as important
+API-11: Delete WhatsApp connection
+
+📁 tests/api/user-profile-api.spec.js (5 tests)
+-----------------------------------------------
+API-12: Get user profile
+API-13: Update user profile
+API-14: Get notification preferences
+API-15: Update notification preferences
+API-16: Change password
+
+📁 tests/api/system-health-api.spec.js (6 tests)
+------------------------------------------------
+API-17: Health check endpoint
+API-18: API version endpoint
+API-19: Rate limiting validation
+API-20: CORS headers validation
+API-21: Error handling - 404 endpoint
+API-22: Security headers validation
+
+================================================================
+
+🔍 TESTS DE ANALYTICS Y MONITOREO (7 tests)
+===========================================
+
+📁 tests/analytics-blocking-test.spec.js (1 test)
+📁 tests/analytics-blocking-simple-test.spec.js (1 test)
+📁 tests/analytics-monitoring-test.spec.js (1 test)
+📁 tests/analytics-network-capture.spec.js (1 test)
+📁 tests/analytics-blocking-final-test.spec.js (1 test)
+📁 tests/analytics-deep-analysis.spec.js (1 test)
+📁 tests/analytics-debug-test.spec.js (1 test)
+
+================================================================
+
+🏥 TESTS DE SALUD DEL SISTEMA (5 tests)
+=======================================
+
+📁 tests/system-health.spec.js (5 tests)
+----------------------------------------
+TC-01: Configuración básica funciona
+TC-02: Setup de analytics funciona
+TC-03: Variables de entorno detectadas correctamente
+TC-04: Navegación a página local funciona
+TC-05: Sistema listo para CI
+
+================================================================
+
+💨 TESTS DE SMOKE (4 tests)
+===========================
+
+📁 tests/smoke-test.spec.js (4 tests)
+-------------------------------------
+Application loads successfully
+Login page is accessible
+Basic login flow works
+Page responds to user interactions
+
+================================================================
+
+🔧 TESTS DE CONFIGURACIÓN Y UTILIDADES (2 tests)
+================================================
+
+📁 tests/config-verification.spec.js (1 test)
+📁 tests/example.spec.js (1 test)
+
+================================================================
+
+📊 RESUMEN ESTADÍSTICO COMPLETO
+==============================
+
+TOTALES DEL EXCEL MASTER:
+- 💨 Smoke Tests: 5 tests
+- 🔄 Regression Tests: 8 tests
+- ⚡ Performance Tests: 6 tests
+- 🔐 Autenticación - Forgot Password: 12 tests
+- 🔐 Autenticación General: 4 tests
+- 💬 Mensajes: 4 tests
+- 🖼️ Chat Image Preview: 3 tests
+- 🚩 Connections - Flagged Messages: 7 tests
+- ⚙️ Settings - App Installation: 4 tests
+- ⚙️ Settings - Profile Settings: 3 tests
+- 🔔 Settings - Notification Settings: 5 tests
+- 🌐 Settings - Account Settings: 3 tests
+
+TOTAL EXCEL MASTER: 64+ test cases
+
+TOTALES IMPLEMENTADOS EN CÓDIGO:
+- 🔐 Autenticación y Login: 16 tests
+- 📝 Registro y Signup: 4 tests  
+- 🏠 Dashboard: 3 tests
+- 🔗 Gestión de Conexiones: 12 tests
+- 📱 Monitoreo de Mensajes: 4 tests
+- 🎨 Interfaz de Usuario: 4 tests
+- ⚙️ Perfil y Configuración: 4 tests
+- 🔒 Seguridad: 4 tests
+- 🔔 Notificaciones: 3 tests
+- ❌ Manejo de Errores: 4 tests
+- 🆘 Ayuda y Soporte: 3 tests
+- 🌐 Tests de API: 22 tests
+- 🔍 Analytics y Monitoreo: 7 tests
+- 🏥 Salud del Sistema: 5 tests
+- 💨 Smoke Tests: 4 tests
+- 🔧 Configuración: 2 tests
+
+TOTAL IMPLEMENTADO: 101+ test cases
+
+TOTAL GENERAL COMBINADO: 165+ test cases
+
+================================================================
+
+🎯 ANÁLISIS DE COBERTURA
+========================
+
+TESTS IMPLEMENTADOS vs EXCEL MASTER:
+✅ Implementados completamente:
+- Autenticación básica (login/logout)
+- Registro de usuarios
+- Dashboard y navegación
+- Gestión de conexiones WhatsApp
+- Monitoreo de mensajes
+- Interfaz de usuario y responsividad
+- Configuración de perfil
+- Seguridad básica
+- Notificaciones
+- Manejo de errores
+- Ayuda y soporte
+- APIs del sistema
+- Analytics y monitoreo
+- Salud del sistema
+
+🔄 Parcialmente implementados:
+- Forgot Password (implementado básico, faltan casos específicos del Excel)
+- Performance tests (implementados básicos, faltan casos específicos)
+- Settings avanzados (implementados básicos, faltan casos específicos)
+
+❌ No implementados del Excel Master:
+- Smoke tests específicos (SMK-01 a SMK-05)
+- Regression tests específicos (REG-01 a REG-08)
+- Performance tests específicos (PERF-01 a PERF-04, TC-PERF01-02)
+- Casos específicos de Forgot Password (TC-FP01 a TC-FP11)
+- Casos específicos de autenticación (TC-AUTH01 a TC-AUTH04)
+- Casos específicos de mensajes (TC-MSG01 a TC-MSG04)
+- Casos específicos de Chat Image Preview (TC-PREV01 a TC-PREV03)
+- Casos específicos de Flagged Messages (TC-FLG01 a TC-FLG07)
+- Casos específicos de Settings (TC-SET01 a TC-SET15)
+
+================================================================
+
+🚀 PRÓXIMOS PASOS RECOMENDADOS
+==============================
+
+PRIORIDAD ALTA:
+1. Implementar Smoke Tests específicos (SMK-01 a SMK-05)
+2. Implementar Regression Tests específicos (REG-01 a REG-08)
+3. Implementar casos específicos de Forgot Password (TC-FP01 a TC-FP11)
+
+PRIORIDAD MEDIA:
+4. Implementar casos específicos de Flagged Messages (TC-FLG01 a TC-FLG07)
+5. Implementar casos específicos de Settings (TC-SET01 a TC-SET15)
+6. Implementar casos específicos de autenticación (TC-AUTH01 a TC-AUTH04)
+
+PRIORIDAD BAJA:
+7. Implementar Performance Tests específicos (PERF-01 a PERF-04)
+8. Implementar casos específicos de mensajes (TC-MSG01 a TC-MSG04)
+9. Implementar casos específicos de Chat Image Preview (TC-PREV01 a TC-PREV03)
+
+================================================================
+
+📋 ESTADO ACTUAL DEL PROYECTO
+=============================
+
+IMPLEMENTADO Y FUNCIONAL:
+✅ Suite base completa (101+ tests)
+✅ Analytics bloqueado
+✅ CI/CD configurado
+✅ Documentación completa
+✅ Tests robustos y estables
+
+PENDIENTE DE IMPLEMENTACIÓN:
+🔄 64+ test cases específicos del Excel Master
+🔄 Casos de prueba más detallados y específicos
+🔄 Performance tests avanzados
+🔄 Tests de regresión específicos
+
+================================================================
+
+Este documento representa la lista COMPLETA y ACTUALIZADA que incluye:
+1. Todos los test cases del Excel Master (64+ tests)
+2. Todos los test cases implementados en código (101+ tests)
+3. Análisis de cobertura y gaps
+4. Recomendaciones de próximos pasos
+
+La suite actual está bien implementada y funcional, pero hay una gran oportunidad de expandir la cobertura con los casos específicos del Excel Master.

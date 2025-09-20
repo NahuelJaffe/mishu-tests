@@ -1,0 +1,325 @@
+ANÁLISIS DE SMOKE TESTS - EXCEL STD_KPIs vs IMPLEMENTACIÓN ACTUAL
+================================================================
+
+📊 SITUACIÓN ACTUAL DE SMOKE TESTS
+==================================
+
+🔍 TESTS ACTUALES EN smoke-test.spec.js:
+========================================
+1. **Application loads successfully** (genérico)
+2. **Login page is accessible** (genérico)
+3. **Basic login flow works** (genérico)
+4. **Page responds to user interactions** (genérico)
+
+❌ PROBLEMAS IDENTIFICADOS:
+- No siguen la numeración TC-XXX del Excel
+- No tienen nombres específicos del Excel STD_KPIs
+- Son tests genéricos, no específicos de funcionalidad
+- No están organizados por test cases del Excel
+
+================================================================
+
+📋 SMOKE TESTS EN EXCEL STD_KPIs (16 tests)
+===========================================
+
+✅ TESTS DEFINIDOS EN EXCEL:
+1. **TC-001**: "Remember me" functionality
+2. **TC-002**: Invalid login credentials
+3. **TC-003**: Login endpoint validation
+4. **TC-004**: Login form accepts input
+5. **TC-005**: Login form elements are present
+6. **TC-006**: Login page loads correctly
+7. **TC-007**: Login with invalid credentials
+8. **TC-008**: Login with valid credentials
+9. **TC-009**: Logout endpoint
+10. **TC-010**: Logout functionality
+11. **TC-011**: Real login with credentials
+12. **TC-012**: Smoke – Connections list
+13. **TC-013**: Smoke – Login
+14. **TC-014**: Smoke – Mensajes en conversación
+15. **TC-015**: Smoke – Navegación principal
+16. **TC-016**: Smoke – Settings
+
+================================================================
+
+🔍 COMPARACIÓN: ACTUAL vs EXCEL STD_KPIs
+========================================
+
+❌ TESTS ACTUALES QUE NO SIGUEN EL EXCEL:
+- "Application loads successfully" → No corresponde a ningún TC
+- "Login page is accessible" → Parcialmente TC-006
+- "Basic login flow works" → Parcialmente TC-008
+- "Page responds to user interactions" → Parcialmente TC-004
+
+✅ TESTS QUE YA ESTÁN IMPLEMENTADOS EN OTRAS BRANCHES:
+- **TC-001**: "Remember me" functionality → ✅ En auth.spec.js (TC-04)
+- **TC-002**: Invalid login credentials → ✅ En auth.spec.js (TC-02)
+- **TC-008**: Login with valid credentials → ✅ En auth.spec.js (TC-01)
+- **TC-010**: Logout functionality → ✅ En auth.spec.js
+- **TC-011**: Real login with credentials → ✅ En real-login-test.spec.js
+- **TC-012**: Connections list → ✅ En connection.spec.js (TC-13)
+- **TC-013**: Login → ✅ En auth.spec.js
+- **TC-014**: Mensajes en conversación → ✅ En connection.spec.js (TC-14)
+- **TC-015**: Navegación principal → ✅ En connection.spec.js (TC-15)
+- **TC-016**: Settings → ✅ En connection.spec.js (TC-16)
+
+❌ TESTS FALTANTES EN SMOKE TESTS:
+- **TC-003**: Login endpoint validation
+- **TC-004**: Login form accepts input
+- **TC-005**: Login form elements are present
+- **TC-006**: Login page loads correctly
+- **TC-007**: Login with invalid credentials (duplicado de TC-002)
+- **TC-009**: Logout endpoint
+
+================================================================
+
+🎯 RECOMENDACIONES DE ACTUALIZACIÓN
+===================================
+
+🔄 ESTRATEGIA RECOMENDADA:
+=========================
+
+1. **MANTENER** smoke-test.spec.js como tests básicos de infraestructura
+2. **CREAR** un nuevo archivo smoke-tests-complete.spec.js con todos los TC del Excel
+3. **ORGANIZAR** por funcionalidades específicas del Excel
+4. **NUMERAR** correctamente con TC-XXX
+
+📋 NUEVO ARCHIVO RECOMENDADO: smoke-tests-complete.spec.js
+==========================================================
+
+```javascript
+const { test, expect } = require('@playwright/test');
+const testConfig = require('../test-config');
+
+test.describe('Smoke Tests - Complete Suite (Excel STD_KPIs)', () => {
+
+  // TESTS DE LOGIN Y AUTENTICACIÓN
+  test('TC-001: Remember me functionality', async ({ page, context }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-002: Invalid login credentials', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-003: Login endpoint validation', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-004: Login form accepts input', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-005: Login form elements are present', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-006: Login page loads correctly', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-007: Login with invalid credentials', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-008: Login with valid credentials', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-009: Logout endpoint', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-010: Logout functionality', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-011: Real login with credentials', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  // TESTS DE FUNCIONALIDADES PRINCIPALES
+  test('TC-012: Smoke – Connections list', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-013: Smoke – Login', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-014: Smoke – Mensajes en conversación', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-015: Smoke – Navegación principal', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+  test('TC-016: Smoke – Settings', async ({ page }) => {
+    // Implementar según especificación del Excel
+  });
+
+});
+```
+
+================================================================
+
+📊 WORKFLOW RECOMENDADO PARA SMOKE TESTS
+========================================
+
+🎯 CREAR NUEVO WORKFLOW: smoke-tests-complete.yml
+================================================
+
+```yaml
+name: Smoke Tests Complete - Excel STD_KPIs
+
+on:
+  push:
+    branches: [ main, smoke-tests-complete ]
+  pull_request:
+    branches: [ main, smoke-tests-complete ]
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of smoke tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+          - core
+          - extended
+          - all
+
+jobs:
+  smoke-tests-chromium:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Run Smoke Tests Complete - Chromium
+      run: |
+        echo "🔥 Ejecutando Smoke Tests Complete en Chromium"
+        
+        SCOPE="${{ github.event.inputs.test_scope || 'core' }}"
+        
+        case $SCOPE in
+          "core")
+            echo "🧪 Ejecutando TC-001 a TC-011 (Core smoke tests)"
+            npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-1]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            ;;
+          "extended")
+            echo "🧪 Ejecutando TC-001 a TC-014 (Extended smoke tests)"
+            npx playwright test tests/smoke-tests-complete.spec.js --grep "TC-00[1-9]|TC-01[0-4]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            ;;
+          "all")
+            echo "🧪 Ejecutando TC-001 a TC-016 (All smoke tests)"
+            npx playwright test tests/smoke-tests-complete.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+            ;;
+        esac
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+    
+    - name: Upload Smoke Test Results - Chromium
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: smoke-test-results-chromium
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+
+  smoke-tests-firefox:
+    # Similar configuration for Firefox
+    # ...
+
+  smoke-tests-webkit:
+    # Similar configuration for WebKit
+    # ...
+
+  smoke-summary:
+    needs: [smoke-tests-chromium, smoke-tests-firefox, smoke-tests-webkit]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Generate Smoke Tests Summary
+      run: |
+        echo "## 🔥 Smoke Tests Complete Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Core:** TC-001 a TC-011 (Login y autenticación)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Extended:** TC-001 a TC-014 (Core + funcionalidades básicas)" >> $GITHUB_STEP_SUMMARY
+        echo "- **All:** TC-001 a TC-016 (Todos los smoke tests)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Objetivo: Validar funcionalidad básica según Excel STD_KPIs" >> $GITHUB_STEP_SUMMARY
+```
+
+================================================================
+
+🚀 PLAN DE IMPLEMENTACIÓN
+=========================
+
+📋 FASE 1: PREPARACIÓN
+======================
+1. ✅ Crear nuevo archivo `smoke-tests-complete.spec.js`
+2. ✅ Implementar los 16 test cases del Excel STD_KPIs
+3. ✅ Seguir exactamente las especificaciones del Excel
+4. ✅ Usar numeración TC-XXX correcta
+
+📋 FASE 2: WORKFLOW
+==================
+1. ✅ Crear nuevo workflow `smoke-tests-complete.yml`
+2. ✅ Configurar scopes (core, extended, all)
+3. ✅ Configurar ejecución en 3 navegadores
+4. ✅ Configurar reportes y artifacts
+
+📋 FASE 3: INTEGRACIÓN
+======================
+1. ✅ Crear nueva branch `smoke-tests-complete`
+2. ✅ Integrar con workflows existentes
+3. ✅ Probar ejecución completa
+4. ✅ Documentar cambios
+
+================================================================
+
+🎯 RESPUESTA A LA PREGUNTA
+==========================
+
+❓ **¿Hay que modificar algo en Smoke Tests?**
+
+✅ **SÍ, hay que hacer cambios significativos:**
+
+1. **PROBLEMA ACTUAL**: Los smoke tests actuales no siguen el Excel STD_KPIs
+2. **SOLUCIÓN**: Crear nuevos smoke tests que sigan exactamente el Excel
+3. **BENEFICIO**: Cobertura completa de 16 test cases específicos
+4. **RESULTADO**: Smoke tests alineados con estándares del Excel
+
+📊 **CAMBIOS ESPECÍFICOS RECOMENDADOS:**
+- Crear nuevo archivo con 16 test cases del Excel
+- Implementar numeración TC-XXX correcta
+- Crear workflow específico para smoke tests completos
+- Mantener archivo actual como tests básicos de infraestructura
+
+================================================================
+ANÁLISIS COMPLETADO - SMOKE TESTS REQUIEREN ACTUALIZACIÓN
+================================================================
