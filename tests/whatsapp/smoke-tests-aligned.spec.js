@@ -117,14 +117,14 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
       }
     });
     
-    // Intentar abrir una conversación
-    // Buscar elementos que puedan ser conversaciones
-    const conversationElements = page.locator('[data-testid="conversation"], .conversation, .chat-item, .message-list');
+    // Buscar conexiones activas para hacer clic
+    const connectionElements = page.locator('[data-testid="connection"], .connection-item, .connection-card, .connection');
     
-    // Si hay conversaciones disponibles, hacer clic en la primera
-    const conversationCount = await conversationElements.count();
-    if (conversationCount > 0) {
-      await conversationElements.first().click();
+    // Si hay conexiones disponibles, hacer clic en la primera
+    const connectionCount = await connectionElements.count();
+    if (connectionCount > 0) {
+      console.log(`🔗 Encontradas ${connectionCount} conexiones, haciendo clic en la primera`);
+      await connectionElements.first().click();
       
       // Esperar a que cargue la conversación
       await page.waitForTimeout(3000);
@@ -133,25 +133,33 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
       const messages = page.locator('[data-testid="message"], .message, .chat-message');
       await expect(messages.first()).toBeVisible({ timeout: 10000 });
       
-      // Verificar imágenes en mensajes
-      const images = page.locator('img[src*="pps.whatsapp.net"], .message img, .chat-image');
+      // Esperar un poco más para que carguen las imágenes
+      await page.waitForTimeout(2000);
+      
+      // Verificar imágenes en mensajes (más selectores)
+      const images = page.locator('img[src*="pps.whatsapp.net"], .message img, .chat-image, img[src*="whatsapp"], .message-content img');
       const imageCount = await images.count();
       
-      if (imageCount > 0) {
-        console.log(`📸 Encontradas ${imageCount} imágenes en la conversación`);
+      console.log(`📸 Encontradas ${imageCount} imágenes en la conversación`);
+      
+      // Verificar si hay imágenes con error (403)
+      if (imageErrors.length > 0) {
+        console.log(`🐛 BUG-01 CONFIRMADO: ${imageErrors.length} imágenes con error 403`);
+        console.log('📋 Detalles del error:', imageErrors);
         
-        // Verificar si hay imágenes con error (403)
-        if (imageErrors.length > 0) {
-          console.log(`🐛 BUG-01 CONFIRMADO: ${imageErrors.length} imágenes con error 403`);
-          console.log('📋 Detalles del error:', imageErrors);
-          
-          // El test pasa pero documenta el bug
-          console.log('⚠️ SMK-04: Mensajes cargan pero hay imágenes con error 403');
-        } else {
-          console.log('✅ SMK-04: Todas las imágenes cargan correctamente');
-        }
+        // El test pasa pero documenta el bug
+        console.log('⚠️ SMK-04: Mensajes cargan pero hay imágenes con error 403');
       } else {
-        console.log('ℹ️ SMK-04: No se encontraron imágenes en esta conversación');
+        console.log('✅ SMK-04: Todas las imágenes cargan correctamente');
+      }
+      
+      // Verificar también imágenes rotas en el DOM
+      const brokenImages = await page.locator('img').evaluateAll(imgs => 
+        imgs.filter(img => img.naturalWidth === 0 || img.naturalHeight === 0)
+      );
+      
+      if (brokenImages.length > 0) {
+        console.log(`🚨 BUG-01 ALTERNATIVO: ${brokenImages.length} imágenes rotas detectadas en DOM`);
       }
     }
     
