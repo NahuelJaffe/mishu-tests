@@ -1,0 +1,78 @@
+name: Smoke Tests Aligned - Excel v3
+
+on:
+  # Solo ejecución manual - triggers automáticos deshabilitados
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of smoke tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+          - core
+          - extended
+          - all
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run Smoke Tests - Core (SMK-01, SMK-02)
+        if: github.event.inputs.test_scope == 'core'
+        run: npx playwright test tests/whatsapp/smoke-tests-aligned.spec.js --grep "SMK-01|SMK-02" --project=${{ matrix.browser }}
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Run Smoke Tests - Extended (SMK-01 to SMK-04)
+        if: github.event.inputs.test_scope == 'extended'
+        run: npx playwright test tests/whatsapp/smoke-tests-aligned.spec.js --grep "SMK-01|SMK-02|SMK-03|SMK-04" --project=${{ matrix.browser }}
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Run Smoke Tests - All (SMK-01 to SMK-05)
+        if: github.event.inputs.test_scope == 'all'
+        run: npx playwright test tests/whatsapp/smoke-tests-aligned.spec.js --grep "SMK-01|SMK-02|SMK-03|SMK-04|SMK-05" --project=${{ matrix.browser }}
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: smoke-test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: smoke-test-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 30

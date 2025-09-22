@@ -208,6 +208,16 @@ async function setupAnalyticsForTest(page) {
   console.log('✅ Analytics blocking setup completed for test');
 }
 
+/**
+ * Setup específico para Smoke Tests
+ */
+async function setupAnalyticsForSmoke(page) {
+  console.log('🚫 Setting up analytics blocking for Smoke Tests...');
+  await setupAnalyticsForTest(page);
+  console.log('✅ Smoke Tests analytics blocking ready');
+}
+
 module.exports = {
-  setupAnalyticsForTest
+  setupAnalyticsForTest,
+  setupAnalyticsForSmoke
 };

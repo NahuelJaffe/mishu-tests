@@ -30,6 +30,7 @@
     "test:help": "playwright test tests/whatsapp/help-support.spec.js",
     "test:chat-image-preview": "playwright test tests/whatsapp/chat-image-preview.spec.js",
     "test:flagged-messages": "playwright test tests/whatsapp/flagged-messages.spec.js",
+    "test:smoke-aligned": "playwright test tests/whatsapp/smoke-tests-aligned.spec.js",
     "test:analysis": "playwright test tests/whatsapp/connection-analysis.spec.js",
     "test:detailed": "playwright test tests/whatsapp/connection-detailed.spec.js",
     "test:exploration": "playwright test tests/whatsapp/login-exploration.spec.js",
