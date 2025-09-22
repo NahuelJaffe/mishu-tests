@@ -32,27 +32,9 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     await expect(page.locator('button[type="submit"]')).toBeVisible();
     
     // Ingresar credenciales válidas y presionar Login
-    console.log('🔑 Usando credenciales:', {
-      email: process.env.TEST_EMAIL ? `${process.env.TEST_EMAIL.substring(0, 3)}***` : 'NO_DEFINIDO',
-      password: process.env.TEST_PASSWORD ? '***' : 'NO_DEFINIDO'
-    });
-    
     await page.fill('input[type="email"]', process.env.TEST_EMAIL);
     await page.fill('input[type="password"]', process.env.TEST_PASSWORD);
     await page.click('button[type="submit"]');
-    
-    // Esperar respuesta del login
-    console.log('⏳ Esperando respuesta del login...');
-    await page.waitForTimeout(3000);
-    
-    // Verificar si hay errores de login
-    const errorMessages = page.locator('text=Error, text=error, .error, [data-testid="error"]');
-    const errorCount = await errorMessages.count();
-    if (errorCount > 0) {
-      console.log('❌ Error de login detectado:', await errorMessages.first().textContent());
-    }
-    
-    console.log('📍 URL después del login:', page.url());
     
     // Resultado esperado: Acceso exitoso a /connections
     await expect(page).toHaveURL(/.*connections/);
