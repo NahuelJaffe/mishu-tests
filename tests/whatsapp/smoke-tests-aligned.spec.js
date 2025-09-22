@@ -195,11 +195,11 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     await expect(page).toHaveURL(/.*connections/);
     
     // Abrir Settings
-    await page.click('text=Settings');
+    await page.click('a:has-text("Settings")');
     await expect(page).toHaveURL(/.*settings/);
     
     // Verificar que la página de Settings carga
-    await expect(page.locator('text=Settings')).toBeVisible();
+    await expect(page.locator('h1:has-text("Settings")')).toBeVisible();
     
     // Verificar que los controles responden (buscar elementos interactivos)
     const settingsElements = page.locator('input, button, select, .setting-item, .profile-setting');
