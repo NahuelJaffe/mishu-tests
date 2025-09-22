@@ -89,7 +89,7 @@ async function globalSetup(config) {
     try {
       // Test if the application is accessible
       console.log('📡 Testing application accessibility...');
-      await page.goto(process.env.BASE_URL || 'https://your-app.example.com/', { 
+      await page.goto(process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/', { 
         timeout: timeout,
         waitUntil: 'domcontentloaded' // Less strict than networkidle
       });
@@ -99,7 +99,7 @@ async function globalSetup(config) {
       
       // Test login page accessibility
       console.log('🔐 Testing login page...');
-      await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`, { 
+      await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/'}/login`, { 
         timeout: timeout,
         waitUntil: 'domcontentloaded'
       });

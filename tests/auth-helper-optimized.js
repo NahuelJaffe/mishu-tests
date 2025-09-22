@@ -9,7 +9,7 @@ async function loginOptimized(page) {
   if (currentUrl.includes('/login')) {
     // If we're on login page, the auth state might have expired
     // Fall back to manual login
-    const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
+    const baseURL = process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app';
     const email = process.env.TEST_EMAIL;
     const password = process.env.TEST_PASSWORD;
     
@@ -19,7 +19,7 @@ async function loginOptimized(page) {
     await page.waitForURL(/connections|dashboard|home/, { timeout: 15000 });
   } else if (!currentUrl.includes('/connections') && !currentUrl.includes('/dashboard') && !currentUrl.includes('/home')) {
     // Navigate to a known authenticated page
-    const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
+    const baseURL = process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app';
     await page.goto(`${baseURL}/connections`);
   }
   

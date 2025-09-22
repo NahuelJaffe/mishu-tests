@@ -25,7 +25,7 @@ test.describe('Smoke Tests', () => {
       
       // Verify we're on the right domain
       const currentUrl = page.url();
-      const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
+      const baseURL = process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app';
       const expectedDomain = baseURL.replace(/^https?:\/\//, '').replace(/\/$/, '');
       expect(currentUrl).toContain(expectedDomain);
       

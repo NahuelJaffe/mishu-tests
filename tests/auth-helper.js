@@ -8,7 +8,7 @@ async function login(page) {
   // Obtener credenciales de variables de entorno
   const email = process.env.TEST_EMAIL;
   const password = process.env.TEST_PASSWORD;
-  const baseUrl = process.env.BASE_URL || 'https://your-app.example.com/';
+  const baseUrl = process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/';
   
   console.log(`🔐 Intentando login con email configurado`);
   

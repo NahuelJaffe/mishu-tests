@@ -81,7 +81,7 @@ test.describe('🚫 Analytics Debug Test', () => {
     
     // 4. Navegar a la página
     console.log('🌐 Navegando a la página...');
-    await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}`);
+    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/'}`);
     
     // 5. Esperar un poco para que se carguen los scripts
     await page.waitForTimeout(3000);
