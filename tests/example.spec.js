@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('Home page loads correctly', async ({ page }) => {
-  await page.goto('https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/');
+  await page.goto('https://your-app.example.com/');
   await expect(page).toHaveTitle(/mishu | Child Safety Monitoring/);
 });
 

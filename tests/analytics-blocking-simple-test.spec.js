@@ -82,7 +82,7 @@ test.describe('Analytics Blocking Simple Test', () => {
     
     // Navegar a la página
     console.log('🌐 Navegando a la página...');
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/', {
+    await page.goto(process.env.BASE_URL || 'https://your-app.example.com/', {
       waitUntil: 'networkidle',
       timeout: 30000
     });

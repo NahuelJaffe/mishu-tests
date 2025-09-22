@@ -7,7 +7,7 @@ module.exports = {
   TEST_PASSWORD: process.env.TEST_PASSWORD || 'ExamplePassword123!',
   
   // URL base para testing - usar secret en CI, valor por defecto en local
-  BASE_URL: process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/',
+  BASE_URL: process.env.BASE_URL || 'https://your-app.example.com/',
   
   // Configuración de testing
   TEST_MODE: true,
@@ -15,7 +15,7 @@ module.exports = {
   ANALYTICS_DISABLED: true,
   
   // Configuración de API
-  API_BASE_URL: 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/api',
+  API_BASE_URL: 'https://your-app.example.com/api',
   API_TIMEOUT: 30000,
   
   // Configuración de timeouts

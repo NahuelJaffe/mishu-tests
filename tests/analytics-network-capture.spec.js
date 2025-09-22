@@ -216,7 +216,7 @@ test.describe('Analytics Network Capture', () => {
     
     // Navegar a la página principal
     console.log('🌐 Navegando a la página principal...');
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/', {
+    await page.goto(process.env.BASE_URL || 'https://your-app.example.com/', {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -227,7 +227,7 @@ test.describe('Analytics Network Capture', () => {
     
     // Navegar a otras páginas para capturar más tráfico
     console.log('🌐 Navegando a página de login...');
-    await page.goto(`${process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/'}/login`, {
+    await page.goto(`${process.env.BASE_URL || 'https://your-app.example.com/'}/login`, {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -382,7 +382,7 @@ test.describe('Analytics Network Capture', () => {
     });
     
     // Navegar a la página
-    await page.goto(process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app/', {
+    await page.goto(process.env.BASE_URL || 'https://your-app.example.com/', {
       waitUntil: 'networkidle',
       timeout: 30000
     });

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const baseURL = process.env.BASE_URL || 'https://mishu-web--pr69-performance-and-prof-8fsc02so.web.app';
+const baseURL = process.env.BASE_URL || 'https://your-app.example.com';
 
 // Helper function to safely parse JSON response
 async function safeJsonParse(response) {
