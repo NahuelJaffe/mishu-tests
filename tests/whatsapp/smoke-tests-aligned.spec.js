@@ -124,23 +124,28 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     const connectionCount = await connectionElements.count();
     if (connectionCount > 0) {
       console.log(`🔗 Encontradas ${connectionCount} conexiones, haciendo clic en la primera`);
-      await connectionElements.first().click();
       
-      // Esperar a que cargue la conversación
-      await page.waitForTimeout(3000);
+      // Hacer clic y esperar navegación
+      await Promise.all([
+        page.waitForURL(/.*\/conversations/, { timeout: 10000 }),
+        connectionElements.first().click()
+      ]);
+      
+      console.log('✅ Navegación a página de conversaciones completada');
+      console.log('📍 URL actual:', page.url());
       
       // Verificar que se muestran mensajes
       const messages = page.locator('[data-testid="message"], .message, .chat-message');
       await expect(messages.first()).toBeVisible({ timeout: 10000 });
       
-      // Esperar un poco más para que carguen las imágenes
-      await page.waitForTimeout(2000);
+      // Esperar un poco más para que carguen las imágenes en la página
+      await page.waitForTimeout(3000);
       
-      // Verificar imágenes en mensajes (más selectores)
-      const images = page.locator('img[src*="pps.whatsapp.net"], .message img, .chat-image, img[src*="whatsapp"], .message-content img');
+      // Verificar imágenes en mensajes de la página de conversaciones
+      const images = page.locator('img[src*="pps.whatsapp.net"], .message img, .chat-image, img[src*="whatsapp"], .message-content img, .conversation img');
       const imageCount = await images.count();
       
-      console.log(`📸 Encontradas ${imageCount} imágenes en la conversación`);
+      console.log(`📸 Encontradas ${imageCount} imágenes en la página de conversaciones`);
       
       // Verificar si hay imágenes con error (403)
       if (imageErrors.length > 0) {
