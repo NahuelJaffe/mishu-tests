@@ -38,7 +38,7 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     
     // Resultado esperado: Acceso exitoso a /connections
     await expect(page).toHaveURL(/.*connections/);
-    await expect(page.locator('text=Connections')).toBeVisible();
+    await expect(page.locator('h1:has-text("Connections")')).toBeVisible();
     
     console.log('✅ SMK-01: Login exitoso');
   });
@@ -55,14 +55,14 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     
     // Navegar entre Connections / Settings y volver
     // Ir a Settings
-    await page.click('text=Settings');
+    await page.click('a:has-text("Settings")');
     await expect(page).toHaveURL(/.*settings/);
-    await expect(page.locator('text=Settings')).toBeVisible();
+    await expect(page.locator('h1:has-text("Settings")')).toBeVisible();
     
     // Volver a Connections
-    await page.click('text=Connections');
+    await page.click('a:has-text("Connections")');
     await expect(page).toHaveURL(/.*connections/);
-    await expect(page.locator('text=Connections')).toBeVisible();
+    await expect(page.locator('h1:has-text("Connections")')).toBeVisible();
     
     // Resultado esperado: Navegación fluida sin errores visibles
     console.log('✅ SMK-02: Navegación principal exitosa');
