@@ -79,7 +79,7 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     await expect(page).toHaveURL(/.*connections/);
     
     // Abrir Connections
-    await expect(page.locator('text=Connections')).toBeVisible();
+    await expect(page.locator('h1:has-text("Connections")')).toBeVisible();
     
     // Verificar que se muestra la lista de conexiones
     // Puede estar vacía o con conexiones existentes
