@@ -30,6 +30,9 @@ async function setupAnalyticsForTest(page) {
   console.log('🚫 Setting up analytics blocking for individual test...');
   console.log('🔍 DEBUG: setupAnalyticsForTest called from global setup');
   
+  // Resetear flag de violación por test
+  global.analyticsViolationLogged = false;
+  
   // Limpiar archivo de violaciones previo
   const violationsLogPath = 'test-results/analytics-violations.log';
   if (fs.existsSync(violationsLogPath)) {
@@ -116,14 +119,20 @@ async function setupAnalyticsForTest(page) {
                               url.includes('hotjar') || url.includes('clarity');
     
     if (isAnalyticsRequest || isAnalyticsKeyword) {
-      console.log('🚫 TEST BLOCKED ROUTE:', url);
+      // Solo loggear la primera violación por test para evitar spam
+      if (!global.analyticsViolationLogged) {
+        console.log('🚫 TEST BLOCKED ROUTE:', url);
+        global.analyticsViolationLogged = true;
+      }
       
-      // Log de violación
-      logAnalyticsViolation('REQUEST', url, {
-        method,
-        blocked: true,
-        reason: isAnalyticsRequest ? 'Analytics domain detected' : 'Analytics keyword detected'
-      });
+      // Log de violación (solo la primera)
+      if (!global.analyticsViolationLogged) {
+        logAnalyticsViolation('REQUEST', url, {
+          method,
+          blocked: true,
+          reason: isAnalyticsRequest ? 'Analytics domain detected' : 'Analytics keyword detected'
+        });
+      }
       
       // Abortar la request de analytics
       await route.abort('blockedbyclient');
