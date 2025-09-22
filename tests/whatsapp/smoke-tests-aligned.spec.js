@@ -5,7 +5,7 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { setupAnalyticsForSmoke } = require('../../analytics-setup');
+const { setupAnalyticsForSmoke } = require('../analytics-setup');
 
 test.describe('Smoke Tests - Excel v3 Aligned', () => {
   let page;
