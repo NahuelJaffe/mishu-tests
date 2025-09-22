@@ -86,7 +86,7 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     const connectionsList = page.locator('[data-testid="connections-list"], .connections-list, .connection-item');
     
     // Resultado esperado: Se listan las conexiones sin errores
-    await expect(page.locator('text=Connections')).toBeVisible();
+    await expect(page.locator('h1:has-text("Connections")')).toBeVisible();
     
     // Verificar que no hay errores visibles
     await expect(page.locator('text=Error, text=error, .error')).toHaveCount(0);
