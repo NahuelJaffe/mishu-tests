@@ -211,7 +211,7 @@ test.describe('Smoke Tests - Excel v3 Aligned', () => {
     }
     
     // Resultado esperado: Pantalla carga y controles responden
-    await expect(page.locator('text=Settings')).toBeVisible();
+    await expect(page.locator('h1:has-text("Settings")')).toBeVisible();
     
     console.log('✅ SMK-05: Settings cargada correctamente');
   });
