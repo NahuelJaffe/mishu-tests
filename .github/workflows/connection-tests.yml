@@ -1,10 +1,11 @@
 name: Connection Tests - All Browsers
 
 on:
-  push:
-    branches: [ main, connection-tests ]
-  pull_request:
-    branches: [ main, connection-tests ]
+  # Deshabilitado para ejecución manual únicamente
+  # push:
+  #   branches: [ main, connection-tests ]
+  # pull_request:
+  #   branches: [ main, connection-tests ]
   workflow_dispatch:
     inputs:
       test_scope:

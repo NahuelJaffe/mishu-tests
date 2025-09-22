@@ -1,6 +1,7 @@
 name: Authentication Tests - All Browsers
 
 on:
+  # Solo ejecución manual - triggers automáticos deshabilitados
   workflow_dispatch:
     inputs:
       test_scope:

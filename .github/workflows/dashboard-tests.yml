@@ -1,10 +1,11 @@
 name: Dashboard Tests - All Browsers
 
 on:
-  push:
-    branches: [ main, dashboard-tests ]
-  pull_request:
-    branches: [ main, dashboard-tests ]
+  # Deshabilitado para ejecución manual únicamente
+  # push:
+  #   branches: [ main, dashboard-tests ]
+  # pull_request:
+  #   branches: [ main, dashboard-tests ]
   workflow_dispatch:
     inputs:
       test_scope:
