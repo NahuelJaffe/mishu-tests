@@ -104,7 +104,11 @@ async function setupAnalyticsForTest(page) {
       'quantserve.com',
       'scorecardresearch.com',
       'adsystem.amazon.com',
-      'amazon-adsystem.com'
+      'amazon-adsystem.com',
+      // Firebase Analytics específicos (NO incluir Auth/Firestore)
+      'firebase.googleapis.com/analytics',
+      'firebaseapp.com/analytics',
+      'firebaseio.com/analytics'
     ];
     
     // Verificar si es una request de analytics real (solo dominios explícitos)
@@ -116,22 +120,21 @@ async function setupAnalyticsForTest(page) {
                               url.includes('facebook.com/tr') || url.includes('doubleclick.net') ||
                               url.includes('googletagmanager') || url.includes('mixpanel') ||
                               url.includes('amplitude') || url.includes('segment') ||
-                              url.includes('hotjar') || url.includes('clarity');
+                              url.includes('hotjar') || url.includes('clarity') ||
+                              // Firebase Analytics específicos
+                              (url.includes('firebase') && (url.includes('analytics') || url.includes('measurement'))) ||
+                              url.includes('firebase-analytics') || url.includes('firebase/measurement');
     
     if (isAnalyticsRequest || isAnalyticsKeyword) {
       // Solo loggear la primera violación por test para evitar spam
       if (!global.analyticsViolationLogged) {
         console.log('🚫 TEST BLOCKED ROUTE:', url);
-        global.analyticsViolationLogged = true;
-      }
-      
-      // Log de violación (solo la primera)
-      if (!global.analyticsViolationLogged) {
         logAnalyticsViolation('REQUEST', url, {
           method,
           blocked: true,
           reason: isAnalyticsRequest ? 'Analytics domain detected' : 'Analytics keyword detected'
         });
+        global.analyticsViolationLogged = true;
       }
       
       // Abortar la request de analytics
