@@ -1,0 +1,221 @@
+name: Flagged Messages Tests - All Browsers
+
+on:
+  # Solo ejecución manual - triggers automáticos deshabilitados
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of flagged messages tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+        - core
+        - extended
+        - all
+
+jobs:
+  test-summary:
+    runs-on: ubuntu-latest
+    outputs:
+      scope: ${{ github.event.inputs.test_scope || 'core' }}
+    steps:
+    - name: Generate Test Summary
+      run: |
+        echo "# 🚩 Flagged Messages Tests - ${{ github.event.inputs.test_scope || 'core' }}" > $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Core:** Basic flagged messages tests (FLG-01, FLG-02, FLG-05)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Extended:** Core + Feedback tests (FLG-03, FLG-04)" >> $GITHUB_STEP_SUMMARY
+        echo "- **All:** Extended + Bulk actions and filtering (FLG-06, FLG-07)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Objetivo: Validar funcionalidad de mensajes flagged y optimizaciones de performance" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
+        echo "- \`tests/whatsapp/flagged-messages.spec.js\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ⚡ Performance Focus:" >> $GITHUB_STEP_SUMMARY
+        echo "- FLG-05: Verifica conteo eficiente con collectionGroup query" >> $GITHUB_STEP_SUMMARY
+        echo "- Optimización de lecturas de Firestore" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Job summary generated at run-time" >> $GITHUB_STEP_SUMMARY
+
+  chromium-flagged-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Chromium
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying Chromium installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Flagged Messages Tests - Chromium
+      run: |
+        echo "🚩 Ejecutando tests de Flagged Messages en Chromium"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core flagged messages tests (FLG-01, FLG-02, FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-01|FLG-02|FLG-05" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended flagged messages tests (FLG-01 a FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-0[1-5]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All flagged messages tests (FLG-01 a FLG-07)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en Chromium"
+    
+    - name: Upload Chromium Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: flagged-messages-chromium-results
+        path: playwright-report/
+        retention-days: 30
+
+  firefox-flagged-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Firefox
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying Firefox installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Flagged Messages Tests - Firefox
+      run: |
+        echo "🚩 Ejecutando tests de Flagged Messages en Firefox"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core flagged messages tests (FLG-01, FLG-02, FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-01|FLG-02|FLG-05" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended flagged messages tests (FLG-01 a FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-0[1-5]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All flagged messages tests (FLG-01 a FLG-07)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en Firefox"
+    
+    - name: Upload Firefox Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: flagged-messages-firefox-results
+        path: playwright-report/
+        retention-days: 30
+
+  webkit-flagged-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install WebKit
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying WebKit installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Flagged Messages Tests - WebKit
+      run: |
+        echo "🚩 Ejecutando tests de Flagged Messages en WebKit"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core flagged messages tests (FLG-01, FLG-02, FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-01|FLG-02|FLG-05" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended flagged messages tests (FLG-01 a FLG-05)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --grep "FLG-0[1-5]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All flagged messages tests (FLG-01 a FLG-07)"
+          npx playwright test tests/whatsapp/flagged-messages.spec.js --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en WebKit"
+    
+    - name: Upload WebKit Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: flagged-messages-webkit-results
+        path: playwright-report/
+        retention-days: 30
+
+  test-results-summary:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    needs: [test-summary, chromium-flagged-tests, firefox-flagged-tests, webkit-flagged-tests]
+    if: always()
+    
+    steps:
+    - name: Generate Final Test Summary
+      run: |
+        echo "## 🚩 Flagged Messages Tests - Resumen Final" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Resultados por Navegador:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Chromium:** ${{ needs.chromium-flagged-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Firefox:** ${{ needs.firefox-flagged-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **WebKit:** ${{ needs.webkit-flagged-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Scope Ejecutado: ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ⚡ Performance Tests:" >> $GITHUB_STEP_SUMMARY
+        echo "- **FLG-05:** Conteo eficiente de mensajes flagged" >> $GITHUB_STEP_SUMMARY
+        echo "- **Optimización:** collectionGroup query vs loops ineficientes" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📁 Artifacts Disponibles:" >> $GITHUB_STEP_SUMMARY
+        echo "- \`flagged-messages-chromium-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`flagged-messages-firefox-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`flagged-messages-webkit-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Tests de Flagged Messages completados" >> $GITHUB_STEP_SUMMARY

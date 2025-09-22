@@ -1,0 +1,213 @@
+name: Chat Image Preview Tests - All Browsers
+
+on:
+  # Solo ejecución manual - triggers automáticos deshabilitados
+  workflow_dispatch:
+    inputs:
+      test_scope:
+        description: 'Scope of chat image preview tests to run'
+        required: true
+        default: 'core'
+        type: choice
+        options:
+        - core
+        - extended
+        - all
+
+jobs:
+  test-summary:
+    runs-on: ubuntu-latest
+    outputs:
+      scope: ${{ github.event.inputs.test_scope || 'core' }}
+    steps:
+    - name: Generate Test Summary
+      run: |
+        echo "# 🖼️ Chat Image Preview Tests - ${{ github.event.inputs.test_scope || 'core' }}" > $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Scope:** ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Browsers:** Chromium, Firefox, WebKit" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Test Scopes:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Core:** Basic image preview tests (CIP-01, CIP-02, CIP-03)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Extended:** Core + Profile picture preview tests (CIP-04, CIP-05)" >> $GITHUB_STEP_SUMMARY
+        echo "- **All:** Extended + Accessibility and keyboard navigation (CIP-06, CIP-07)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Objetivo: Validar funcionalidad de preview de imágenes de perfil en todos los navegadores" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Tests incluidos:" >> $GITHUB_STEP_SUMMARY
+        echo "- \`tests/whatsapp/chat-image-preview.spec.js\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Job summary generated at run-time" >> $GITHUB_STEP_SUMMARY
+
+  chromium-image-preview-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Chromium
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying Chromium installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Chat Image Preview Tests - Chromium
+      run: |
+        echo "🖼️ Ejecutando tests de Chat Image Preview en Chromium"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core image preview tests (CIP-01, CIP-02, CIP-03)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-3]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended image preview tests (CIP-01 a CIP-05)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-5]" --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All image preview tests (CIP-01 a CIP-07)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --project=chromium --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en Chromium"
+    
+    - name: Upload Chromium Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: chat-image-preview-chromium-results
+        path: playwright-report/
+        retention-days: 30
+
+  firefox-image-preview-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Firefox
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying Firefox installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Chat Image Preview Tests - Firefox
+      run: |
+        echo "🖼️ Ejecutando tests de Chat Image Preview en Firefox"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core image preview tests (CIP-01, CIP-02, CIP-03)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-3]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended image preview tests (CIP-01 a CIP-05)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-5]" --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All image preview tests (CIP-01 a CIP-07)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --project=firefox --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en Firefox"
+    
+    - name: Upload Firefox Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: chat-image-preview-firefox-results
+        path: playwright-report/
+        retention-days: 30
+
+  webkit-image-preview-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    needs: test-summary
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install WebKit
+      run: |
+        echo "Installing all Playwright browsers..."
+        npx playwright install --with-deps
+        echo "Verifying WebKit installation..."
+        npx playwright install --dry-run
+    
+    - name: Run Chat Image Preview Tests - WebKit
+      run: |
+        echo "🖼️ Ejecutando tests de Chat Image Preview en WebKit"
+        
+        # Determinar qué tests ejecutar según el scope
+        if [ "${{ github.event.inputs.test_scope }}" == "core" ]; then
+          echo "📋 Scope: Core image preview tests (CIP-01, CIP-02, CIP-03)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-3]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        elif [ "${{ github.event.inputs.test_scope }}" == "extended" ]; then
+          echo "📋 Scope: Extended image preview tests (CIP-01 a CIP-05)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --grep "CIP-0[1-5]" --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        else
+          echo "📋 Scope: All image preview tests (CIP-01 a CIP-07)"
+          npx playwright test tests/whatsapp/chat-image-preview.spec.js --project=webkit --reporter=html --timeout=120000 --max-failures=5 --retries=1
+        fi
+        
+        echo "🧪 Tests completados en WebKit"
+    
+    - name: Upload WebKit Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: chat-image-preview-webkit-results
+        path: playwright-report/
+        retention-days: 30
+
+  test-results-summary:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    needs: [test-summary, chromium-image-preview-tests, firefox-image-preview-tests, webkit-image-preview-tests]
+    if: always()
+    
+    steps:
+    - name: Generate Final Test Summary
+      run: |
+        echo "## 🖼️ Chat Image Preview Tests - Resumen Final" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Resultados por Navegador:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Chromium:** ${{ needs.chromium-image-preview-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Firefox:** ${{ needs.firefox-image-preview-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **WebKit:** ${{ needs.webkit-image-preview-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Scope Ejecutado: ${{ github.event.inputs.test_scope || 'core' }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📁 Artifacts Disponibles:" >> $GITHUB_STEP_SUMMARY
+        echo "- \`chat-image-preview-chromium-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`chat-image-preview-firefox-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`chat-image-preview-webkit-results\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Tests de Chat Image Preview completados" >> $GITHUB_STEP_SUMMARY
